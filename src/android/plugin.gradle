@@ -1,0 +1,22 @@
+repositories {
+    maven {
+            url "https://maven-other.tuya.com/repository/maven-releases/"
+    }
+}
+
+dependencies {
+    implementation 'com.tuya.smart:tuyasmart:3.26.5'
+    implementation 'com.tuya.smart:tuyasmart-ipcsdk:3.26.5'
+    implementation 'cn.yipianfengye.android:zxing-library:2.2'
+
+    implementation 'com.alibaba:fastjson:1.1.67.android'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.14.9'
+
+}
+
+android {
+    packagingOptions {
+        pickFirst 'lib/*/libc++_shared.so'
+
+    }
+}

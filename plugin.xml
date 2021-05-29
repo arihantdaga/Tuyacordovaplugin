@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-tuya-unofficial" version="1.0.0">
+   <name>tuyacordovaplugin</name>
+   <js-module name="tuyacordovaplugin" src="www/tuyacordovaplugin.js">
+      <clobbers target="tuyacordovaplugin" />
+   </js-module>
+   <preference name="TUYA_SMART_APPKEY" default="" />
+   <preference name="TUYA_SMART_SECRET" default="" />
+
+   <platform name="android">
+      <!-- <framework src="com.tuya.smart:tuyasmart:3.26.5" />
+      <framework src="com.tuya.smart:tuyasmart-ipcsdk:3.26.5" />
+      <framework src="cn.yipianfengye.android:zxing-library:2.2" /> -->
+      <preference name="AndroidXEnabled" default="true" />
+      <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/>
+
+      <config-file parent="/*" target="res/xml/config.xml">
+         <feature name="Tuyacordovaplugin">
+            <param name="android-package" value="com.arihant.tuyaplugin.Tuyacordovaplugin" />
+         </feature>
+      </config-file>
+      <config-file parent="/*" target="AndroidManifest.xml" />
+      <source-file src="src/android/Tuyacordovaplugin.java" target-dir="src/com/arihant/tuyaplugin" />
+      <!-- <config-file target="AndroidManifest.xml" parent="/manifest">
+         <uses-permission android:name="android.permission.BLUETOOTH" />
+         <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+         <uses-permission android:name="android.permission.INTERNET" />
+         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+      </config-file> -->
+      <edit-config  file="AndroidManifest.xml" target="/manifest/application" mode="merge">
+         <application android:allowBackup="false" xmlns:tools="http://schemas.android.com/tools"
+         tools:replace="android:allowBackup,android:supportsRtl"
+         />
+      </edit-config>
+      <config-file target="AndroidManifest.xml" parent="/manifest/application">
+         <meta-data
+            android:name="TUYA_SMART_APPKEY"
+            android:value="$TUYA_SMART_APPKEY" />
+         <meta-data
+            android:name="TUYA_SMART_SECRET"
+            android:value="$TUYA_SMART_SECRET" />
+      </config-file>
+      <config-file target="AndroidManifest.xml" parent="/manifest">
+         <!-- sdcard -->
+         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+         
+         <uses-permission android:name="android.permission.INTERNET" />
+         <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+         <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+         <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+         <uses-permission android:name="android.permission.RECORD_AUDIO" />
+         <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+      </config-file>
+   </platform>
+</plugin>

@@ -1,0 +1,22 @@
+{
+    "name": "cordova-plugin-tuya-unofficial",
+    "version": "0.0.2",
+    "description": "Tuya SDK Unofficial Plugin",
+    "scripts": {
+      "build": ""
+    },
+    "cordova": {
+      "id": "cordova-plugin-tuya-unofficial",
+      "platforms": [
+        "android"
+      ]
+    },
+    "keywords": [
+      "tuya",
+      "cordova-ios",
+      "cordova-android"
+    ],
+    "author": "Arihant Daga",
+    "license": "Apache-2.0"
+  }
+  
