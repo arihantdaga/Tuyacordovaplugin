@@ -1,12 +1,33 @@
 package com.arihant.tuyaplugin;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.telecom.Call;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.google.zxing.WriterException;
+import com.tuya.smart.android.camera.sdk.TuyaIPCSdk;
+import com.tuya.smart.android.camera.sdk.api.ITuyaIPCCore;
 import com.tuya.smart.android.user.api.ILoginCallback;
+import com.tuya.smart.android.user.api.IUidLoginCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
+import com.tuya.smart.home.sdk.bean.HomeBean;
+import com.tuya.smart.home.sdk.builder.TuyaCameraActivatorBuilder;
+import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
+import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback;
+import com.tuya.smart.sdk.api.ITuyaActivatorGetToken;
+import com.tuya.smart.sdk.api.ITuyaCameraDevActivator;
+import com.tuya.smart.sdk.api.ITuyaSmartCameraActivatorListener;
+import com.tuya.smart.sdk.bean.DeviceBean;
 
 import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaInterface;
@@ -15,18 +36,25 @@ import org.apache.cordova.CallbackContext;
 
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.LOG;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_DEV_ID;
 
 /**
  * This class echoes a string called from JavaScript.
  */
 public class Tuyacordovaplugin extends CordovaPlugin {
-    private CallbackContext callbackContext;
+    private CallbackContext cbCtx;
     private Activity activity;
     String TAG = "Tuyacordovaplugin";
     private boolean sdkInitialized = false;
+
+    private ITuyaCameraDevActivator mTuyaActivator;
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
@@ -51,13 +79,14 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         super.onDestroy();
         TuyaHomeSdk.onDestroy();
         this.sdkInitialized = false;
+        activity.unregisterReceiver(br);
     }
 
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         activity = cordova.getActivity();
-        if (this.callbackContext == null) {
-            this.callbackContext = callbackContext;
+        if (this.cbCtx == null) {
+            this.cbCtx = callbackContext;
         }
 
         LOG.d(TAG, "action = %s", action);
@@ -89,34 +118,296 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         return true;
     }
 
+    BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent != null){
+                String method = intent.getStringExtra("method");
+                String data = intent.getStringExtra("data");
+                if(method != null){
+
+                }
+            }
+        }
+    };
+
     public void login(CordovaArgs args, CallbackContext callbackContext){
         
     }
 
-    private void coolMethod(String message) {
-        if (message != null && message.length() > 0) {
-            TuyaHomeSdk.getUserInstance().loginWithEmail("91", "arihantdaga2010@gmail.com", "sdad7323", new ILoginCallback(){
+    public void user_loginOrRegitserWithUID(CordovaArgs args, CallbackContext callbackContext){
+        try{
+            String countryCode = args.getString(0);
+            String uid = args.getString(1);
+            String pass = args.getString(2);
+            TuyaHomeSdk.getUserInstance().loginOrRegisterWithUid (countryCode, uid, pass, true, new IUidLoginCallback(){
                 @Override
-                public void onSuccess(User user) {
+                public void onSuccess(User user, long homeId) {
                     Toast.makeText(activity.getApplicationContext(),
                             "Login success",
                             Toast.LENGTH_SHORT).show();
-                    callbackContext.success("Hello brother"+ message);
-//                    fetchUserHomeList();
+                    JSONObject successObj = new JSONObject();
+                    try{
+                        successObj.put("homeId", homeId);
+                    }catch (Exception e){
+                        LOG.d(TAG, "user_loginOrRegitserWithUID error = %s", e.toString());
+                    }
+                    sendPluginResult(callbackContext, successObj);
                 }
                 @Override
                 public void onError(String code, String error) {
                     Toast.makeText(activity.getApplicationContext(),
                             "code: " + code + "error:" + error,
                             Toast.LENGTH_SHORT).show();
-                    callbackContext.success("Hello brother"+ message);
+                    callbackContext.error(makeError(code,error));
                 }
             });
-
-
-//            this.callbackContext.success("Hello brother"+ message);
-        } else {
-            this.callbackContext.error("Expected one non-empty string argument.");
+        }catch (JSONException e){
+            callbackContext.error(makeError((e)));
         }
+    }
+
+    public void home_listHomes(CordovaArgs args, CallbackContext callbackContext) throws  JSONException{
+        try{
+            TuyaHomeSdk.getHomeManagerInstance().queryHomeList(new ITuyaGetHomeListCallback() {
+                @Override
+                public void onSuccess(List<HomeBean> homeBeans) {
+                    JSONArray homes = new JSONArray();
+                    for(int i = 0 ; i < homeBeans.size(); i++){
+                        HomeBean hb = homeBeans.get(i);
+                        homes.put(hb.getHomeId());
+                    }
+                    sendPluginResult(callbackContext, homes);
+                }
+
+                @Override
+                public void onError(String code, String error) {
+                    callbackContext.error(makeError(code,error));
+                }
+            });
+        }catch (Exception e){
+            callbackContext.error(makeError(e));
+        }
+    }
+    public void home_listDevices(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
+        long homeId = Long.parseLong(args.getString(0));
+        TuyaHomeSdk.newHomeInstance(homeId).getHomeDetail(new ITuyaHomeResultCallback() {
+            @Override
+            public void onSuccess(HomeBean homeBean) {
+                List<DeviceBean> deviceBeans = homeBean != null ? homeBean.getDeviceList() : null;
+                ArrayList deviceList = (ArrayList) deviceBeans;
+                Log.d(TAG, "onSuccess: List Home Devices : device length : " + deviceList.size());
+                String deviceListResponse = JSON.toJSONString(deviceList);
+                try{
+                    JSONArray deviceListRespArray = new JSONArray(deviceListResponse);
+                    sendPluginResult(callbackContext, deviceListRespArray);
+                }catch(Exception e){
+                    callbackContext.error(makeError(e));
+                    return;
+                }
+
+
+            }
+
+            @Override
+            public void onError(String errorCode, String errorMsg) {
+                callbackContext.error(makeError(errorCode,errorMsg));
+            }
+        });
+    }
+
+
+    public void network_smartCameraConfiguration(CordovaArgs args, CallbackContext callbackContext) throws  JSONException {
+        String ssid = args.getString(0);
+        String pass = args.getString(1);
+        long homeId = Long.parseLong(args.getString(2));
+
+        TuyaHomeSdk.getActivatorInstance().getActivatorToken(homeId,
+                new ITuyaActivatorGetToken() {
+                    @Override
+                    public void onSuccess(String token) {
+                        //Create and show qrCode
+                        TuyaCameraActivatorBuilder builder = new TuyaCameraActivatorBuilder()
+                                .setToken(token)
+                                .setPassword(pass)
+                                .setTimeOut(100)
+                                .setContext(activity)
+                                .setSsid(ssid)
+                                .setListener(new ITuyaSmartCameraActivatorListener() {
+                                    @Override
+                                    public void onQRCodeSuccess(String qrcodeUrl) {
+                                        PluginResult qrCodeResult = new PluginResult(PluginResult.Status.OK, qrcodeUrl);
+                                        qrCodeResult.setKeepCallback(true);
+                                        callbackContext.sendPluginResult(qrCodeResult);
+
+
+
+                                        PluginResult qrCodeResult2 = new PluginResult(PluginResult.Status.OK, "Pint 2  "+ qrcodeUrl);
+                                        qrCodeResult.setKeepCallback(true);
+                                        callbackContext.sendPluginResult(qrCodeResult2);
+
+//                                        final Bitmap bitmap;
+//                                        try {
+//                                            bitmap = QRCodeUtil.createQRCode(qrcodeUrl, 300);
+//                                            activity.runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    mIvQr.setImageBitmap(bitmap);
+////                                                    mLlInputWifi.setVisibility(View.GONE);
+//                                                    mIvQr.setVisibility(View.VISIBLE);
+//                                                }
+//                                            });
+//                                        } catch (WriterException e) {
+//                                            e.printStackTrace();
+//                                        }
+
+                                        // Send qrCOdeUrl to cordovacallback.
+
+                                    }
+
+                                    @Override
+                                    public void onError(String errorCode, String errorMsg) {
+
+                                    }
+
+                                    @Override
+                                    public void onActiveSuccess(DeviceBean devResp) {
+                                        Toast.makeText(activity,"config success!",Toast.LENGTH_LONG).show();
+//                                        devResp.
+                                    }
+                                });
+
+                        mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newCameraDevActivator(builder);
+                        mTuyaActivator.createQRCode();
+                        mTuyaActivator.start();
+                    }
+
+
+                    @Override
+                    public void onFailure(String errorCode, String errorMsg) {
+
+                    }
+                });
+
+    }
+
+    public void ipc_startCameraLivePlay(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
+        String devId = args.getString(0);
+        ITuyaIPCCore cameraInstance = TuyaIPCSdk.getCameraInstance();
+        if (cameraInstance != null) {
+            if (cameraInstance.isIPCDevice(devId)) {
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
+                pluginResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(pluginResult);
+
+                Log.d(TAG, "startCameraLivePlay: " + devId);
+                Intent intent = new Intent(activity, CameraPanelActivity.class);
+                intent.putExtra(INTENT_DEV_ID, devId);
+                Log.d(TAG, "startCameraLivePlay:  point 1");
+                cordova.startActivityForResult(this,intent, 1000);
+                Log.d(TAG, "startCameraLivePlay: Point 2");
+                eventSendPluginResult( callbackContext, "Event 1", "Message 1");
+                eventSendPluginResult( callbackContext, "Event 2", "Message 2");
+
+            }
+        }else{
+            callbackContext.error(makeError("0", "Unknown error"));
+        }
+    }
+
+
+    /**
+     * Home Model Cache
+     *
+     * @author chuanfeng <a href="mailto:developer@tuya.com"/>
+     * @since 2021/2/18 9:31 AM
+     */
+    public enum HomeModel {
+        INSTANCE;
+
+        public static final String CURRENT_HOME_ID = "currentHomeId";
+
+        /**
+         * Set current home's homeId
+         */
+        public final void setCurrentHome(Context context, long homeId) {
+            SharedPreferences sp = context.getSharedPreferences("HomeModel", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+
+            editor.putLong(CURRENT_HOME_ID, homeId);
+            editor.apply();
+        }
+
+        /**
+         * Get current home's homeId
+         */
+        public static final long getCurrentHome(Context context) {
+            SharedPreferences sp = context.getSharedPreferences("HomeModel", Context.MODE_PRIVATE);
+            return sp.getLong(CURRENT_HOME_ID, 0);
+        }
+
+        /**
+         * check if current home set
+         */
+        public final boolean checkHomeId(Context context) {
+            return getCurrentHome(context) != 0L;
+        }
+
+        public final void clear(Context context) {
+            SharedPreferences sp = context.getSharedPreferences("HomeModel", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.remove(CURRENT_HOME_ID);
+            editor.apply();
+        }
+    }
+
+    // ============================ Broadcast Receiver =====================//
+    private void _broadcastRCV() {
+        IntentFilter filter = new IntentFilter(CameraPanelActivity.BROADCAST_LISTENER);
+        activity.registerReceiver(br, filter);
+    }
+
+    //============================= Helpers ===============================//
+
+    private JSONObject makeError(Exception error){
+        JSONObject resultObj = new JSONObject();
+        try {
+            resultObj.put("error", "JsonException");
+            resultObj.put("message", error.getMessage());
+        } catch (Exception e) {}
+
+        return resultObj;
+    }
+    private JSONObject makeError(String code, String message){
+        JSONObject resultObj = new JSONObject();
+        try {
+            resultObj.put("error", code);
+            resultObj.put("message", message);
+        } catch (Exception e) {}
+
+        return resultObj;
+    }
+
+    private void sendPluginResult(CallbackContext callbackContext, boolean success){
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, success);
+        callbackContext.sendPluginResult(pluginResult);
+    }
+    private void sendPluginResult(CallbackContext callbackContext, String message){
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, message);
+        callbackContext.sendPluginResult(pluginResult);
+    }
+    private void sendPluginResult(CallbackContext callbackContext, JSONObject obj){
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, obj);
+        callbackContext.sendPluginResult(pluginResult);
+    }
+    private void sendPluginResult(CallbackContext callbackContext, JSONArray arr){
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, arr);
+        callbackContext.sendPluginResult(pluginResult);
+    }
+
+    private void eventSendPluginResult(CallbackContext callbackContext,String event, String data){
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, event);
+        pluginResult.setKeepCallback(true);
+        callbackContext.sendPluginResult(pluginResult);
     }
 }

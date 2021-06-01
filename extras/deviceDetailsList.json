@@ -1,0 +1,211 @@
+[
+    {
+        "ability": 0,
+        "attribute": 8576,
+        "baseAttribute": 1024,
+        "beacon": false,
+        "bleMesh": false,
+        "bleMeshWifi": false,
+        "blueMesh": false,
+        "blueMeshWifi": false,
+        "bluetooth": false,
+        "bv": "30.01",
+        "cadv": "1.0.1",
+        "category": "",
+        "categoryCode": "wf_sp",
+        "cloudOnline": true,
+        "communicationId": "d72bca7ef8a9f208db3qc1",
+        "devAttribute": 0,
+        "devId": "d72bca7ef8a9f208db3qc1",
+        "devUpgradeStatus": [
+            {
+                "module": "wifi",
+                "upgradeStatus": 0
+            },
+            {
+                "module": "mcu",
+                "upgradeStatus": 0
+            }
+        ],
+        "deviceCategory": "sp",
+        "displayOrder": -1,
+        "dpMaxTime": 1622520432392,
+        "dpName": {},
+        "dps": {
+            "101": true,
+            "103": false,
+            "109": "0|0|0",
+            "110": 5,
+            "111": false,
+            "115": "7b2276223a22332e30222c226275636b6574223a22696e642d747579612d73746f726167653330222c2266696c6573223a5b5b222f3231616632322d323330333835302d6c6b776c653538393835313337366631313337642f6465746563742f313632323532303432382e6a706567222c2263396266393961376334646332656631225d5d7d",
+            "117": -20000,
+            "126": 0,
+            "136": "",
+            "145": 100,
+            "146": "0",
+            "147": 10,
+            "149": true,
+            "152": "2",
+            "170": false
+        },
+        "dpsTime": {
+            "101": 1622520428794,
+            "103": 1622520428795,
+            "109": 1622520430852,
+            "110": 1622520428796,
+            "111": 1622519617673,
+            "115": 1622520432392,
+            "117": 1622519617673,
+            "126": 1622520428772,
+            "136": 1622519617673,
+            "145": 1622520428792,
+            "146": 1622520428764,
+            "147": 1622519617673,
+            "149": 1622520428730,
+            "152": 1622520428793,
+            "154": 1622519617673,
+            "170": 1622520430852
+        },
+        "encrypt": false,
+        "errorCode": 0,
+        "faultDps": [],
+        "gwType": "s",
+        "hasBleCommunication": false,
+        "hasHttpCommunication": false,
+        "hasLanCommunication": true,
+        "hasMqttCommunication": true,
+        "hasSigmeshCommunication": false,
+        "hasTuyaMeshCommunication": false,
+        "homeDisplayOrder": 0,
+        "i18nTime": 0,
+        "iconUrl": "https://images.tuyain.com/smart/icon/ay1539564680812QVp8s/74f0281011d9ea9182ec59efad11a0d3.png",
+        "infraredSubDev": false,
+        "infraredWifi": false,
+        "ip": "1.39.204.88",
+        "isLocalOnline": false,
+        "isOnline": true,
+        "isShare": false,
+        "lat": "",
+        "localKey": "82d985f537081b6e",
+        "lon": "",
+        "name": "Battery doorbell",
+        "otaUpgradeModes": [
+            0
+        ],
+        "ownerId": "2303850",
+        "panelConfig": {
+            "bic": [
+                {
+                    "code": "timer",
+                    "selected": false
+                },
+                {
+                    "code": "jump_url",
+                    "selected": false
+                }
+            ]
+        },
+        "productBean": {
+            "attribute": 8576,
+            "beacon": false,
+            "bizAttribute": 0,
+            "bluetooth": false,
+            "capability": 1,
+            "category": "sp",
+            "categoryCode": "wf_sp",
+            "i18nTime": 1617869222182,
+            "id": "oqeqdebo0tyqsrus",
+            "infraredSubDevDisplayInList": false,
+            "key": "oqeqdebo0tyqsrus",
+            "meshCategory": "",
+            "panelConfig": {
+                "$ref": "$[0].panelConfig"
+            },
+            "resptime": 1622520439474,
+            "sSchema": {
+                "functionSchemaList": [
+                    {
+                        "standardCode": "basic_indicator",
+                        "standardType": "Boolean",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"basic_indicator\":\"$\"}"
+                    },
+                    {
+                        "standardCode": "basic_flip",
+                        "standardType": "Boolean",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"basic_flip\":\"$\"}"
+                    },
+                    {
+                        "standardCode": "sd_format",
+                        "standardType": "Boolean",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"sd_format\":\"$\"}"
+                    },
+                    {
+                        "standardCode": "wireless_lowpower",
+                        "standardType": "Integer",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"wireless_lowpower\":\"$\"}"
+                    },
+                    {
+                        "standardCode": "wireless_awake",
+                        "standardType": "Boolean",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"wireless_awake\":\"$\"}"
+                    },
+                    {
+                        "standardCode": "pir_switch",
+                        "standardType": "Enum",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"pir_switch\":\"$\"}"
+                    },
+                    {
+                        "standardCode": "humanoid_filter",
+                        "standardType": "Boolean",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"humanoid_filter\":\"$\"}"
+                    }
+                ],
+                "productCompatibled": true,
+                "statusSchemaList": [
+                    {
+                        "dpCode": "basic_indicator",
+                        "standardType": "Boolean",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"basic_indicator\":\"$\"}"
+                    },
+                    {
+                        "dpCode": "basic_flip",
+                        "standardType": "Boolean",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"basic_flip\":\"$\"}"
+                    },
+                    {
+                        "dpCode": "sd_storge",
+                        "standardType": "Integer",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"sd_storge\":\"$\"}"
+                    },
+                    {
+                        "dpCode": "sd_status",
+                        "standardType": "Integer",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"sd_status\":\"$\"}"
+                    },
+                    {
+                        "dpCode": "sd_format",
+                        "standardType": "Boolean",
+                        "strategyCode": "default",
+                        "strategyValue": "{\"sd_format\":\"$\"}"
+                    },
+                    {
+                        "dpCode": "movement_detect_pic",
+                        "standardType": "Raw",
+                        "strategyCode": "sp_dp_encryption",
+                        "strategyValue": "{\"movement_detect_pic\":\"$\"}"
+                    },
+                    {
+                        "dpCode": "sd_format_state",
+                        "standardType":"Integ"
+                    }

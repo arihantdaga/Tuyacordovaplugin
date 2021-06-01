@@ -20,14 +20,6 @@
          </feature>
       </config-file>
       <config-file parent="/*" target="AndroidManifest.xml" />
-      <source-file src="src/android/Tuyacordovaplugin.java" target-dir="src/com/arihant/tuyaplugin" />
-      <!-- <config-file target="AndroidManifest.xml" parent="/manifest">
-         <uses-permission android:name="android.permission.BLUETOOTH" />
-         <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-         <uses-permission android:name="android.permission.INTERNET" />
-         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-      </config-file> -->
       <edit-config  file="AndroidManifest.xml" target="/manifest/application" mode="merge">
          <application android:allowBackup="false" xmlns:tools="http://schemas.android.com/tools"
          tools:replace="android:allowBackup,android:supportsRtl"
@@ -54,5 +46,65 @@
          <uses-permission android:name="android.permission.RECORD_AUDIO" />
          <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
       </config-file>
+
+      <config-file target="AndroidManifest.xml" parent="/manifest/application">
+				<activity android:name="com.arihant.tuyaplugin.CameraPanelActivity"/>
+		</config-file>
+
+      <!-- Activities  -->
+      <source-file src="src/android/Tuyacordovaplugin.java" target-dir="src/com/arihant/tuyaplugin" />
+      <source-file src="src/android/CameraPanelActivity.java" target-dir="src/com/arihant/tuyaplugin" />
+      <!-- Utilities  -->
+      <source-file src="src/android/utils/Constants.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <source-file src="src/android/utils/DateUtils.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <source-file src="src/android/utils/DPConstants.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <source-file src="src/android/utils/FrescoManager.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <source-file src="src/android/utils/MessageUtil.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <source-file src="src/android/utils/TimeZoneUtils.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <source-file src="src/android/utils/ToastUtil.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <source-file src="src/android/utils/CameraDoorbellManager.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+
+      <!-- Layouts -->
+      
+      <resource-file src="src/android/res/layout/activity_camera_panel.xml" target="res/layout/activity_camera_panel.xml" />
+		<resource-file src="src/android/res/layout/camera_panel_control_layout.xml" target="res/layout/camera_panel_control_layout.xml" />
+		
+      <!-- Drawables -->
+      <resource-file src="src/android/res/drawable/bg_button_selector.xml" target="res/drawable/bg_button_selector.xml" />
+      <resource-file src="src/android/res/drawable/bg_button.xml" target="res/drawable/bg_button.xml" />
+      <resource-file src="src/android/res/drawable/camera_icon_mic_selector.xml" target="res/drawable/camera_icon_mic_selector.xml" />
+      <resource-file src="src/android/res/drawable/camera_icon_photo_selector.xml" target="res/drawable/camera_icon_photo_selector.xml" />
+      <resource-file src="src/android/res/drawable/camera_icon_playback_selector.xml" target="res/drawable/camera_icon_playback_selector.xml" />
+      <resource-file src="src/android/res/drawable/camera_icon_record_selector.xml" target="res/drawable/camera_icon_record_selector.xml" />
+      <resource-file src="src/android/res/drawable/camera_item_control_btn.xml" target="res/drawable/camera_item_control_btn.xml" />
+      <resource-file src="src/android/res/drawable/camera_mute_btn.xml" target="res/drawable/camera_mute_btn.xml" />
+      <resource-file src="src/android/res/drawable/camera_shape_wirlesswake.xml" target="res/drawable/camera_shape_wirlesswake.xml" />
+
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_arrow.png" target="res/drawable-xhdpi/camera_icon_arrow.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_cloud.png" target="res/drawable-xhdpi/camera_icon_cloud.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_hd.png" target="res/drawable-xhdpi/camera_icon_hd.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_info.png" target="res/drawable-xhdpi/camera_icon_info.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_message.png" target="res/drawable-xhdpi/camera_icon_message.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_photo_btn_normal.png" target="res/drawable-xhdpi/camera_icon_photo_btn_normal.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_photo_btn_unenable.png" target="res/drawable-xhdpi/camera_icon_photo_btn_unenable.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_playback_btn_normal.png" target="res/drawable-xhdpi/camera_icon_playback_btn_normal.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_playback_btn_unable.png" target="res/drawable-xhdpi/camera_icon_playback_btn_unable.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_rec_btn_normal.png" target="res/drawable-xhdpi/camera_icon_rec_btn_normal.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_rec_btn_on.png" target="res/drawable-xhdpi/camera_icon_rec_btn_on.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_icon_rec_btn_unenable.png" target="res/drawable-xhdpi/camera_icon_rec_btn_unenable.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_preview_sound_btn_off.png" target="res/drawable-xhdpi/camera_preview_sound_btn_off.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_preview_sound_btn_on.png" target="res/drawable-xhdpi/camera_preview_sound_btn_on.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_tab_speak_btn_nomal.png" target="res/drawable-xhdpi/camera_tab_speak_btn_nomal.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_tab_speak_btn_on.png" target="res/drawable-xhdpi/camera_tab_speak_btn_on.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/camera_tab_speak_btn_unenable.png" target="res/drawable-xhdpi/camera_tab_speak_btn_unenable.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/tysmart_back.png" target="res/drawable-xhdpi/tysmart_back.png" />
+		
+      <!-- Values -->
+      <resource-file src="src/android/res/values/tuyacordovaplugin_colors.xml" target="res/values/tuyacordovaplugin_colors.xml" />
+      <resource-file src="src/android/res/values/tuyacordovaplugin_dimens.xml" target="res/values/tuyacordovaplugin_dimens.xml" />
+      <resource-file src="src/android/res/values/tuyacordovaplugin_strings.xml" target="res/values/tuyacordovaplugin_strings.xml" />
+      <resource-file src="src/android/res/values/tuyacordovaplugin_themes.xml" target="res/values/tuyacordovaplugin_themes.xml" />
+      
+
    </platform>
 </plugin>
