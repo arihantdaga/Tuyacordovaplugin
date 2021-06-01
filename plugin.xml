@@ -21,7 +21,7 @@
       </config-file>
       <config-file parent="/*" target="AndroidManifest.xml" />
       <edit-config  file="AndroidManifest.xml" target="/manifest/application" mode="merge">
-         <application android:allowBackup="false" xmlns:tools="http://schemas.android.com/tools"
+         <application android:allowBackup="true" xmlns:tools="http://schemas.android.com/tools"
          tools:replace="android:allowBackup,android:supportsRtl"
          />
       </edit-config>

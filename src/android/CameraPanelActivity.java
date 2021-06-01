@@ -30,7 +30,6 @@ import com.arihant.tuyaplugin.utils.Constants;
 import com.arihant.tuyaplugin.utils.DPConstants;
 import com.arihant.tuyaplugin.utils.MessageUtil;
 import com.arihant.tuyaplugin.utils.ToastUtil;
-import com.kiot.tuyaplugintest.R;
 import com.tuya.smart.android.camera.sdk.TuyaIPCSdk;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCCore;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCDoorbell;
@@ -178,10 +177,10 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
                     handlesnapshot(msg);
                     break;
                 case MSG_VIDEO_RECORD_BEGIN:
-                    ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_suc));
+                    ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
                     break;
                 case MSG_VIDEO_RECORD_FAIL:
-                    ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_failed));
+                    ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
                     break;
                 case MSG_VIDEO_RECORD_OVER:
                     handleVideoRecordOver(msg);
@@ -201,7 +200,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     };
 
     private void initView() {
-//        toolbar = findViewById(R.id.toolbar_view);
+//        toolbar = findViewById(_getResource("toolbar_view", "id"));
 ////        setSupportActionBar(toolbar);
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -209,27 +208,27 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 //                onBackPressed();
 //            }
 //        });
-        mVideoView = findViewById(R.id.camera_video_view);
-        muteImg = findViewById(R.id.camera_mute);
-        qualityTv = findViewById(R.id.camera_quality);
-        speakTxt = findViewById(R.id.speak_Txt);
-        recordTxt = findViewById(R.id.record_Txt);
-        photoTxt = findViewById(R.id.photo_Txt);
-        replayTxt = findViewById(R.id.replay_Txt);
-        settingTxt = findViewById(R.id.setting_Txt);
+        mVideoView = findViewById(_getResource("camera_video_view", "id"));
+        muteImg = findViewById(_getResource("camera_mute", "id"));
+        qualityTv = findViewById(_getResource("camera_quality", "id"));
+        speakTxt = findViewById(_getResource("speak_Txt", "id"));
+        recordTxt = findViewById(_getResource("record_Txt", "id"));
+        photoTxt = findViewById(_getResource("photo_Txt", "id"));
+        replayTxt = findViewById(_getResource("replay_Txt", "id"));
+        settingTxt = findViewById(_getResource("setting_Txt", "id"));
         settingTxt.setOnClickListener(this);
-        deviceInfoTxt = findViewById(R.id.info_Txt);
+        deviceInfoTxt = findViewById(_getResource("info_Txt", "id"));
         deviceInfoTxt.setOnClickListener(this);
-        findViewById(R.id.get_clarity_Txt).setOnClickListener(this);
-        cloudStorageTxt = findViewById(R.id.cloud_Txt);
-        messageCenterTxt = findViewById(R.id.message_center_Txt);
+        findViewById(_getResource("get_clarity_Txt", "id")).setOnClickListener(this);
+        cloudStorageTxt = findViewById(_getResource("cloud_Txt", "id"));
+        messageCenterTxt = findViewById(_getResource("message_center_Txt", "id"));
 
         WindowManager windowManager = (WindowManager) this.getSystemService(WINDOW_SERVICE);
         int width = windowManager.getDefaultDisplay().getWidth();
         int height = width * ASPECT_RATIO_WIDTH / ASPECT_RATIO_HEIGHT;
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
-//        layoutParams.addRule(RelativeLayout.BELOW, R.id.toolbar_view);
-        findViewById(R.id.camera_video_view_Rl).setLayoutParams(layoutParams);
+//        layoutParams.addRule(RelativeLayout.BELOW, _getResource("toolbar_view", "id"));
+        findViewById(_getResource("camera_video_view_Rl", "id")).setLayoutParams(layoutParams);
 
         muteImg.setSelected(true);
     }
@@ -259,7 +258,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     }
 
     private void showNotSupportToast() {
-        ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.not_support_device));
+        ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("not_support_device", "string")));
     }
 
     private void preview() {
@@ -297,17 +296,17 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.camera_mute) {
+        if (id == _getResource("camera_mute", "id")) {
             muteClick();
-        } else if (id == R.id.camera_quality) {
+        } else if (id == _getResource("camera_quality", "id")) {
             setVideoClarity();
-        } else if (id == R.id.speak_Txt) {
+        } else if (id == _getResource("speak_Txt", "id")) {
             speakClick();
-        } else if (id == R.id.record_Txt) {
+        } else if (id == _getResource("record_Txt", "id")) {
             recordClick();
-        } else if (id == R.id.photo_Txt) {
+        } else if (id == _getResource("photo_Txt", "id")) {
             snapShotClick();
-        } else if (id == R.id.replay_Txt) {
+        } else if (id == _getResource("replay_Txt", "id")) {
             Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
             /*
 
@@ -315,13 +314,13 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
             intent.putExtra(INTENT_P2P_TYPE, p2pType);
             intent.putExtra(INTENT_DEV_ID, devId);
             startActivity(intent);*/
-        } else if (id == R.id.setting_Txt) {
+        } else if (id == _getResource("setting_Txt", "id")) {
             Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
 
             /*Intent intent1 = new Intent(CameraPanelActivity.this, CameraSettingActivity.class);
             intent1.putExtra(INTENT_DEV_ID, devId);
             startActivity(intent1);*/
-        } else if (id == R.id.cloud_Txt) {
+        } else if (id == _getResource("cloud_Txt", "id")) {
             Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
 
             /*if (p2pType == SDK_PROVIDER_V1) {
@@ -332,20 +331,20 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
             intent2.putExtra(INTENT_DEV_ID, devId);
             intent2.putExtra(INTENT_P2P_TYPE, p2pType);
             startActivity(intent2);*/
-        } else if (id == R.id.message_center_Txt) {
+        } else if (id == _getResource("message_center_Txt", "id")) {
             Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
 
             /*Intent intent3 = new Intent(CameraPanelActivity.this, AlarmDetectionActivity.class);
             intent3.putExtra(INTENT_DEV_ID, devId);
             startActivity(intent3);*/
-        } else if (id == R.id.info_Txt) {
+        } else if (id == _getResource("info_Txt", "id")) {
             Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
 
             /*
             Intent intent4 = new Intent(CameraPanelActivity.this, CameraInfoActivity.class);
             intent4.putExtra(INTENT_DEV_ID, devId);
             startActivity(intent4);*/
-        } else if (id == R.id.get_clarity_Txt) {
+        } else if (id == _getResource("get_clarity_Txt", "id")) {
             if (mCameraP2P != null) {
                 mCameraP2P.getVideoClarity(new OperationDelegateCallBack() {
                     @Override
@@ -652,11 +651,11 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.menu_remove_device) {
+//        if (item.getItemId() == _getResource("menu_remove_device", "id")) {
 //            AlertDialog dialog = new AlertDialog.Builder(this)
 //                    .setCancelable(true)
-//                    .setTitle(getString(R.string.remove_device_dialog))
-//                    .setPositiveButton(getString(R.string.confirm), (dialog1, which) ->
+//                    .setTitle(getString(_getResource("remove_device_dialog", "string")))
+//                    .setPositiveButton(getString(_getResource("confirm", "string")), (dialog1, which) ->
 //                            unBindDevice())
 //                    .create();
 //            dialog.show();
@@ -685,33 +684,33 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 
     private void handleStopTalk(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_suc));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_failed));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
     }
 
     private void handleStartTalk(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_suc));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_failed));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
     }
 
     private void handleVideoRecordOver(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_suc));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_failed));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
     }
 
     private void handlesnapshot(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_suc));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_failed));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
     }
 
@@ -719,16 +718,16 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
             muteImg.setSelected(previewMute == ICameraP2P.MUTE);
         } else {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_failed));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
     }
 
 
     private void handleClarity(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            qualityTv.setText(videoClarity == ICameraP2P.HD ? getString(R.string.hd) : getString(R.string.sd));
+            qualityTv.setText(videoClarity == ICameraP2P.HD ? getString(_getResource("sd", "string")) : getString(_getResource("sd", "string")));
         } else {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_failed));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
     }
 
@@ -736,21 +735,21 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
             preview();
         } else {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.connect_failed));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("connect_failed", "string")));
         }
     }
 
     private void handleGetVideoClarity(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS && !TextUtils.isEmpty(currVideoClarity)) {
-            String info = getString(R.string.other);
+            String info = getString(_getResource("other", "string"));
             if (currVideoClarity.equals(String.valueOf(ICameraP2P.HD))) {
-                info = getString(R.string.hd);
+                info = getString(_getResource("hd", "string"));
             } else if (currVideoClarity.equals(String.valueOf(ICameraP2P.STANDEND))) {
-                info = getString(R.string.sd);
+                info = getString(_getResource("sd", "string"));
             }
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.get_current_clarity) + info);
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("get_current_clarity", "string")) + info);
         } else {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(R.string.operation_failed));
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
     }
 
