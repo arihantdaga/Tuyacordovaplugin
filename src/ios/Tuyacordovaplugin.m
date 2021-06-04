@@ -1,4 +1,5 @@
 #import "Tuyacordovaplugin.h"
+#import "CameraViewController.h"
 
 @interface Tuyacordovaplugin ()
 @property(strong, nonatomic) TuyaSmartHomeManager *homeManager;
@@ -9,7 +10,7 @@
 - (void) pluginInitialize {
     NSString *appKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleTuyaAppKey"];
     NSString *appSecret = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleTuyaAppSecret"];
-    [[TuyaSmartSDK sharedInstance] startWithAppKey:appkey secretKey:appSecret];
+    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
 }
 
 - (void) user_loginOrRegitserWithUID: (CDVInvokedUrlCommand *) command {
@@ -20,7 +21,7 @@
 
     [[TuyaSmartUser sharedInstance] loginOrRegisterWithCountryCode:countryCode uid:uid password:pass createHome:YES success:^(id result) {
 		NSDictionary *resultDict = [NSDictionary dictionaryWithObjectsAndKeys:
-        [NSString numberWithLongLong:result], @"homeId",
+        [NSString stringWithFormat:@"%lld", result], @"homeId",
       	nil];
 		CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
 		[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -57,17 +58,13 @@
 
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:devices];
 	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        
-    } failure:^(NSError *errorMsg) {
-        NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    }];
+
 }
 
 - (void) ipc_startCameraLivePlay: (CDVInvokedUrlCommand *) command {
     NSString *devId = (NSString *)[command argumentAtIndex:0];
-    
+    CameraViewController *vc = [[CameraViewController alloc] initWithDeviceId:devId];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

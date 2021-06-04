@@ -1,7 +1,8 @@
 #import <UIKit/UIKit.h>
 #import <Cordova/CDVPlugin.h>
+#import <Cordova/CDV.h>
 
-@interface Tuyacordovaplugin
+@interface Tuyacordovaplugin: CDVPlugin
 
 - (void) user_loginOrRegitserWithUID: (CDVInvokedUrlCommand *)command;
 
