@@ -1,0 +1,3 @@
+#import <TuyaSmartBaseKit/TuyaSmartBaseKit.h>
+#import <TuyaSmartActivatorKit/TuyaSmartActivatorKit.h>
+#import <TuyaSmartCameraKit/TuyaSmartCameraKit.h>

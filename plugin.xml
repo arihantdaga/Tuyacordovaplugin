@@ -107,4 +107,29 @@
       
 
    </platform>
+   <platform name="ios">
+      <config-file target="config.xml" parent="/*">
+         <feature name="Tuyacordovaplugin">
+         <param name="ios-package" value="Tuyacordovaplugin" />
+         </feature>
+      </config-file>
+      <podspec>
+         <config>
+            <source url="https://cdn.cocoapods.org/" />
+            <source url="https://github.com/TuyaInc/TuyaPublicSpecs.git"/>
+         </config>
+         <pods use-frameworks="true">
+            <pod name="SVProgressHUD" />
+            <pod name="TuyaSmartHomeKit" />
+         </pods>
+      </podspec>
+      <config-file target="*-Info.plist" parent="CFBundleTuyaAppKey">
+            <string>$TUYA_SMART_APPKEY</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="CFBundleTuyaAppSecret">
+            <string>$TUYA_SMART_SECRET</string>
+        </config-file>
+      <header-file src="src/ios/Tuyacordovaplugin.h" />
+      <source-file src="src/ios/Tuyacordovaplugin.m" />
+   </platform>
 </plugin>
