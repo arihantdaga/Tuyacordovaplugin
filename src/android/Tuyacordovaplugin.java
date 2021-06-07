@@ -167,6 +167,31 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         }
     }
 
+    public void home_createHome(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
+          try{
+            String name = args.getString(0);
+            Double lon = 0;
+            Double lat = 0;
+            String geoName = args.getString(1);
+            List<String> rooms = args.getString(2);
+            TuyaHomeSdk.getHomeManagerInstance().createHome(name, lon, lat, geoName, rooms, new ITuyaGetHomeListCallback() {
+                @Override
+                public void onSuccess(HomeBean bean) {
+                    JSONObject home = new JSONObject();
+                    home.put("home", bean);
+                    sendPluginResult(callbackContext, home);
+                }
+
+                @Override
+                public void onError(String code, String error) {
+                    callbackContext.error(makeError(code,error));
+                }
+            });
+        }catch (Exception e){
+            callbackContext.error(makeError(e));
+        }
+    }
+
     public void home_listHomes(CordovaArgs args, CallbackContext callbackContext) throws  JSONException{
         try{
             TuyaHomeSdk.getHomeManagerInstance().queryHomeList(new ITuyaGetHomeListCallback() {

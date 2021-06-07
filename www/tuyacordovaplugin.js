@@ -8,7 +8,7 @@ const pluginName = 'Tuyacordovaplugin';
 
 var Home = {
     createHome: function createHome(){
-        return exec('home_createHome',[]);
+        return exec('home_createHome',[name,geoName,rooms]);
     },
     listHomes: function listHomes(){
         return exec('home_listHomes',[]);
@@ -16,7 +16,7 @@ var Home = {
     getCurrentHome : function getCurrentHome(){
 
     },
-    setCurrentHome : function setCurrentHOme(){
+    setCurrentHome : function setCurrentHome(){
         
     },
     listDevices: function listDevices(homeId){
