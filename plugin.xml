@@ -8,9 +8,9 @@
    <preference name="TUYA_SMART_SECRET" default="" />
 
    <platform name="android">
-      <!-- <framework src="com.tuya.smart:tuyasmart:3.26.5" />
+      <framework src="com.tuya.smart:tuyasmart:3.26.5" />
       <framework src="com.tuya.smart:tuyasmart-ipcsdk:3.26.5" />
-      <framework src="cn.yipianfengye.android:zxing-library:2.2" /> -->
+      <framework src="cn.yipianfengye.android:zxing-library:2.2" />
       <preference name="AndroidXEnabled" default="true" />
       <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/>
 
