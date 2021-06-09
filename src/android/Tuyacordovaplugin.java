@@ -167,30 +167,6 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         }
     }
 
-    public void home_createHome(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
-          try{
-            String name = args.getString(0);
-            Double lon = 0;
-            Double lat = 0;
-            String geoName = args.getString(1);
-            List<String> rooms = args.getString(2);
-            TuyaHomeSdk.getHomeManagerInstance().createHome(name, lon, lat, geoName, rooms, new ITuyaGetHomeListCallback() {
-                @Override
-                public void onSuccess(HomeBean bean) {
-                    JSONObject home = new JSONObject();
-                    home.put("home", bean);
-                    sendPluginResult(callbackContext, home);
-                }
-
-                @Override
-                public void onError(String code, String error) {
-                    callbackContext.error(makeError(code,error));
-                }
-            });
-        }catch (Exception e){
-            callbackContext.error(makeError(e));
-        }
-    }
 
     public void home_listHomes(CordovaArgs args, CallbackContext callbackContext) throws  JSONException{
         try{
@@ -246,7 +222,6 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         String ssid = args.getString(0);
         String pass = args.getString(1);
         long homeId = Long.parseLong(args.getString(2));
-
         TuyaHomeSdk.getActivatorInstance().getActivatorToken(homeId,
                 new ITuyaActivatorGetToken() {
                     @Override
@@ -261,30 +236,11 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                                 .setListener(new ITuyaSmartCameraActivatorListener() {
                                     @Override
                                     public void onQRCodeSuccess(String qrcodeUrl) {
+                                        Toast.makeText(activity,qrcodeUrl,Toast.LENGTH_LONG).show();
                                         PluginResult qrCodeResult = new PluginResult(PluginResult.Status.OK, qrcodeUrl);
                                         qrCodeResult.setKeepCallback(true);
                                         callbackContext.sendPluginResult(qrCodeResult);
-
-
-
-                                        PluginResult qrCodeResult2 = new PluginResult(PluginResult.Status.OK, "Pint 2  "+ qrcodeUrl);
-                                        qrCodeResult.setKeepCallback(true);
-                                        callbackContext.sendPluginResult(qrCodeResult2);
-
-//                                        final Bitmap bitmap;
-//                                        try {
-//                                            bitmap = QRCodeUtil.createQRCode(qrcodeUrl, 300);
-//                                            activity.runOnUiThread(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    mIvQr.setImageBitmap(bitmap);
-////                                                    mLlInputWifi.setVisibility(View.GONE);
-//                                                    mIvQr.setVisibility(View.VISIBLE);
-//                                                }
-//                                            });
-//                                        } catch (WriterException e) {
-//                                            e.printStackTrace();
-//                                        }
+                                       // eventSendPluginResult( callbackContext, "Event 1", "Message 1");
 
                                         // Send qrCOdeUrl to cordovacallback.
 
@@ -292,25 +248,34 @@ public class Tuyacordovaplugin extends CordovaPlugin {
 
                                     @Override
                                     public void onError(String errorCode, String errorMsg) {
-
+                                        PluginResult configResult = new PluginResult(PluginResult.Status.OK,errorMsg);
+                                        configResult.setKeepCallback(true);
+                                        callbackContext.sendPluginResult(configResult);
+                                        eventSendPluginResult( callbackContext, "Event 1", "Message 1");
+                                        Toast.makeText(activity,"config success!",Toast.LENGTH_LONG).show();
                                     }
 
                                     @Override
                                     public void onActiveSuccess(DeviceBean devResp) {
+                                        PluginResult configResult = new PluginResult(PluginResult.Status.OK, devResp.devId);
+                                        configResult.setKeepCallback(true);
+                                        callbackContext.sendPluginResult(configResult);
+                                        eventSendPluginResult( callbackContext, "Event 1", "Message 1");
                                         Toast.makeText(activity,"config success!",Toast.LENGTH_LONG).show();
-//                                        devResp.
+                                       // devResp.
                                     }
                                 });
 
                         mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newCameraDevActivator(builder);
                         mTuyaActivator.createQRCode();
                         mTuyaActivator.start();
+                        mTuyaActivator.stop();
                     }
 
 
                     @Override
                     public void onFailure(String errorCode, String errorMsg) {
-
+                        callbackContext.error(makeError("0", "Unknown error"));
                     }
                 });
 

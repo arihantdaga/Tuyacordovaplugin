@@ -21,8 +21,8 @@
       </config-file>
       <config-file parent="/*" target="AndroidManifest.xml" />
       <edit-config  file="AndroidManifest.xml" target="/manifest/application" mode="merge">
-         <application android:allowBackup="true" xmlns:tools="http://schemas.android.com/tools"
-         tools:replace="android:allowBackup,android:supportsRtl"
+         <application android:requestLegacyExternalStorage="true" android:allowBackup="true" xmlns:tools="http://schemas.android.com/tools"
+         tools:replace="android:allowBackup,android:supportsRtl,android:requestLegacyExternalStorage"
          />
       </edit-config>
       <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -32,6 +32,13 @@
          <meta-data
             android:name="TUYA_SMART_SECRET"
             android:value="$TUYA_SMART_SECRET" />
+          <meta-data
+            android:name="APP_THEME"
+            android:value="$APP_THEME" />
+         <meta-data
+            android:name="THEME_COLOR"
+            android:value="$THEME_COLOR" />
+
       </config-file>
       <config-file target="AndroidManifest.xml" parent="/manifest">
          <!-- sdcard -->

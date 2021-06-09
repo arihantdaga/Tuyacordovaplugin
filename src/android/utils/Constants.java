@@ -58,23 +58,34 @@ public class Constants {
     public static final int MSG_DELETE_ALARM_DETECTION = 2052;
     public static final int MSG_GET_VIDEO_CLARITY = 2053;
 
-    public synchronized static boolean hasStoragePermission() {
+    public synchronized static boolean hasStoragePermission(Context context) {
         String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "a.log";
         try {
             File file = new File(filePath);
             if (!file.exists()) {
+                file.mkdirs();
                 boolean iscreate = file.createNewFile();
                 if (iscreate) {
                     file.delete();
                     return true;
                 } else {
-                    return false;
+                    //ToastUtil.shortToast(context,file.toString());
+                    return true;
                 }
             } else {
                 file.delete();
-                return false;
+                file.mkdirs();
+                boolean iscreate = file.createNewFile();
+                if (iscreate) {
+                    file.delete();
+                    return true;
+                } else {
+                    //ToastUtil.shortToast(context,file.toString());
+                    return true;
+                }
             }
         } catch (Exception e) {
+            //ToastUtil.shortToast(context,e.toString());
             return false;
         }
 
@@ -86,7 +97,10 @@ public class Constants {
         if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
                     permission)) {
-                ToastUtil.shortToast(context, tip);
+                ActivityCompat.requestPermissions((Activity) context,
+                        new String[]{permission},
+                        requestCode);
+                //ToastUtil.shortToast(context, tip);
             } else {
                 ActivityCompat.requestPermissions((Activity) context,
                         new String[]{permission},
