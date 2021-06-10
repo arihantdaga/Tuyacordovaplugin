@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -81,8 +82,8 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private TextView qualityTv;
     private TextView speakTxt, recordTxt, photoTxt, replayTxt, settingTxt, cloudStorageTxt, messageCenterTxt, deviceInfoTxt;
 
-    private static final int ASPECT_RATIO_WIDTH = 9;
-    private static final int ASPECT_RATIO_HEIGHT = 16;
+    private static final int ASPECT_RATIO_WIDTH = 12;
+    private static final int ASPECT_RATIO_HEIGHT = 10;
     private boolean isSpeaking = false;
     private boolean isRecording = false;
     private boolean isPlay = false;
@@ -215,14 +216,18 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         recordTxt = findViewById(_getResource("record_Txt", "id"));
         photoTxt = findViewById(_getResource("photo_Txt", "id"));
         replayTxt = findViewById(_getResource("replay_Txt", "id"));
+        ((ViewGroup) replayTxt.getParent()).removeView(replayTxt);
         settingTxt = findViewById(_getResource("setting_Txt", "id"));
         settingTxt.setOnClickListener(this);
+        ((ViewGroup) settingTxt.getParent()).removeView(settingTxt);
         deviceInfoTxt = findViewById(_getResource("info_Txt", "id"));
         deviceInfoTxt.setOnClickListener(this);
+        ((ViewGroup) deviceInfoTxt.getParent()).removeView(deviceInfoTxt);
         findViewById(_getResource("get_clarity_Txt", "id")).setOnClickListener(this);
         cloudStorageTxt = findViewById(_getResource("cloud_Txt", "id"));
+        ((ViewGroup) cloudStorageTxt.getParent()).removeView(cloudStorageTxt);
         messageCenterTxt = findViewById(_getResource("message_center_Txt", "id"));
-
+        ((ViewGroup) messageCenterTxt.getParent()).removeView(messageCenterTxt);
         WindowManager windowManager = (WindowManager) this.getSystemService(WINDOW_SERVICE);
         int width = windowManager.getDefaultDisplay().getWidth();
         int height = width * ASPECT_RATIO_WIDTH / ASPECT_RATIO_HEIGHT;
@@ -363,7 +368,8 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     }
     private void recordClick() {
         if (!isRecording) {
-            if (Constants.hasStoragePermission()) {
+            ToastUtil.shortToast(CameraPanelActivity.this, "Enter Recording");
+            if (Constants.hasStoragePermission(CameraPanelActivity.this)) {
                 String picPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera/";
                 File file = new File(picPath);
                 if (!file.exists()) {
@@ -407,7 +413,8 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     }
 
     private void snapShotClick() {
-        if (Constants.hasStoragePermission()) {
+        if (Constants.hasStoragePermission(CameraPanelActivity.this)) {
+            ToastUtil.shortToast(CameraPanelActivity.this, "Enter Snapshot");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera/";
                 File file = new File(path);
@@ -717,6 +724,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private void handleMute(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
             muteImg.setSelected(previewMute == ICameraP2P.MUTE);
+            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
             ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
@@ -725,7 +733,8 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 
     private void handleClarity(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            qualityTv.setText(videoClarity == ICameraP2P.HD ? getString(_getResource("sd", "string")) : getString(_getResource("sd", "string")));
+            qualityTv.setText(videoClarity == ICameraP2P.HD ? getString(_getResource("hd", "string")) : getString(_getResource("sd", "string")));
+            //ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         } else {
             ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
