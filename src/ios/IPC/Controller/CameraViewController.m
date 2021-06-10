@@ -17,6 +17,8 @@
 
 #define VideoViewWidth [UIScreen mainScreen].bounds.size.width
 #define VideoViewHeight ([UIScreen mainScreen].bounds.size.width / 16 * 9)
+#define kTuyaSmartIPCConfigAPI @"tuya.m.ipc.config.get"
+#define kTuyaSmartIPCConfigAPIVersion @"2.0"
 
 #define kControlTalk        @"talk"
 #define kControlRecord      @"record"
@@ -81,16 +83,46 @@
         _devId = devId;
         _device = [TuyaSmartDevice deviceWithDeviceId:devId];
         _dpManager = [[TuyaSmartCameraDPManager alloc] initWithDeviceId:devId];
-        _cameraType = [TuyaSmartCameraFactory cameraWithP2PType:@(_device.deviceModel.p2pType) deviceId:_device.deviceModel.devId delegate:self];
+        id p2pType = [_device.deviceModel.skills objectForKey:@"p2pType"];
+        _cameraType = [TuyaSmartCameraFactory cameraWithP2PType:p2pType deviceId:_device.deviceModel.devId delegate:self];
         _muted = YES;
         _lastMuted = _muted;
         _videoView = [[CameraVideoView alloc] initWithFrame:CGRectZero];
         _videoView.renderView = _cameraType.videoView;
-        
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleInterruption:)
                                                      name:AVAudioSessionInterruptionNotification
                                                    object:[AVAudioSession sharedInstance]];
+        
+        
+        
+        
+        
+//        _devId = devId;
+//        _device = [TuyaSmartDevice deviceWithDeviceId:devId];
+//        _dpManager = [[TuyaSmartCameraDPManager alloc] initWithDeviceId:devId];
+//        id p2pType = [_device.deviceModel.skills objectForKey:@"p2pType"];
+//        [[TuyaSmartRequest new] requestWithApiName:kTuyaSmartIPCConfigAPI postData:@{@"devId": devId} version:kTuyaSmartIPCConfigAPIVersion success:^(id result) {
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//                TuyaSmartCameraConfig *config = [TuyaSmartCameraFactory ipcConfigWithUid:@"arihantdaga@kiot.io" localKey:_device.deviceModel.localKey configData:result];
+//                _cameraType = [TuyaSmartCameraFactory cameraWithP2PType:p2pType config:config delegate:self];
+//                _muted = YES;
+//                _lastMuted = _muted;
+//                _videoView = [[CameraVideoView alloc] initWithFrame:CGRectZero];
+//                _videoView.renderView = _cameraType.videoView;
+//                NSLog([TuyaSmartUser sharedInstance].uid);
+//                [self retryAction];
+//
+//                [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                         selector:@selector(handleInterruption:)
+//                                                             name:AVAudioSessionInterruptionNotification
+//                                                           object:[AVAudioSession sharedInstance]];
+//
+//            });
+//        } failure:^(NSError *error) {
+//                    // Failed to get configuration information
+//        }];
     }
     return self;
 }

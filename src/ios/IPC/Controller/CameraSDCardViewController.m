@@ -26,7 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    __weak typeof(self) weakSelf = self;
+    CameraSDCardViewController __weak *weakSelf = self;
     [self.dpManager valueForDP:TuyaSmartCameraSDCardStorageDPName success:^(id result) {
         NSArray *components = [result componentsSeparatedByString:@"|"];
         if (components.count < 3) {

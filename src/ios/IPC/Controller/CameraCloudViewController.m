@@ -135,7 +135,7 @@
 
 - (void)soundAction {
     BOOL isMuted = [self.cloudManager isMuted];
-    __weak typeof(self) weakSelf = self;
+    CameraCloudViewController __weak *weakSelf = self;
     [self.cloudManager enableMute:!isMuted success:^{
         NSString *imageName = @"ty_camera_soundOn_icon";
         if (weakSelf.cloudManager.isMuted) {
@@ -284,7 +284,7 @@
     if (![pieceModel containsTime:playTime]) {
         playTime = pieceModel.startTime;
     }
-    __weak typeof(self) weakSelf = self;
+    CameraCloudViewController __weak *weakSelf = self;
     [self.cloudManager playCloudVideoWithStartTime:playTime endTime:self.selectedDay.endTime isEvent:NO onResponse:^(int errCode) {
         if (errCode) {
             [weakSelf alertWithMessage:NSLocalizedStringFromTable(@"ipc_status_stream_failed", @"IPCLocalizable", @"")];
@@ -298,7 +298,7 @@
 }
 
 - (void)playCloudEvent:(TuyaSmartCloudTimeEventModel *)eventModel {
-    __weak typeof(self) weakSelf = self;
+    CameraCloudViewController __weak *weakSelf = self;
     [self.cloudManager playCloudVideoWithStartTime:eventModel.startTime endTime:self.selectedDay.endTime isEvent:YES onResponse:^(int errCode) {
         if (errCode) {
             [weakSelf alertWithMessage:NSLocalizedStringFromTable(@"ipc_status_stream_failed", @"IPCLocalizable", @"")];
