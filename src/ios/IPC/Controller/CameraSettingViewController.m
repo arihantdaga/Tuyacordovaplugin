@@ -65,7 +65,7 @@
     [self.dpManager addObserver:self];
     [self.tableView registerClass:[CameraSwitchCell class] forCellReuseIdentifier:@"switchCell"];
     [self getDeviceInfo];
-    [self setupTableFooter];
+    // [self setupTableFooter];
 }
 
 - (NSString *)titleForCenterItem {
@@ -171,7 +171,7 @@
         [section0 addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_pir_switch", @"IPCLocalizable", @""), kValue: text, kAction: @"pirAction", kArrow: @"1"}];
     }
     
-    if (section0.count > 0) {
+    if (section0.count > 0 && 0) {
         [dataSource addObject:@{kTitle:NSLocalizedStringFromTable(@"ipc_settings_page_basic_function_txt", @"IPCLocalizable", @""), kValue: section0.copy}];
     }
     
@@ -197,7 +197,7 @@
         NSString *text = [self decibelSensitivityText:self.decibelSensitivity];
         [section2 addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_motion_sensitivity_settings", @"IPCLocalizable", @""), kValue: text, kAction: @"decibelSensitivityAction", kArrow: @"1"}];
     }
-    if (section2.count > 0) {
+    if (section2.count > 0 && 0) {
         [dataSource addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_sound_detected_switch_settings", @"IPCLocalizable", @""), kValue: section2.copy}];
     }
     
@@ -215,7 +215,7 @@
         NSString *text = [self recordModeText:self.recordMode];
         [section3 addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_sdcard_record_mode_settings", @"IPCLocalizable", @""), kValue: text, kAction: @"recordModeAction", kArrow: @"1"}];
     }
-    if (section3.count > 0) {
+    if (section3.count > 0 && 0) {
         [dataSource addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_sdcard_settings", @"IPCLocalizable", @""), kValue: section3.copy}];
     }
     

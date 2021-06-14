@@ -32,18 +32,15 @@
     CGContextMoveToPoint(ctx, width / 3 * 2, 0);
     CGContextAddLineToPoint(ctx, width / 3 * 2, height);
     
-    CGContextMoveToPoint(ctx, 0, height / 2);
-    CGContextAddLineToPoint(ctx, width, height / 2);
-    
-    [[UIColor darkGrayColor] setStroke];
-    CGContextSetLineWidth(ctx, 0.5);
-    CGContextStrokePath(ctx);
+    CGContextMoveToPoint(ctx, 0, height);
+    CGContextAddLineToPoint(ctx, width, height);
+
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGFloat buttonWith = self.frame.size.width / 3;
-    CGFloat buttonHeight = self.frame.size.height / 2;
+    CGFloat buttonHeight = self.frame.size.height;
     [self.subviews enumerateObjectsUsingBlock:^(UIView *obj, NSUInteger idx, BOOL *stop) {
         obj.frame = CGRectMake((idx % 3) * (buttonWith + 0.5), idx / 3 * (buttonHeight + 0.5), buttonWith - 1, buttonHeight - 1);
     }];

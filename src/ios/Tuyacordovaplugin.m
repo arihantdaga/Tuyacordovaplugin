@@ -74,8 +74,15 @@
     NSString *devId = (NSString *)[command argumentAtIndex:0];
     CameraViewController *vc = [[CameraViewController alloc] initWithDeviceId:devId];
     //  [self.navigationController pushViewController:vc animated:YES];
-    [self.viewController addChildViewController:vc];
-    [self.webView.superview insertSubview:vc.view aboveSubview:self.webView];
+
+
+//    [self.viewController addChildViewController:vc];
+//    [self.webView.superview insertSubview:vc.view aboveSubview:self.webView];
+    
+    // [self.viewController presentModalViewController:vc  animated:YES];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self.viewController presentViewController:navigationController animated:YES completion:nil];
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
