@@ -3,6 +3,7 @@
 
 @interface Tuyacordovaplugin ()
 @property(strong, nonatomic) TuyaSmartHomeManager *homeManager;
+//@property (nonatomic, strong) UIViewController *viewController;
 @end
 
 @implementation Tuyacordovaplugin
@@ -54,17 +55,36 @@
     NSString *homeIdString = (NSString *)[command argumentAtIndex:0];
     long long homeId = [homeIdString longLongValue];
 
-    NSArray<TuyaSmartDeviceModel*> *devices = [[TuyaSmartHome homeWithHomeId:homeId].deviceList mutableCopy];
 
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:devices];
-	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeId];
+    home.delegate = self;
+    [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+        NSArray<TuyaSmartDeviceModel*> *devices = [home.deviceList mutableCopy];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 
+        } failure:^(NSError *errorMsg) {
+            NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        }];
 }
 
 - (void) ipc_startCameraLivePlay: (CDVInvokedUrlCommand *) command {
     NSString *devId = (NSString *)[command argumentAtIndex:0];
     CameraViewController *vc = [[CameraViewController alloc] initWithDeviceId:devId];
-    [self.navigationController pushViewController:vc animated:YES];
+    //  [self.navigationController pushViewController:vc animated:YES];
+
+
+//    [self.viewController addChildViewController:vc];
+//    [self.webView.superview insertSubview:vc.view aboveSubview:self.webView];
+    
+    // [self.viewController presentModalViewController:vc  animated:YES];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self.viewController presentViewController:navigationController animated:YES completion:nil];
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 

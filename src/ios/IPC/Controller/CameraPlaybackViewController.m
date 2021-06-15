@@ -176,7 +176,7 @@ typedef NSArray<NSDictionary *> TYDictArray;
     [self.view bringSubviewToFront:self.calendarView];
     [self.calendarView show:[NSDate new]];
     TuyaSmartPlaybackDate *playbackDate = [TuyaSmartPlaybackDate new];
-    __weak typeof(self) weakSelf = self;
+    CameraPlaybackViewController __weak *weakSelf = self;
     [self playbackDaysInYear:playbackDate.year month:playbackDate.month complete:^(TYNumberArray *result) {
         weakSelf.playbackDays = result.mutableCopy;
         [weakSelf.calendarView reloadData];
@@ -358,7 +358,7 @@ typedef NSArray<NSDictionary *> TYDictArray;
 - (void)getRecordAndPlay:(TuyaSmartPlaybackDate *)playbackDate {
     self.title = [NSString stringWithFormat:@"%@-%@-%@", @(playbackDate.year), @(playbackDate.month), @(playbackDate.day)];
     self.currentDate = playbackDate;
-    __weak typeof(self) weakSelf = self;
+    CameraPlaybackViewController __weak *weakSelf = self;
     [self showLoadingWithTitle:@""];
     [self requestTimeSliceWithPlaybackDate:playbackDate complete:^(TYDictArray *result) {
         if (result.count > 0) {

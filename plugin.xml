@@ -136,10 +136,139 @@
       <config-file target="*-Info.plist" parent="CFBundleTuyaAppKey">
             <string>$TUYA_SMART_APPKEY</string>
         </config-file>
-        <config-file target="*-Info.plist" parent="CFBundleTuyaAppSecret">
-            <string>$TUYA_SMART_SECRET</string>
-        </config-file>
+      <config-file target="*-Info.plist" parent="CFBundleTuyaAppSecret">
+         <string>$TUYA_SMART_SECRET</string>
+      </config-file>
+      <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+         <string>To take snapshots from smart IPCamera</string>
+      </config-file>
+      <config-file target="*-Info.plist" parent="NSPhotoLibraryAddUsageDescription">
+         <string>To take snapshots from smart IPCamera</string>
+      </config-file>
+      <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+         <string>To speak for smart IPCamera</string>
+      </config-file>
+        
       <header-file src="src/ios/Tuyacordovaplugin.h" />
       <source-file src="src/ios/Tuyacordovaplugin.m" />
+      <!-- <header-file src="src/ios/src/ios/IPC/Controller/Tuyacordovaplugin.h" />
+      <source-file src="src/ios/src/ios/IPC/Controller/Tuyacordovaplugin.m" /> -->
+
+
+      <!-- Image Assets -->
+      <source-file src="src/ios/IPC/Assets/pps_left_arrow@2x.png" />
+      <source-file src="src/ios/IPC/Assets/pps_left_arrow@3x.png" />
+      <source-file src="src/ios/IPC/Assets/pps_right_arrow@2x.png" />
+      <source-file src="src/ios/IPC/Assets/pps_right_arrow@3x.png" />
+      <source-file src="src/ios/IPC/Assets/tp_top_bar_back@2x.png" />
+      <source-file src="src/ios/IPC/Assets/tp_top_bar_back@3x.png" />
+      <source-file src="src/ios/IPC/Assets/tp_top_bar_goBack@2x.png" />
+      <source-file src="src/ios/IPC/Assets/tp_top_bar_goBack@3x.png" />
+      <source-file src="src/ios/IPC/Assets/tp_top_bar_more@2x.png" />
+      <source-file src="src/ios/IPC/Assets/tp_top_bar_more@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_cloud_icon@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_cloud_icon@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_control_hd_normal@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_control_hd_normal@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_control_sd_normal@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_control_sd_normal@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_hangup@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_hangup@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_message@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_message@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_mic_icon@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_mic_icon@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_photo_icon@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_photo_icon@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_playback_icon@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_playback_icon@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_rec_icon@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_rec_icon@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_soundOff_icon@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_soundOff_icon@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_soundOn_icon@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_soundOn_icon@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_tool_delete_normal@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_tool_delete_normal@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_tool_download_normal@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_tool_download_normal@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_tool_pause_normal@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_tool_pause_normal@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_tool_play_normal@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_camera_tool_play_normal@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_about@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_about@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_about_active@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_about_active@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_add@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_add@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_add_active@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_add_active@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_devicelist@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_devicelist@3x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_devicelist_active@2x.png" />
+      <source-file src="src/ios/IPC/Assets/ty_mainbt_devicelist_active@3x.png" />
+      <source-file src="src/ios/IPC/Assets/tysmart_selected@2x.png" />
+      <source-file src="src/ios/IPC/Assets/tysmart_selected@3x.png" />
+
+
+      <!-- IPC/Camera -->
+      <header-file src="src/ios/IPC/Camera/Tuyacordovaplugin-Bridging-Header.h" />
+
+      <!-- IPC/Config -->
+      <resource-file src="src/ios/IPC/Config/IPCLocalizable.strings" />
+      <resource-file src="src/ios/IPC/Config/IPCViewsLocalizable.strings" />
+
+      <!-- IPC/Controller -->
+      <source-file src="src/ios/IPC/Controller/CameraCloudViewController.h" />
+      <source-file src="src/ios/IPC/Controller/CameraCloudViewController.m" />
+      <source-file src="src/ios/IPC/Controller/CameraDoorbellManager.h" />
+      <source-file src="src/ios/IPC/Controller/CameraDoorbellManager.m" />
+      <source-file src="src/ios/IPC/Controller/CameraDoorbellViewController.h" />
+      <source-file src="src/ios/IPC/Controller/CameraDoorbellViewController.m" />
+      <source-file src="src/ios/IPC/Controller/CameraMessageViewController.h" />
+      <source-file src="src/ios/IPC/Controller/CameraMessageViewController.m" />
+      <source-file src="src/ios/IPC/Controller/CameraPlaybackViewController.h" />
+      <source-file src="src/ios/IPC/Controller/CameraPlaybackViewController.m" />
+      <source-file src="src/ios/IPC/Controller/CameraSDCardViewController.h" />
+      <source-file src="src/ios/IPC/Controller/CameraSDCardViewController.m" />
+      <source-file src="src/ios/IPC/Controller/CameraSettingViewController.h" />
+      <source-file src="src/ios/IPC/Controller/CameraSettingViewController.m" />
+      <source-file src="src/ios/IPC/Controller/CameraViewController.h" />
+      <source-file src="src/ios/IPC/Controller/CameraViewController.m" />
+
+      <!-- IPC/Models -->
+      <source-file src="src/ios/IPC/Models/CameraTimeLineModel.h" />
+      <source-file src="src/ios/IPC/Models/CameraTimeLineModel.m" />
+      <source-file src="src/ios/IPC/Models/CloudTimePieceModel+Timeline.h" />
+      <source-file src="src/ios/IPC/Models/CloudTimePieceModel+Timeline.m" />
+
+      <!-- IPC/Utils -->
+      <source-file src="src/ios/IPC/Utils/CameraPermissionUtil.h" />
+      <source-file src="src/ios/IPC/Utils/CameraPermissionUtil.m" />
+      <source-file src="src/ios/IPC/Utils/UIView+CameraAdditions.h" />
+      <source-file src="src/ios/IPC/Utils/UIView+CameraAdditions.m" />
+
+      <!-- IPC/View -->
+      <source-file src="src/ios/IPC/View/CameraCalendarCollectionViewCell.h" />
+      <source-file src="src/ios/IPC/View/CameraCalendarCollectionViewCell.m" />
+      <source-file src="src/ios/IPC/View/CameraCalendarView.h" />
+      <source-file src="src/ios/IPC/View/CameraCalendarView.m" />
+      <source-file src="src/ios/IPC/View/CameraCloudDayCollectionViewCell.h" />
+      <source-file src="src/ios/IPC/View/CameraCloudDayCollectionViewCell.m" />
+      <source-file src="src/ios/IPC/View/CameraControlButton.h" />
+      <source-file src="src/ios/IPC/View/CameraControlButton.m" />
+      <source-file src="src/ios/IPC/View/CameraControlView.h" />
+      <source-file src="src/ios/IPC/View/CameraControlView.m" />
+      <source-file src="src/ios/IPC/View/CameraSwitchCell.h" />
+      <source-file src="src/ios/IPC/View/CameraSwitchCell.m" />
+      <source-file src="src/ios/IPC/View/CameraVideoView.h" />
+      <source-file src="src/ios/IPC/View/CameraVideoView.m" />
+      <source-file src="src/ios/IPC/View/CameraViewConstants.h" />
+      <source-file src="src/ios/IPC/View/TYCameraRecordCell.h" />
+      <source-file src="src/ios/IPC/View/TYCameraRecordCell.m" />
+      <source-file src="src/ios/IPC/View/TYCameraRecordListView.h" />
+      <source-file src="src/ios/IPC/View/TYCameraRecordListView.m" />
+
    </platform>
 </plugin>

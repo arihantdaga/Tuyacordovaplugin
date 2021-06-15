@@ -16,7 +16,7 @@
         CGRect subViewFrame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
         _emptyDataView = [[TYCameraEmptyDataView alloc] initWithFrame:subViewFrame];
         _emptyDataView.imageView.image  = [UIImage imageNamed:@"ty_camera_record_empty"];
-        _emptyDataView.textLabel.text   = IPCLocalizedString(@"ipc_playback_no_records_today", @"");
+        _emptyDataView.textLabel.text   = @"No records";
         [self addSubview:_emptyDataView];
         
         _tableView = [[UITableView alloc] initWithFrame:subViewFrame style:UITableViewStylePlain];

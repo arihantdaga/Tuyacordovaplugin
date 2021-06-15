@@ -17,6 +17,9 @@
 
 #define VideoViewWidth [UIScreen mainScreen].bounds.size.width
 #define VideoViewHeight ([UIScreen mainScreen].bounds.size.width / 16 * 9)
+#define TOP_MARGIN (VideoViewHeight/4)
+#define kTuyaSmartIPCConfigAPI @"tuya.m.ipc.config.get"
+#define kTuyaSmartIPCConfigAPIVersion @"2.0"
 
 #define kControlTalk        @"talk"
 #define kControlRecord      @"record"
@@ -81,16 +84,46 @@
         _devId = devId;
         _device = [TuyaSmartDevice deviceWithDeviceId:devId];
         _dpManager = [[TuyaSmartCameraDPManager alloc] initWithDeviceId:devId];
-        _cameraType = [TuyaSmartCameraFactory cameraWithP2PType:@(_device.deviceModel.p2pType) deviceId:_device.deviceModel.devId delegate:self];
+        id p2pType = [_device.deviceModel.skills objectForKey:@"p2pType"];
+        _cameraType = [TuyaSmartCameraFactory cameraWithP2PType:p2pType deviceId:_device.deviceModel.devId delegate:self];
         _muted = YES;
         _lastMuted = _muted;
         _videoView = [[CameraVideoView alloc] initWithFrame:CGRectZero];
         _videoView.renderView = _cameraType.videoView;
-        
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleInterruption:)
                                                      name:AVAudioSessionInterruptionNotification
                                                    object:[AVAudioSession sharedInstance]];
+        
+        
+        
+        
+        
+//        _devId = devId;
+//        _device = [TuyaSmartDevice deviceWithDeviceId:devId];
+//        _dpManager = [[TuyaSmartCameraDPManager alloc] initWithDeviceId:devId];
+//        id p2pType = [_device.deviceModel.skills objectForKey:@"p2pType"];
+//        [[TuyaSmartRequest new] requestWithApiName:kTuyaSmartIPCConfigAPI postData:@{@"devId": devId} version:kTuyaSmartIPCConfigAPIVersion success:^(id result) {
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//                TuyaSmartCameraConfig *config = [TuyaSmartCameraFactory ipcConfigWithUid:@"arihantdaga@kiot.io" localKey:_device.deviceModel.localKey configData:result];
+//                _cameraType = [TuyaSmartCameraFactory cameraWithP2PType:p2pType config:config delegate:self];
+//                _muted = YES;
+//                _lastMuted = _muted;
+//                _videoView = [[CameraVideoView alloc] initWithFrame:CGRectZero];
+//                _videoView.renderView = _cameraType.videoView;
+//                NSLog([TuyaSmartUser sharedInstance].uid);
+//                [self retryAction];
+//
+//                [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                         selector:@selector(handleInterruption:)
+//                                                             name:AVAudioSessionInterruptionNotification
+//                                                           object:[AVAudioSession sharedInstance]];
+//
+//            });
+//        } failure:^(NSError *error) {
+//                    // Failed to get configuration information
+//        }];
     }
     return self;
 }
@@ -132,6 +165,8 @@
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = NO;
     }
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style: UIBarButtonItemStyleBordered target:self action:@selector(Back)];
+    self.navigationItem.leftBarButtonItem = backButton;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -152,6 +187,11 @@
 }
 
 #pragma mark - Action
+
+- (IBAction)Back
+  {
+    [self dismissViewControllerAnimated:YES completion:nil]; // ios 6
+  }
 
 - (void)settingAction {
     CameraSettingViewController *settingVC = [CameraSettingViewController new];
@@ -554,7 +594,7 @@
 
 - (UIView *)videoContainer {
     if (!_videoContainer) {
-        _videoContainer = [[UIView alloc] initWithFrame:CGRectMake(0, APP_TOP_BAR_HEIGHT, VideoViewWidth, VideoViewHeight)];
+        _videoContainer = [[UIView alloc] initWithFrame:CGRectMake(0, APP_TOP_BAR_HEIGHT + TOP_MARGIN, VideoViewWidth, VideoViewHeight)];
         _videoContainer.backgroundColor = [UIColor blackColor];
     }
     return _videoContainer;
@@ -576,29 +616,30 @@
                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_screenshot", @"IPCLocalizable", @""),
                  @"identifier": kControlPhoto
                  },
-             @{
-                 @"image": @"ty_camera_playback_icon",
-                 @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
-                 @"identifier": kControlPlayback
-                 },
-             @{
-                 @"image": @"ty_camera_cloud_icon",
-                 @"title": NSLocalizedStringFromTable(@"ipc_panel_button_cstorage", @"IPCLocalizable", @""),
-                 @"identifier": kControlCloud
-                 },
-             @{
-                 @"image": @"ty_camera_message",
-                 @"title": NSLocalizedStringFromTable(@"ipc_panel_button_message", @"IPCLocalizable", @""),
-                 @"identifier": kControlMessage
-                 }
+            //  @{
+            //      @"image": @"ty_camera_playback_icon",
+            //      @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
+            //      @"identifier": kControlPlayback
+            //      },
+            //  @{
+            //      @"image": @"ty_camera_cloud_icon",
+            //      @"title": NSLocalizedStringFromTable(@"ipc_panel_button_cstorage", @"IPCLocalizable", @""),
+            //      @"identifier": kControlCloud
+            //      },
+            //  @{
+            //      @"image": @"ty_camera_message",
+            //      @"title": NSLocalizedStringFromTable(@"ipc_panel_button_message", @"IPCLocalizable", @""),
+            //      @"identifier": kControlMessage
+            //      }
              ];
 }
 
 - (CameraControlView *)controlView {
     if (!_controlView) {
-        CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT;
+        // CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT + (VideoViewHeight/2);
+        CGFloat height = self.view.frame.size.height / 8;
+        CGFloat top = [UIScreen mainScreen].bounds.size.height - APP_TOP_BAR_HEIGHT - height;
         CGFloat width = self.view.frame.size.width;
-        CGFloat height = self.view.frame.size.height - top;
         _controlView = [[CameraControlView alloc] initWithFrame:CGRectMake(0, top, width, height)];
         _controlView.sourceData = [self controlDatas];
         _controlView.delegate = self;
@@ -608,7 +649,7 @@
 
 - (UIButton *)soundButton {
     if (!_soundButton) {
-        _soundButton = [[UIButton alloc] initWithFrame:CGRectMake(8, APP_TOP_BAR_HEIGHT + VideoViewHeight - 50, 44, 44)];
+        _soundButton = [[UIButton alloc] initWithFrame:CGRectMake(8, APP_TOP_BAR_HEIGHT + VideoViewHeight + TOP_MARGIN - 50, 44, 44)];
         [_soundButton setImage:[UIImage imageNamed:@"ty_camera_soundOff_icon"] forState:UIControlStateNormal];
     }
     return _soundButton;
@@ -616,7 +657,7 @@
 
 - (UIButton *)hdButton {
     if (!_hdButton) {
-        _hdButton = [[UIButton alloc] initWithFrame:CGRectMake(60, APP_TOP_BAR_HEIGHT + VideoViewHeight - 50, 44, 44)];
+        _hdButton = [[UIButton alloc] initWithFrame:CGRectMake(60, APP_TOP_BAR_HEIGHT + VideoViewHeight + TOP_MARGIN - 50, 44, 44)];
         [_hdButton setImage:[UIImage imageNamed:@"ty_camera_control_sd_normal"] forState:UIControlStateNormal];
     }
     return _hdButton;

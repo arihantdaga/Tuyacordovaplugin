@@ -65,7 +65,7 @@
     [self.dpManager addObserver:self];
     [self.tableView registerClass:[CameraSwitchCell class] forCellReuseIdentifier:@"switchCell"];
     [self getDeviceInfo];
-    [self setupTableFooter];
+    // [self setupTableFooter];
 }
 
 - (NSString *)titleForCenterItem {
@@ -83,7 +83,7 @@
 }
 
 - (void)removeAction {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.device remove:^{
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
     } failure:^(NSError *error) {
@@ -171,7 +171,7 @@
         [section0 addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_pir_switch", @"IPCLocalizable", @""), kValue: text, kAction: @"pirAction", kArrow: @"1"}];
     }
     
-    if (section0.count > 0) {
+    if (section0.count > 0 && 0) {
         [dataSource addObject:@{kTitle:NSLocalizedStringFromTable(@"ipc_settings_page_basic_function_txt", @"IPCLocalizable", @""), kValue: section0.copy}];
     }
     
@@ -197,7 +197,7 @@
         NSString *text = [self decibelSensitivityText:self.decibelSensitivity];
         [section2 addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_motion_sensitivity_settings", @"IPCLocalizable", @""), kValue: text, kAction: @"decibelSensitivityAction", kArrow: @"1"}];
     }
-    if (section2.count > 0) {
+    if (section2.count > 0 && 0) {
         [dataSource addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_sound_detected_switch_settings", @"IPCLocalizable", @""), kValue: section2.copy}];
     }
     
@@ -215,7 +215,7 @@
         NSString *text = [self recordModeText:self.recordMode];
         [section3 addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_sdcard_record_mode_settings", @"IPCLocalizable", @""), kValue: text, kAction: @"recordModeAction", kArrow: @"1"}];
     }
-    if (section3.count > 0) {
+    if (section3.count > 0 && 0) {
         [dataSource addObject:@{kTitle: NSLocalizedStringFromTable(@"ipc_sdcard_settings", @"IPCLocalizable", @""), kValue: section3.copy}];
     }
     
@@ -241,7 +241,7 @@
 }
 
 - (void)indicatorAction:(UISwitch *)switchButton {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.dpManager setValue:@(switchButton.on) forDP:TuyaSmartCameraBasicIndicatorDPName success:^(id result) {
         weakSelf.indicatorOn = switchButton.on;
     } failure:^(NSError *error) {
@@ -250,7 +250,7 @@
 }
 
 - (void)flipAction:(UISwitch *)switchButton {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.dpManager setValue:@(switchButton.on) forDP:TuyaSmartCameraBasicFlipDPName success:^(id result) {
         weakSelf.flipOn = switchButton.on;
     } failure:^(NSError *error) {
@@ -259,7 +259,7 @@
 }
 
 - (void)osdAction:(UISwitch *)switchButton {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.dpManager setValue:@(switchButton.on) forDP:TuyaSmartCameraBasicOSDDPName success:^(id result) {
         weakSelf.osdOn = switchButton.on;
     } failure:^(NSError *error) {
@@ -268,7 +268,7 @@
 }
 
 - (void)privateAction:(UISwitch *)switchButton {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.dpManager setValue:@(switchButton.on) forDP:TuyaSmartCameraBasicPrivateDPName success:^(id result) {
         weakSelf.privateOn = switchButton.on;
     } failure:^(NSError *error) {
@@ -283,7 +283,7 @@
                            kValue: TuyaSmartCameraNightvisionOn},
                          @{kTitle: [self nightvisionText:TuyaSmartCameraNightvisionOff],
                            kValue: TuyaSmartCameraNightvisionOff}];
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self showActionSheet:options selectedHandler:^(id result) {
         [self.dpManager setValue:result forDP:TuyaSmartCameraBasicNightvisionDPName success:^(id result) {
             weakSelf.nightvisionState = result;
@@ -303,7 +303,7 @@
                            kValue: TuyaSmartCameraPIRStateLow},
                          @{kTitle: [self pirText:TuyaSmartCameraPIRStateOff],
                            kValue: TuyaSmartCameraPIRStateOff}];
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self showActionSheet:options selectedHandler:^(id result) {
         [self.dpManager setValue:result forDP:TuyaSmartCameraBasicPIRDPName success:^(id result) {
             weakSelf.pirState = result;
@@ -315,7 +315,7 @@
 }
 
 - (void)motionDetectAction:(UISwitch *)switchButton {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.dpManager setValue:@(switchButton.on) forDP:TuyaSmartCameraMotionDetectDPName success:^(id result) {
         weakSelf.motionDetectOn = switchButton.on;
         [weakSelf reloadData];
@@ -331,7 +331,7 @@
                            kValue: TuyaSmartCameraMotionMedium},
                          @{kTitle: [self motionSensitivityText:TuyaSmartCameraMotionLow],
                            kValue: TuyaSmartCameraMotionLow}];
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self showActionSheet:options selectedHandler:^(id result) {
         [self.dpManager setValue:result forDP:TuyaSmartCameraMotionSensitivityDPName success:^(id result) {
             weakSelf.motionSensitivity = result;
@@ -343,7 +343,7 @@
 }
 
 - (void)decibelDetectAction:(UISwitch *)switchButton {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.dpManager setValue:@(switchButton.on) forDP:TuyaSmartCameraDecibelDetectDPName success:^(id result) {
         weakSelf.decibelDetectOn = switchButton.on;
         [weakSelf reloadData];
@@ -357,7 +357,7 @@
                            kValue: TuyaSmartCameraDecibelHigh},
                          @{kTitle: [self decibelSensitivityText:TuyaSmartCameraDecibelLow],
                            kValue: TuyaSmartCameraDecibelLow}];
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self showActionSheet:options selectedHandler:^(id result) {
         [self.dpManager setValue:result forDP:TuyaSmartCameraDecibelSensitivityDPName success:^(id result) {
             weakSelf.decibelSensitivity = result;
@@ -375,7 +375,7 @@
 }
 
 - (void)sdRecordAction:(UISwitch *)switchButton {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.dpManager setValue:@(switchButton.on) forDP:TuyaSmartCameraSDCardRecordDPName success:^(id result) {
         weakSelf.sdRecordOn = switchButton.on;
     } failure:^(NSError *error) {
@@ -388,7 +388,7 @@
                            kValue: TuyaSmartCameraRecordModeEvent},
                          @{kTitle: [self recordModeText:TuyaSmartCameraRecordModeAlways],
                            kValue: TuyaSmartCameraRecordModeAlways}];
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self showActionSheet:options selectedHandler:^(id result) {
         
         [self.dpManager setValue:result forDP:TuyaSmartCameraRecordModeDPName success:^(id result) {
@@ -401,7 +401,7 @@
 }
 
 - (void)batteryLockAction:(UISwitch *)switchButton {
-    __weak typeof(self) weakSelf = self;
+    CameraSettingViewController __weak *weakSelf = self;
     [self.dpManager setValue:@(switchButton.on) forDP:TuyaSmartCameraWirelessBatteryLockDPName success:^(id result) {
         weakSelf.batteryLockOn = switchButton.on;
     } failure:^(NSError *error) {
