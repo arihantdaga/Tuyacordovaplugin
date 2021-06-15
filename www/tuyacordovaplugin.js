@@ -44,7 +44,11 @@ const pluginName = 'Tuyacordovaplugin';
     }
     
     var Utils = {
-    
+        getDeviceData: function getDeviceData({devId,homeId}, successCallback, errorCallback){
+            return cordova.exec(successCallback, errorCallback, pluginName, 'device_data', [devId,homeId]);
+        },
+        setDeviceDps: function setDeviceDps({devId,dps}){
+         return exec('setDPs',[devId,dps])}
     }
     
     var IPC = {

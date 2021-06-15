@@ -20,6 +20,9 @@ import com.tuya.smart.android.user.api.ILoginCallback;
 import com.tuya.smart.android.user.api.IUidLoginCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
+import com.tuya.smart.sdk.api.ITuyaDevice;
+import com.tuya.smart.sdk.api.IDevListener;
+import com.tuya.smart.sdk.api.IResultCallback;
 import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.builder.TuyaCameraActivatorBuilder;
 import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
@@ -217,6 +220,75 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         });
     }
 
+    public void device_data(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
+        String devId = args.getString(0);
+        long homeId = Long.parseLong(args.getString(1));
+        TuyaHomeSdk.newHomeInstance(homeId).getHomeDetail(new ITuyaHomeResultCallback() {
+            @Override
+            public void onSuccess(HomeBean homeBean) {
+                List<DeviceBean> deviceBeans = homeBean != null ? homeBean.getDeviceList() : null;
+                ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
+                try{
+                    mDevice.registerDevListener(new IDevListener() {
+                        @Override
+                        public void onDpUpdate(String devId, String dpStr) {
+                            PluginResult dpUpdateResult = new PluginResult(PluginResult.Status.OK, dpStr);
+                            dpUpdateResult.setKeepCallback(true);
+                            callbackContext.sendPluginResult(dpUpdateResult);
+                        }
+                        @Override
+                        public void onRemoved(String devId) {
+
+                        }
+                        @Override
+                        public void onStatusChanged(String devId, boolean online) {
+
+                        }
+                        @Override
+                        public void onNetworkStatusChanged(String devId, boolean status) {
+
+                        }
+                        @Override
+                        public void onDevInfoUpdate(String devId) {
+
+                        }
+                    });
+                    //JSONArray deviceListRespArray = new JSONArray(deviceListResponse);
+                    //sendPluginResult(callbackContext, deviceListRespArray);
+                }catch(Exception e){
+                    callbackContext.error(makeError(e));
+                    return;
+                }
+
+
+            }
+
+            @Override
+            public void onError(String errorCode, String errorMsg) {
+                callbackContext.error(makeError(errorCode,errorMsg));
+            }
+        });
+    }
+
+    public void setDPs(CordovaArgs args, CallbackContext callbackContext) throws  JSONException{
+        String devId = args.getString(0);
+        String dps = args.getString(1);
+        ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
+        mDevice.publishDps(dps, new IResultCallback() {
+            @Override
+            public void onError(String code, String error) {
+                callbackContext.error(makeError(code,error));
+               // Toast.makeText(mContext, "Failed to switch on the light.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess() {
+                sendPluginResult(callbackContext, dps);
+                //Toast.makeText(mContext, "The light is switched on successfully.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     public void network_smartCameraConfiguration(CordovaArgs args, CallbackContext callbackContext) throws  JSONException {
         String ssid = args.getString(0);
@@ -252,7 +324,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                                         configResult.setKeepCallback(true);
                                         callbackContext.sendPluginResult(configResult);
                                         eventSendPluginResult( callbackContext, "Event 1", "Message 1");
-                                        Toast.makeText(activity,"config success!",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(activity,"config error!",Toast.LENGTH_LONG).show();
                                     }
 
                                     @Override
