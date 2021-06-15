@@ -21,8 +21,9 @@
         <com.tuya.smart.camera.middleware.widget.TuyaCameraView
             android:id="@+id/camera_video_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-             />
+            android:layout_height="match_parent">
+
+        </com.tuya.smart.camera.middleware.widget.TuyaCameraView>
 
         <ImageView
             android:id="@+id/camera_mute"

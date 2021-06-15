@@ -7,6 +7,7 @@ public class DPConstants {
     public static final String PTZ_STOP = "116";
     //Data type: boolean
     public static final String WATERMARK = "104";
+    public static final String BATTERY = "145";
 
     public static final String SD_STATUS = "110";
     public static final String SD_STORAGE = "109";

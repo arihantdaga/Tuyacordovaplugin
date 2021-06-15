@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.arihant.tuyaplugin.utils.Constants;
 import com.arihant.tuyaplugin.utils.DPConstants;
 import com.arihant.tuyaplugin.utils.MessageUtil;
@@ -80,9 +81,9 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private TuyaCameraView mVideoView;
     private ImageView muteImg;
     private TextView qualityTv;
-    private TextView speakTxt, recordTxt, photoTxt, replayTxt, settingTxt, cloudStorageTxt, messageCenterTxt, deviceInfoTxt;
+    private TextView speakTxt, recordTxt, photoTxt, replayTxt, settingTxt, cloudStorageTxt, messageCenterTxt, deviceInfoTxt,batteryTxt;
 
-    private static final int ASPECT_RATIO_WIDTH = 12;
+    private static final int ASPECT_RATIO_WIDTH = 9;
     private static final int ASPECT_RATIO_HEIGHT = 10;
     private boolean isSpeaking = false;
     private boolean isRecording = false;
@@ -90,6 +91,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private int previewMute = ICameraP2P.MUTE;
     private int videoClarity = ICameraP2P.HD;
     private String currVideoClarity;
+    private String batteryLevel;
 
     private String picPath, videoPath;
 
@@ -117,7 +119,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         initView();
         initData();
         initListener();
-
+        getBatteryLevel();
         if (querySupportByDPID(DPConstants.PTZ_CONTROL)) {
             mVideoView.setOnRenderDirectionCallback(new OnRenderDirectionCallback() {
 
@@ -201,6 +203,12 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     };
 
     private void initView() {
+
+//        String battery_val;
+//        DeviceBean deviceBean = TuyaHomeSdk.getDataInstance().getDeviceBean(devId);
+//            Map<String, Object> dps = deviceBean.getDps();
+//            Object battery_value = dps.get(DPConstants.BATTERY);
+//            battery_val = JSON.toJSONString(battery_value);
 //        toolbar = findViewById(_getResource("toolbar_view", "id"));
 ////        setSupportActionBar(toolbar);
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -212,6 +220,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         mVideoView = findViewById(_getResource("camera_video_view", "id"));
         muteImg = findViewById(_getResource("camera_mute", "id"));
         qualityTv = findViewById(_getResource("camera_quality", "id"));
+        batteryTxt = findViewById(_getResource("battery","id"));
         speakTxt = findViewById(_getResource("speak_Txt", "id"));
         recordTxt = findViewById(_getResource("record_Txt", "id"));
         photoTxt = findViewById(_getResource("photo_Txt", "id"));
@@ -234,7 +243,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
 //        layoutParams.addRule(RelativeLayout.BELOW, _getResource("toolbar_view", "id"));
         findViewById(_getResource("camera_video_view_Rl", "id")).setLayoutParams(layoutParams);
-
+       // batteryTxt.setText(battery_val);
         muteImg.setSelected(true);
     }
 
@@ -628,6 +637,17 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
             return dps != null && dps.get(dpId) != null;
         }
         return false;
+    }
+    private String getBatteryLevel() {
+        DeviceBean deviceBean = TuyaHomeSdk.getDataInstance().getDeviceBean(devId);
+        if (deviceBean != null) {
+            Map<String, Object> dps = deviceBean.getDps();
+            Object res = dps.get(DPConstants.BATTERY);
+            batteryLevel = JSON.toJSONString(res);
+            Log.d(TAG, "startCameraLivePlay: " + JSON.toJSONString(res));
+            batteryTxt.setText(" : "+batteryLevel+" %");
+        }
+        return null;
     }
 
     private ITuyaDevice iTuyaDevice;

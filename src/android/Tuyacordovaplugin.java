@@ -228,6 +228,15 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             public void onSuccess(HomeBean homeBean) {
                 List<DeviceBean> deviceBeans = homeBean != null ? homeBean.getDeviceList() : null;
                 ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
+                //ArrayList deviceList = (ArrayList) deviceBeans;
+                for(DeviceBean device: deviceBeans){
+                    if(device.getDevId().equalsIgnoreCase(devId)){
+                        String devicedata = JSON.toJSONString(device);
+                        PluginResult deviceresult = new PluginResult(PluginResult.Status.OK, devicedata);
+                        deviceresult.setKeepCallback(true);
+                        callbackContext.sendPluginResult(deviceresult);
+                    }
+                }
                 try{
                     mDevice.registerDevListener(new IDevListener() {
                         @Override
@@ -277,12 +286,15 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         mDevice.publishDps(dps, new IResultCallback() {
             @Override
             public void onError(String code, String error) {
+                //Log.d(TAG, "onSuccess12312",code);
+                Log.e(TAG, "publishDps err " + code);
                 callbackContext.error(makeError(code,error));
-               // Toast.makeText(mContext, "Failed to switch on the light.", Toast.LENGTH_SHORT).show();
+               //Toast.makeText(mContext, "Failed to switch on the light.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSuccess() {
+                Log.d(TAG, "onSucasdasd12323" );
                 sendPluginResult(callbackContext, dps);
                 //Toast.makeText(mContext, "The light is switched on successfully.", Toast.LENGTH_SHORT).show();
             }

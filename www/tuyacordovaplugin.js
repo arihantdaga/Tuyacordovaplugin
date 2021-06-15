@@ -1,10 +1,10 @@
-var exec = function exec(method, params) {
-    return new Promise(function (resolve, reject) {
-      return cordova.exec(resolve, reject, pluginName, method, params);
-    });
-};
-
-const pluginName = 'Tuyacordovaplugin';
+    var exec = function exec(method, params) {
+        return new Promise(function (resolve, reject) {
+          return cordova.exec(resolve, reject, pluginName, method, params);
+        });
+    };
+    
+    const pluginName = 'Tuyacordovaplugin';
     
     var Home = {
         createHome: function createHome(){
@@ -48,7 +48,8 @@ const pluginName = 'Tuyacordovaplugin';
             return cordova.exec(successCallback, errorCallback, pluginName, 'device_data', [devId,homeId]);
         },
         setDeviceDps: function setDeviceDps({devId,dps}){
-         return exec('setDPs',[devId,dps])}
+         return exec('setDPs',[devId,dps])
+        }
     }
     
     var IPC = {
