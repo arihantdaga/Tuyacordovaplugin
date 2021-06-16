@@ -237,37 +237,37 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                         callbackContext.sendPluginResult(deviceresult);
                     }
                 }
-                try{
-                    mDevice.registerDevListener(new IDevListener() {
-                        @Override
-                        public void onDpUpdate(String devId, String dpStr) {
-                            PluginResult dpUpdateResult = new PluginResult(PluginResult.Status.OK, dpStr);
-                            dpUpdateResult.setKeepCallback(true);
-                            callbackContext.sendPluginResult(dpUpdateResult);
-                        }
-                        @Override
-                        public void onRemoved(String devId) {
-
-                        }
-                        @Override
-                        public void onStatusChanged(String devId, boolean online) {
-
-                        }
-                        @Override
-                        public void onNetworkStatusChanged(String devId, boolean status) {
-
-                        }
-                        @Override
-                        public void onDevInfoUpdate(String devId) {
-
-                        }
-                    });
+                //try{
+//                    mDevice.registerDevListener(new IDevListener() {
+//                        @Override
+//                        public void onDpUpdate(String devId, String dpStr) {
+//                            PluginResult dpUpdateResult = new PluginResult(PluginResult.Status.OK, dpStr);
+//                            dpUpdateResult.setKeepCallback(true);
+//                            callbackContext.sendPluginResult(dpUpdateResult);
+//                        }
+//                        @Override
+//                        public void onRemoved(String devId) {
+//
+//                        }
+//                        @Override
+//                        public void onStatusChanged(String devId, boolean online) {
+//
+//                        }
+//                        @Override
+//                        public void onNetworkStatusChanged(String devId, boolean status) {
+//
+//                        }
+//                        @Override
+//                        public void onDevInfoUpdate(String devId) {
+//
+//                        }
+//                    });
                     //JSONArray deviceListRespArray = new JSONArray(deviceListResponse);
                     //sendPluginResult(callbackContext, deviceListRespArray);
-                }catch(Exception e){
-                    callbackContext.error(makeError(e));
-                    return;
-                }
+//                }catch(Exception e){
+//                    callbackContext.error(makeError(e));
+//                    return;
+//                }
 
 
             }
@@ -283,6 +283,30 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         String devId = args.getString(0);
         String dps = args.getString(1);
         ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
+        mDevice.registerDevListener(new IDevListener() {
+            @Override
+            public void onDpUpdate(String devId, String dpStr) {
+                PluginResult dpUpdateResult = new PluginResult(PluginResult.Status.OK, dpStr);
+                dpUpdateResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(dpUpdateResult);
+            }
+            @Override
+            public void onRemoved(String devId) {
+
+            }
+            @Override
+            public void onStatusChanged(String devId, boolean online) {
+
+            }
+            @Override
+            public void onNetworkStatusChanged(String devId, boolean status) {
+
+            }
+            @Override
+            public void onDevInfoUpdate(String devId) {
+
+            }
+        });
         mDevice.publishDps(dps, new IResultCallback() {
             @Override
             public void onError(String code, String error) {
@@ -295,7 +319,10 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "onSucasdasd12323" );
-                sendPluginResult(callbackContext, dps);
+                PluginResult dpUpdateResult = new PluginResult(PluginResult.Status.OK, dps);
+                dpUpdateResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(dpUpdateResult);
+
                 //Toast.makeText(mContext, "The light is switched on successfully.", Toast.LENGTH_SHORT).show();
             }
         });

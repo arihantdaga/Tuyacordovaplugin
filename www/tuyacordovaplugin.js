@@ -1,3 +1,4 @@
+cordova.define("cordova-plugin-tuya-unofficial.tuyacordovaplugin", function(require, exports, module) {
     var exec = function exec(method, params) {
         return new Promise(function (resolve, reject) {
           return cordova.exec(resolve, reject, pluginName, method, params);
@@ -47,8 +48,8 @@
         getDeviceData: function getDeviceData({devId,homeId}, successCallback, errorCallback){
             return cordova.exec(successCallback, errorCallback, pluginName, 'device_data', [devId,homeId]);
         },
-        setDeviceDps: function setDeviceDps({devId,dps}){
-         return exec('setDPs',[devId,dps])
+        setDeviceDps: function setDeviceDps({devId,dps},successCallback,errorCallback){
+         return cordova.exec(successCallback,errorCallback,pluginName,'setDPs',[devId,dps]);
         }
     }
     
@@ -72,4 +73,5 @@
     }
     
     module.exports = Tuya;
+    });
     
