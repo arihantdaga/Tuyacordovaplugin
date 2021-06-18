@@ -272,18 +272,18 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         String devId = args.getString(0);
         ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
         mDevice.removeDevice(new IResultCallback() {
-	@Override
-	public void onError(String errorCode, String errorMsg) {
-         callbackContext.error(makeError(errorCode,errorMsg));
-	}
+            @Override
+            public void onError(String errorCode, String errorMsg) {
+                callbackContext.error(makeError(errorCode,errorMsg));
+            }
 
-	@Override
-	public void onSuccess() {
-          PluginResult removeResult = new PluginResult(PluginResult.Status.OK,devId );
-                removeResult.setKeepCallback(true);
-                callbackContext.sendPluginResult(removeResult);
-	}
-});
+            @Override
+            public void onSuccess() {
+                PluginResult removeResult = new PluginResult(PluginResult.Status.OK,devId );
+                        removeResult.setKeepCallback(true);
+                        callbackContext.sendPluginResult(removeResult);
+            }
+        });
     }
 
       public void signalStrength(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
