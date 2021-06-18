@@ -253,19 +253,19 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         String deviceName = args.getString(1);
         ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
         mDevice.renameDevice(deviceName, new IResultCallback() {
-	@Override
-	public void onError(String code, String error) {
-		// Failed to rename the device.
-        callbackContext.error(makeError(errorCode,errorMsg));
-	}
-	@Override
-	public void onSuccess() {
-		// The device is renamed successfully.
-        PluginResult renameResult = new PluginResult(PluginResult.Status.OK, deviceName);
-                renameResult.setKeepCallback(true);
-                callbackContext.sendPluginResult(renameResult);
-	}
-});
+            @Override
+            public void onError(String code, String error) {
+                // Failed to rename the device.
+                callbackContext.error(makeError(errorCode,errorMsg));
+            }
+            @Override
+            public void onSuccess() {
+                // The device is renamed successfully.
+                PluginResult renameResult = new PluginResult(PluginResult.Status.OK, deviceName);
+                        renameResult.setKeepCallback(true);
+                        callbackContext.sendPluginResult(renameResult);
+            }
+        });
     }
 
     public void removeDevice(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
@@ -289,20 +289,20 @@ public class Tuyacordovaplugin extends CordovaPlugin {
       public void signalStrength(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
         String devId = args.getString(0);
         ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
-      mDevice.requestWifiSignal(new WifiSignalListener() {
+        mDevice.requestWifiSignal(new WifiSignalListener() {
 
-	@Override
-	public void onSignalValueFind(String signal) {
-          PluginResult signalResult = new PluginResult(PluginResult.Status.OK,signal);
-                signalResult.setKeepCallback(true);
-                callbackContext.sendPluginResult(signalResult);
-	}
+            @Override
+            public void onSignalValueFind(String signal) {
+                PluginResult signalResult = new PluginResult(PluginResult.Status.OK,signal);
+                        signalResult.setKeepCallback(true);
+                        callbackContext.sendPluginResult(signalResult);
+            }
 
-	@Override
-	public void onError(String errorCode, String errorMsg) {
-         callbackContext.error(makeError(errorCode,errorMsg));
-	}
-});;
+            @Override
+            public void onError(String errorCode, String errorMsg) {
+                callbackContext.error(makeError(errorCode,errorMsg));
+            }
+        });
     }
 
     public void setDPs(CordovaArgs args, CallbackContext callbackContext) throws  JSONException{
