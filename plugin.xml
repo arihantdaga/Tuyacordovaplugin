@@ -105,6 +105,7 @@
       <resource-file src="src/android/res/drawable-xhdpi/camera_tab_speak_btn_on.png" target="res/drawable-xhdpi/camera_tab_speak_btn_on.png" />
       <resource-file src="src/android/res/drawable-xhdpi/camera_tab_speak_btn_unenable.png" target="res/drawable-xhdpi/camera_tab_speak_btn_unenable.png" />
       <resource-file src="src/android/res/drawable-xhdpi/tysmart_back.png" target="res/drawable-xhdpi/tysmart_back.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/lighting.png" target="res/drawable-xhdpi/lighting.png" />
 		
       <!-- Values -->
       <resource-file src="src/android/res/values/tuyacordovaplugin_colors.xml" target="res/values/tuyacordovaplugin_colors.xml" />
