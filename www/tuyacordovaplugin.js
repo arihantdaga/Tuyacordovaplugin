@@ -1,4 +1,3 @@
-cordova.define("cordova-plugin-tuya-unofficial.tuyacordovaplugin", function(require, exports, module) {
     var exec = function exec(method, params) {
         return new Promise(function (resolve, reject) {
           return cordova.exec(resolve, reject, pluginName, method, params);
@@ -33,8 +32,8 @@ cordova.define("cordova-plugin-tuya-unofficial.tuyacordovaplugin", function(requ
         register: function register({countryCode, email, password, otp}) {
             return exec('user_register', [countryCode, email, password, otp])
         },
-        loginOrRegitserWithUID : function loginOrRegitserWithUID({countryCode, uid, password}){
-            return exec('user_loginOrRegitserWithUID',[countryCode, uid,password])
+        loginOrRegitserWithUID : function loginOrRegitserWithUID({countryCode, uid, password}, successCallback, errorCallback){
+            return cordova.exec(successCallback, errorCallback, pluginName,'user_loginOrRegitserWithUID',[countryCode, uid,password])
         }
     }
     
@@ -50,6 +49,15 @@ cordova.define("cordova-plugin-tuya-unofficial.tuyacordovaplugin", function(requ
         },
         setDeviceDps: function setDeviceDps({devId,dps},successCallback,errorCallback){
          return cordova.exec(successCallback,errorCallback,pluginName,'setDPs',[devId,dps]);
+        },
+        renameDevice: function renameDevice({devId,deviceName}, successCallback, errorCallback){
+            return cordova.exec(successCallback,errorCallback,pluginName,'renameDevice',[devId,deviceName]);
+        },
+        removeDevice: function removeDevice({devId}, successCallback, errorCallback){
+            return cordova.exec(successCallback,errorCallback,pluginName,'removeDevice',[devId])
+        },
+        signalStrength: function signalStrength({devId}, successCallback, errorCallback){
+            return cordova.exec(successCallback, errorCallback, pluginName,'signalStrength',[devId]);
         }
     }
     
@@ -73,5 +81,4 @@ cordova.define("cordova-plugin-tuya-unofficial.tuyacordovaplugin", function(requ
     }
     
     module.exports = Tuya;
-    });
     
