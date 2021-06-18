@@ -347,13 +347,16 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                                 .setListener(new ITuyaSmartCameraActivatorListener() {
                                     @Override
                                     public void onQRCodeSuccess(String qrcodeUrl) {
-                                        Toast.makeText(activity,qrcodeUrl,Toast.LENGTH_LONG).show();
-                                        PluginResult qrCodeResult = new PluginResult(PluginResult.Status.OK, qrcodeUrl);
+                                        JSONObject resultObj = new JSONObject();
+                                        try {
+                                            resultObj.put("status", "qr");
+                                            resultObj.put("qrCode", qrcodeUrl);
+                                        } catch (Exception e) {
+                                            LOG.d(TAG, "error = %s", e.toString());
+                                        }
+                                        PluginResult qrCodeResult = new PluginResult(PluginResult.Status.OK, resultObj);
                                         qrCodeResult.setKeepCallback(true);
                                         callbackContext.sendPluginResult(qrCodeResult);
-                                       // eventSendPluginResult( callbackContext, "Event 1", "Message 1");
-
-                                        // Send qrCOdeUrl to cordovacallback.
 
                                     }
 
@@ -364,23 +367,30 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                                         callbackContext.sendPluginResult(configResult);
                                         eventSendPluginResult( callbackContext, "Event 1", "Message 1");
                                         Toast.makeText(activity,"config error!",Toast.LENGTH_LONG).show();
+                                        mTuyaActivator.stop();
                                     }
 
                                     @Override
                                     public void onActiveSuccess(DeviceBean devResp) {
-                                        PluginResult configResult = new PluginResult(PluginResult.Status.OK, devResp.devId);
+                                        JSONObject resultObj = new JSONObject();
+                                        try {
+                                            resultObj.put("status", "success");
+                                            resultObj.put("deviceId", devResp.devId);
+                                            resultObj.put("mac", devResp.getMac());
+                                            resultObj.put("deviceName", devResp.getName());
+                                        } catch (Exception e) {
+                                            LOG.d(TAG, "error = %s", e.toString());
+                                        }
+                                        PluginResult configResult = new PluginResult(PluginResult.Status.OK, resultObj);
                                         configResult.setKeepCallback(true);
                                         callbackContext.sendPluginResult(configResult);
-                                        eventSendPluginResult( callbackContext, "Event 1", "Message 1");
-                                        Toast.makeText(activity,"config success!",Toast.LENGTH_LONG).show();
-                                       // devResp.
+                                        mTuyaActivator.stop();
                                     }
                                 });
 
                         mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newCameraDevActivator(builder);
                         mTuyaActivator.createQRCode();
                         mTuyaActivator.start();
-                        mTuyaActivator.stop();
                     }
 
 
@@ -391,6 +401,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 });
 
     }
+
 
     public void ipc_startCameraLivePlay(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
         String devId = args.getString(0);
