@@ -256,7 +256,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             @Override
             public void onError(String code, String error) {
                 // Failed to rename the device.
-                callbackContext.error(makeError(errorCode,errorMsg));
+                callbackContext.error(makeError(code, error));
             }
             @Override
             public void onSuccess() {
