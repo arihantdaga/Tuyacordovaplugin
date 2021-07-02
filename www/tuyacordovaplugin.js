@@ -21,6 +21,9 @@
         },
         listDevices: function listDevices(homeId){
             return exec('home_listDevices',[homeId]);
+        },
+        initNotifications: function initNotifications(pushToken) {
+            return exec('home_initNotifications', [pushToken]);
         }
     
     }
@@ -32,32 +35,41 @@
         register: function register({countryCode, email, password, otp}) {
             return exec('user_register', [countryCode, email, password, otp])
         },
-        loginOrRegitserWithUID : function loginOrRegitserWithUID({countryCode, uid, password}, successCallback, errorCallback){
-            return cordova.exec(successCallback, errorCallback, pluginName,'user_loginOrRegitserWithUID',[countryCode, uid,password])
+        loginOrRegitserWithUID : function loginOrRegitserWithUID({countryCode, uid, password}){
+            return exec('user_loginOrRegitserWithUID',[countryCode, uid,password])
+        },
+        isLoggedIn: function isLoggin(){
+            return exec('user_isLoggedIn', []);
+        },
+        logout: function logout(){
+            return exec('user_logout', []);
         }
     }
     
     var Networking = {
         smartCameraConfiguration: function smartCameraConfiguration({ssid,pass,homeId}, successCallback, errorCallback){
             return cordova.exec(successCallback, errorCallback, pluginName, 'network_smartCameraConfiguration', [ssid,pass,homeId]);
+        },
+        stopCameraConfiguration: function smartCameraConfiguration(successCallback, errorCallback){
+            return cordova.exec(successCallback, errorCallback, pluginName, 'network_stopCameraConfiguration', []);
         }
     }
     
     var Utils = {
-        getDeviceData: function getDeviceData({devId,homeId}, successCallback, errorCallback){
-            return cordova.exec(successCallback, errorCallback, pluginName, 'device_data', [devId,homeId]);
+        getDeviceData: function getDeviceData({devId,homeId}){
+            return exec('device_data', [devId,homeId]);
         },
-        setDeviceDps: function setDeviceDps({devId,dps},successCallback,errorCallback){
-         return cordova.exec(successCallback,errorCallback,pluginName,'setDPs',[devId,dps]);
+        setDeviceDps: function setDeviceDps({devId,dps}){
+         return exec('setDPs',[devId,dps]);
         },
-        renameDevice: function renameDevice({devId,deviceName}, successCallback, errorCallback){
-            return cordova.exec(successCallback,errorCallback,pluginName,'renameDevice',[devId,deviceName]);
+        renameDevice: function renameDevice({devId,deviceName}){
+            return exec('renameDevice',[devId,deviceName]);
         },
-        removeDevice: function removeDevice({devId}, successCallback, errorCallback){
-            return cordova.exec(successCallback,errorCallback,pluginName,'removeDevice',[devId])
+        removeDevice: function removeDevice({devId}){
+            return exec('removeDevice',[devId])
         },
-        signalStrength: function signalStrength({devId}, successCallback, errorCallback){
-            return cordova.exec(successCallback, errorCallback, pluginName,'signalStrength',[devId]);
+        signalStrength: function signalStrength({devId}){
+            return exec('signalStrength',[devId]);
         }
     }
     

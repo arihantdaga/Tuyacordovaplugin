@@ -10,13 +10,13 @@ import android.graphics.Bitmap;
 import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.google.zxing.WriterException;
 import com.tuya.smart.android.camera.sdk.TuyaIPCSdk;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCCore;
 import com.tuya.smart.android.user.api.ILoginCallback;
+import com.tuya.smart.android.user.api.ILogoutCallback;
 import com.tuya.smart.android.user.api.IUidLoginCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
@@ -139,6 +139,39 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         
     }
 
+    public void home_initNotifications(CordovaArgs args, CallbackContext callbackContext) throws  JSONException{
+        String pushToken = args.getString(0);
+        LOG.d(TAG, "registerforNotifications: registerforNotifications is called");
+        String pushProvider = "fcm";
+        TuyaHomeSdk.getPushInstance().registerDevice(pushToken, pushProvider, new IResultCallback() {
+            @Override
+            public void onError(String code, String error) {
+                callbackContext.error(makeError(code, error));
+            }
+            @Override
+            public void onSuccess() {
+                LOG.d(TAG, "registerforNotifications success: ");
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, "OK");
+                callbackContext.sendPluginResult(pluginResult);
+            }
+        });
+    }
+
+    public void user_logout(CordovaArgs args, CallbackContext callbackContext) {
+        TuyaHomeSdk.getUserInstance().logout(new ILogoutCallback() {
+            @Override
+            public void onSuccess() {
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, "OK");
+                callbackContext.sendPluginResult(pluginResult);
+            }
+
+            @Override
+            public void onError(String code, String error) {
+                callbackContext.error(makeError(code, error));
+            }
+        });
+    }
+
     public void user_loginOrRegitserWithUID(CordovaArgs args, CallbackContext callbackContext){
         try{
             String countryCode = args.getString(0);
@@ -147,9 +180,6 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             TuyaHomeSdk.getUserInstance().loginOrRegisterWithUid (countryCode, uid, pass, true, new IUidLoginCallback(){
                 @Override
                 public void onSuccess(User user, long homeId) {
-                    Toast.makeText(activity.getApplicationContext(),
-                            "Login success",
-                            Toast.LENGTH_SHORT).show();
                     JSONObject successObj = new JSONObject();
                     try{
                         successObj.put("homeId", homeId);
@@ -160,14 +190,22 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 }
                 @Override
                 public void onError(String code, String error) {
-                    Toast.makeText(activity.getApplicationContext(),
-                            "code: " + code + "error:" + error,
-                            Toast.LENGTH_SHORT).show();
                     callbackContext.error(makeError(code,error));
                 }
             });
         }catch (JSONException e){
-            callbackContext.error(makeError((e)));
+            callbackContext.error(makeError(e));
+        }
+    }
+
+    public void user_isLoggedIn(CordovaArgs args, CallbackContext callbackContext) {
+        try {
+            boolean isLoggedIn = TuyaHomeSdk.getUserInstance().isLogin();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("status", isLoggedIn);
+            sendPluginResult(callbackContext, jsonObj);
+        } catch (JSONException e){
+            callbackContext.error(makeError(e));
         }
     }
 
@@ -339,7 +377,6 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 //Log.d(TAG, "onSuccess12312",code);
                 Log.e(TAG, "publishDps err " + code);
                 callbackContext.error(makeError(code,error));
-               //Toast.makeText(mContext, "Failed to switch on the light.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -348,8 +385,6 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 PluginResult dpUpdateResult = new PluginResult(PluginResult.Status.OK, dps);
                 dpUpdateResult.setKeepCallback(true);
                 callbackContext.sendPluginResult(dpUpdateResult);
-
-                //Toast.makeText(mContext, "The light is switched on successfully.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -392,7 +427,6 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                                         configResult.setKeepCallback(true);
                                         callbackContext.sendPluginResult(configResult);
                                         eventSendPluginResult( callbackContext, "Event 1", "Message 1");
-                                        Toast.makeText(activity,"config error!",Toast.LENGTH_LONG).show();
                                         mTuyaActivator.stop();
                                     }
 
@@ -402,7 +436,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                                         try {
                                             resultObj.put("status", "success");
                                             resultObj.put("deviceId", devResp.devId);
-                                            resultObj.put("mac", devResp.getMac());
+                                            resultObj.put("mac", devResp.uuid);
                                             resultObj.put("deviceName", devResp.getName());
                                         } catch (Exception e) {
                                             LOG.d(TAG, "error = %s", e.toString());
@@ -434,19 +468,14 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         ITuyaIPCCore cameraInstance = TuyaIPCSdk.getCameraInstance();
         if (cameraInstance != null) {
             if (cameraInstance.isIPCDevice(devId)) {
-                PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
-                pluginResult.setKeepCallback(true);
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
                 callbackContext.sendPluginResult(pluginResult);
 
                 Log.d(TAG, "startCameraLivePlay: " + devId);
                 Intent intent = new Intent(activity, CameraPanelActivity.class);
                 intent.putExtra(INTENT_DEV_ID, devId);
-                Log.d(TAG, "startCameraLivePlay:  point 1");
+                cordova.setActivityResultCallback (this);
                 cordova.startActivityForResult(this,intent, 1000);
-                Log.d(TAG, "startCameraLivePlay: Point 2");
-                eventSendPluginResult( callbackContext, "Event 1", "Message 1");
-                eventSendPluginResult( callbackContext, "Event 2", "Message 2");
-
             }
         }else{
             callbackContext.error(makeError("0", "Unknown error"));

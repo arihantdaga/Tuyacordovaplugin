@@ -8,9 +8,9 @@
    <preference name="TUYA_SMART_SECRET" default="" />
 
    <platform name="android">
-      <framework src="com.tuya.smart:tuyasmart:3.26.5" />
-      <framework src="com.tuya.smart:tuyasmart-ipcsdk:3.26.5" />
-      <framework src="cn.yipianfengye.android:zxing-library:2.2" />
+      <!-- <framework src="com.tuya.smart:tuyasmart:3.26.5" />
+      <framework src="com.tuya.smart:tuyasmart-ipcsdk:3.26.5" /> -->
+      <!-- <framework src="cn.yipianfengye.android:zxing-library:2.2" /> -->
       <preference name="AndroidXEnabled" default="true" />
       <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/>
 
@@ -20,11 +20,6 @@
          </feature>
       </config-file>
       <config-file parent="/*" target="AndroidManifest.xml" />
-      <!-- <edit-config  file="AndroidManifest.xml" target="/manifest/application" mode="merge">
-         <application android:requestLegacyExternalStorage="true" android:allowBackup="true" xmlns:tools="http://schemas.android.com/tools"
-         tools:replace="android:allowBackup,android:supportsRtl,android:requestLegacyExternalStorage"
-         />
-      </edit-config> -->
       <config-file target="AndroidManifest.xml" parent="/manifest/application">
          <meta-data
             android:name="TUYA_SMART_APPKEY"
@@ -40,6 +35,7 @@
             android:value="$THEME_COLOR" />
 
       </config-file>
+
       <config-file target="AndroidManifest.xml" parent="/manifest">
          <!-- sdcard -->
          <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -272,4 +268,6 @@
       <source-file src="src/ios/IPC/View/TYCameraRecordListView.m" />
 
    </platform>
+
+   <hook src="scripts/postPlugin.js" type="after_plugin_install" />
 </plugin>
