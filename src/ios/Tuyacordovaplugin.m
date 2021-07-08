@@ -1,4 +1,5 @@
 #import "Tuyacordovaplugin.h"
+#import "AppDelegate+Tuyacordovaplugin.h"
 #import "CameraViewController.h"
 
 @interface Tuyacordovaplugin () <TuyaSmartActivatorDelegate, TuyaSmartDeviceDelegate>

@@ -2,7 +2,6 @@
 #import <Cordova/CDVPlugin.h>
 #import <Cordova/CDV.h>
 #import <TuyaSmartActivatorKit/TuyaSmartActivatorKit.h>
-#import "TuyaDevice.h"
 
 @interface Tuyacordovaplugin: CDVPlugin
 

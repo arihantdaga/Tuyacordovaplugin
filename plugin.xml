@@ -124,6 +124,7 @@
          </config>
          <pods use-frameworks="true">
             <pod name="SVProgressHUD" />
+            <pod name="SDWebImage" />
             <pod name="TuyaSmartHomeKit" />
             <pod name="TuyaSmartCameraKit" />
             <pod name="TuyaCameraUIKit" />
@@ -217,55 +218,58 @@
       <resource-file src="src/ios/IPC/Config/IPCViewsLocalizable.strings" />
 
       <!-- IPC/Controller -->
-      <source-file src="src/ios/IPC/Controller/CameraCloudViewController.h" />
+      <header-file src="src/ios/IPC/Controller/CameraCloudViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraCloudViewController.m" />
-      <source-file src="src/ios/IPC/Controller/CameraDoorbellManager.h" />
+      <header-file src="src/ios/IPC/Controller/CameraDoorbellManager.h" />
       <source-file src="src/ios/IPC/Controller/CameraDoorbellManager.m" />
-      <source-file src="src/ios/IPC/Controller/CameraDoorbellViewController.h" />
+      <header-file src="src/ios/IPC/Controller/CameraDoorbellViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraDoorbellViewController.m" />
-      <source-file src="src/ios/IPC/Controller/CameraMessageViewController.h" />
+      <header-file src="src/ios/IPC/Controller/CameraMessageViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraMessageViewController.m" />
-      <source-file src="src/ios/IPC/Controller/CameraPlaybackViewController.h" />
+      <header-file src="src/ios/IPC/Controller/CameraPlaybackViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraPlaybackViewController.m" />
-      <source-file src="src/ios/IPC/Controller/CameraSDCardViewController.h" />
+      <header-file src="src/ios/IPC/Controller/CameraSDCardViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraSDCardViewController.m" />
-      <source-file src="src/ios/IPC/Controller/CameraSettingViewController.h" />
+      <header-file src="src/ios/IPC/Controller/CameraSettingViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraSettingViewController.m" />
-      <source-file src="src/ios/IPC/Controller/CameraViewController.h" />
+      <header-file src="src/ios/IPC/Controller/CameraViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraViewController.m" />
 
       <!-- IPC/Models -->
-      <source-file src="src/ios/IPC/Models/CameraTimeLineModel.h" />
+      <header-file src="src/ios/IPC/Models/CameraTimeLineModel.h" />
       <source-file src="src/ios/IPC/Models/CameraTimeLineModel.m" />
-      <source-file src="src/ios/IPC/Models/CloudTimePieceModel+Timeline.h" />
+      <header-file src="src/ios/IPC/Models/CloudTimePieceModel+Timeline.h" />
       <source-file src="src/ios/IPC/Models/CloudTimePieceModel+Timeline.m" />
 
       <!-- IPC/Utils -->
-      <source-file src="src/ios/IPC/Utils/CameraPermissionUtil.h" />
+      <header-file src="src/ios/IPC/Utils/CameraPermissionUtil.h" />
       <source-file src="src/ios/IPC/Utils/CameraPermissionUtil.m" />
-      <source-file src="src/ios/IPC/Utils/UIView+CameraAdditions.h" />
+      <header-file src="src/ios/IPC/Utils/UIView+CameraAdditions.h" />
       <source-file src="src/ios/IPC/Utils/UIView+CameraAdditions.m" />
 
       <!-- IPC/View -->
-      <source-file src="src/ios/IPC/View/CameraCalendarCollectionViewCell.h" />
+      <header-file src="src/ios/IPC/View/CameraCalendarCollectionViewCell.h" />
       <source-file src="src/ios/IPC/View/CameraCalendarCollectionViewCell.m" />
-      <source-file src="src/ios/IPC/View/CameraCalendarView.h" />
+      <header-file src="src/ios/IPC/View/CameraCalendarView.h" />
       <source-file src="src/ios/IPC/View/CameraCalendarView.m" />
-      <source-file src="src/ios/IPC/View/CameraCloudDayCollectionViewCell.h" />
+      <header-file src="src/ios/IPC/View/CameraCloudDayCollectionViewCell.h" />
       <source-file src="src/ios/IPC/View/CameraCloudDayCollectionViewCell.m" />
-      <source-file src="src/ios/IPC/View/CameraControlButton.h" />
+      <header-file src="src/ios/IPC/View/CameraControlButton.h" />
       <source-file src="src/ios/IPC/View/CameraControlButton.m" />
-      <source-file src="src/ios/IPC/View/CameraControlView.h" />
+      <header-file src="src/ios/IPC/View/CameraControlView.h" />
       <source-file src="src/ios/IPC/View/CameraControlView.m" />
-      <source-file src="src/ios/IPC/View/CameraSwitchCell.h" />
+      <header-file src="src/ios/IPC/View/CameraSwitchCell.h" />
       <source-file src="src/ios/IPC/View/CameraSwitchCell.m" />
-      <source-file src="src/ios/IPC/View/CameraVideoView.h" />
+      <header-file src="src/ios/IPC/View/CameraVideoView.h" />
       <source-file src="src/ios/IPC/View/CameraVideoView.m" />
-      <source-file src="src/ios/IPC/View/CameraViewConstants.h" />
-      <source-file src="src/ios/IPC/View/TYCameraRecordCell.h" />
+      <header-file src="src/ios/IPC/View/CameraViewConstants.h" />
+      <header-file src="src/ios/IPC/View/TYCameraRecordCell.h" />
       <source-file src="src/ios/IPC/View/TYCameraRecordCell.m" />
-      <source-file src="src/ios/IPC/View/TYCameraRecordListView.h" />
+      <header-file src="src/ios/IPC/View/TYCameraRecordListView.h" />
       <source-file src="src/ios/IPC/View/TYCameraRecordListView.m" />
+
+      <header-file src="src/ios/AppDelegate+Tuyacordovaplugin.h" />
+      <source-file src="src/ios/AppDelegate+Tuyacordovaplugin.m" />
 
    </platform>
 
