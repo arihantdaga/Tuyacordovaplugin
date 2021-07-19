@@ -423,10 +423,15 @@ public class Tuyacordovaplugin extends CordovaPlugin {
 
                                     @Override
                                     public void onError(String errorCode, String errorMsg) {
-                                        PluginResult configResult = new PluginResult(PluginResult.Status.OK,errorMsg);
-                                        configResult.setKeepCallback(true);
+                                        JSONObject resultObj = new JSONObject();
+                                        try {
+                                            resultObj.put("code", errorCode);
+                                            resultObj.put("message", errorMsg);
+                                        } catch (Exception e) {
+                                            LOG.d(TAG, "error = %s", e.toString());
+                                        }
+                                        PluginResult configResult = new PluginResult(PluginResult.Status.ERROR, resultObj);
                                         callbackContext.sendPluginResult(configResult);
-                                        eventSendPluginResult( callbackContext, "Event 1", "Message 1");
                                         mTuyaActivator.stop();
                                     }
 
