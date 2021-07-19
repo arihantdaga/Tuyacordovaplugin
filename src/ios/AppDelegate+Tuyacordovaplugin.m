@@ -6,8 +6,15 @@
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @end
 
+static id <UNUserNotificationCenterDelegate> _previousDelegate;
+#define kApplicationInBackgroundKey @"applicationInBackground"
+
 @implementation AppDelegate (Tuyacordovaplugin)
 
+- (id) getCommandInstance:(NSString*)className
+{
+    return [self.viewController getCommandInstance:className];
+}
 
 + (void) load 
 {
@@ -18,17 +25,33 @@
 
 - (AppDelegate *)pushPluginSwizzledInit
 {
-    // [[NSNotificationCenter defaultCenter]
-    //  addObserver:self
-    //  selector:@selector(applicationDidBecomeActive:)
-    //  name:UIApplicationDidBecomeActiveNotification
-    //  object:nil];
-    
     return [self pushPluginSwizzledInit];
 }
 
-- (void)applicationDidBecomeActive:(NSNotification *)notification
-{
+- (void)setApplicationInBackground:(NSNumber *)applicationInBackground {
+    objc_setAssociatedObject(self, kApplicationInBackgroundKey, applicationInBackground, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSNumber *)applicationInBackground {
+    return objc_getAssociatedObject(self, kApplicationInBackgroundKey);
+}
+
+- (BOOL)application:(UIApplication *)application swizzledDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self application:application swizzledDidFinishLaunchingWithOptions:launchOptions];
+    if ([UNUserNotificationCenter currentNotificationCenter].delegate != nil) {
+        _previousDelegate = [UNUserNotificationCenter currentNotificationCenter].delegate;
+    }
+    [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+    self.applicationInBackground = @(YES);
+    return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    self.applicationInBackground = @(NO);
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    self.applicationInBackground = @(YES);
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -40,11 +63,25 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler 
 {
     NSLog(@"notification ochindi");
-    if (userInfo[@"devId"]) {
-    CameraViewController *vc = [[CameraViewController alloc] initWithDeviceId:userInfo[@"devId"]];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self.viewController presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)(void))completionHandler {
+    
+
+    NSMutableDictionary *userInfo = [response.notification.request.content.userInfo mutableCopy];
+    [userInfo setObject:response.actionIdentifier forKey:@"actionCallback"];
+    NSString *devId = userInfo[@"devId"];
+    if (devId) {
+        if ([self.applicationInBackground  isEqual: @(YES)]) {
+            Tuyacordovaplugin *pushHandler = [self getCommandInstance:@"Tuyacordovaplugin"];
+            [pushHandler saveBgNotificationData:userInfo];
+        } else {
+            [Tuyacordovaplugin.tuyacordovaplugin sendForegroundNotification: response.notification.request.content.userInfo];
+        }
     }
+    completionHandler();
 }
 
 

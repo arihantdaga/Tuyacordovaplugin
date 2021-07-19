@@ -10,7 +10,16 @@
 
 @implementation Tuyacordovaplugin
 
+static Tuyacordovaplugin* tuyacordovaplugin;
+
+@synthesize bgNotificationData;
+
++ (Tuyacordovaplugin*) tuyacordovaplugin {
+    return tuyacordovaplugin;
+}
+
 - (void) pluginInitialize {
+    tuyacordovaplugin = self;
     NSString *appKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleTuyaAppKey"];
     NSString *appSecret = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleTuyaAppSecret"];
     [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
@@ -71,40 +80,6 @@
     }];
 }
 
-// - (void) network_smartCameraConfiguration: (CDVInvokedUrlCommand *) command {
-//     NSString *ssid = (NSString *)[command argumentAtIndex:0];
-//     NSString *pass = (NSString *)[command argumentAtIndex:1];
-//     NSString *homeIdString = (NSString *)[command argumentAtIndex:2];
-//     long long homeId = [homeIdString longLongValue];
-
-//     [[TuyaSmartActivator sharedInstance] getTokenWithHomeId:homeId success:^(NSDictionary *result) {
-//         if (1) {
-//             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
-//             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-//         }
-//         else {
-//             NSDictionary *dictionary = @{
-//                     @"s": ssid,
-//                     @"p": pass,
-//                     @"t": result
-//             };
-//             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
-//             NSString *wifiJsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-
-//             NSDictionary *resultDict = @{
-//                 @"status": @"qr",
-//                 @"qrCode": wifiJsonStr
-//             };
-//             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
-//             [pluginResult setKeepCallbackAsBool:true];
-//             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-//         }
-//     } errorCallback:^(NSError *errorMsg) {
-//         NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
-//         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
-//         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-//     }];
-// }
 
 - (void) network_smartCameraConfiguration: (CDVInvokedUrlCommand *) command {
     NSString *ssid = (NSString *)[command argumentAtIndex:0];
@@ -136,7 +111,14 @@
                 [[TuyaSmartActivator sharedInstance] startConfigWiFi:TYActivatorModeQRCode ssid:ssid password:pass token:result timeout:100];
             });
         } else {
-            //TODO handle this
+            [TuyaSmartActivator sharedInstance].delegate = nil;
+            self.latestCallbackIdForConfiguration = nil;
+            NSDictionary* resultDict = @{
+                @"message": @"Cannot generate QR Code, try again",
+                @"code": @"KTCUST001"
+            };
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }
     } failure:^(NSError *errorMsg) {
         [TuyaSmartActivator sharedInstance].delegate = nil;
@@ -148,8 +130,7 @@
 }
 
 - (void) network_stopCameraConfiguration: (CDVInvokedUrlCommand *) command {
-    // TODO
-    // [TuyaSmartActivator sharedInstance].delegate = nil;
+    [TuyaSmartActivator sharedInstance].delegate = nil;
     [[TuyaSmartActivator sharedInstance] stopConfigWiFi];
 }
 
@@ -223,7 +204,12 @@
                                                     error:&error];
 
     if (! jsonData) {
-        // TODO handle this
+        NSDictionary *err = @{
+            @"code": @"KTCUST002",
+            @"message": @"Unable to get get device details, try again"
+        };
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:err];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } else {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -243,8 +229,6 @@
     
     TuyaSmartSchemaModel *schema = self.tyDevice.deviceModel.schemaArray[2];
     
-//    NSString *type = [schema.type isEqualToString:@"obj"] ? schema.property.type : schema.type;
-    
     [self.tyDevice publishDps: json success:^(){
         self.latestCallbackIdForDpsUpdate = command.callbackId;
     } failure:^(NSError *errorMsg) {
@@ -260,8 +244,9 @@
     NSString *devId = (NSString *)[command argumentAtIndex:0];
     NSString *deviceName = (NSString *)[command argumentAtIndex:1];
 
-    TuyaSmartDevice *smartDevice = [TuyaSmartDevice deviceWithDeviceId:devId];
-    [smartDevice updateName:deviceName success:^{
+    [self initTyDeviceWithDevId:devId];
+    
+    [self.tyDevice updateName:deviceName success:^{
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:(NSString *)deviceName];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } failure:^(NSError *errorMsg) {
@@ -301,6 +286,30 @@
     }];
 }
 
+- (void) push_getBgNotificationData: (CDVInvokedUrlCommand *)command {
+    if (self.bgNotificationData != nil) {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:self.bgNotificationData];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//        self.bgNotificationData = nil;
+    } else {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:nil];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
+}
+
+- (void) push_getForegroundNotificationData: (CDVInvokedUrlCommand *)command {
+    self.latestCallbackIdForForegroundNotification = command.callbackId;
+    if (self.bgNotificationData != nil) {
+        [self sendForegroundNotification:self.bgNotificationData];
+        return;
+    }
+    else {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [pluginResult setKeepCallbackAsBool:true];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
+}
+
 
 
 - (TuyaSmartHomeManager *)homeManager {
@@ -319,12 +328,30 @@
     self.tyDevice = nil;
 }
 
+- (void) saveBgNotificationData: (NSDictionary *)userData {
+    if (self.latestCallbackIdForForegroundNotification && self.latestCallbackIdForForegroundNotification.length > 0) {
+        [self sendForegroundNotification:userData];
+    } else {
+        self.bgNotificationData = userData;
+    }
+}
+
+- (void) sendForegroundNotification: (NSDictionary *)userData {
+    if (self.latestCallbackIdForForegroundNotification && self.latestCallbackIdForForegroundNotification.length > 0) {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:userData];
+        [pluginResult setKeepCallbackAsBool:true];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.latestCallbackIdForForegroundNotification];
+    }
+}
 
 //helpers
 + (NSDictionary *)makeError:(NSError *)errorMessage {
-  NSDictionary *resultDict = [NSDictionary dictionaryWithObjectsAndKeys:
-    @"Error", @"message",
-  nil];
+    NSString *message = errorMessage.userInfo[@"NSLocalizedDescription"] ? errorMessage.userInfo[@"NSLocalizedDescription"] : @"Unknown Error Occurred";
+    NSInteger code = [errorMessage code];
+    NSDictionary *resultDict = @{
+        @"message": message,
+        @"code": [NSString stringWithFormat: @"%ld", (long)code]
+    };
   return resultDict;
 }
 

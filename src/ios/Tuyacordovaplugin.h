@@ -24,11 +24,20 @@
 - (void) removeDevice: (CDVInvokedUrlCommand *)command;
 - (void) signalStrength: (CDVInvokedUrlCommand *)command;
 
+- (void) push_getBgNotificationData: (CDVInvokedUrlCommand *)command;
+- (void) push_getForegroundNotificationData: (CDVInvokedUrlCommand *)command;
+
 - (void) initTyDeviceWithDevId: (NSString *)devId;
 - (void) destroyTyDevice;
+- (void) saveBgNotificationData: (NSDictionary *) userData;
+- (void) sendForegroundNotification: (NSDictionary *)userData;
+
++ (Tuyacordovaplugin *) tuyacordovaplugin;
 
 @property (nonatomic) NSString* latestCallbackIdForConfiguration;
 @property (nonatomic) NSString* latestCallbackIdForDpsUpdate;
 @property (nonatomic) NSString* latestCallbackIdForSignalStrength;
+@property (nonatomic) NSString* latestCallbackIdForForegroundNotification;
+@property (nonatomic) NSDictionary* bgNotificationData;
 
 @end

@@ -82,6 +82,15 @@
     var Lock = {
     
     }
+
+    var Push = {
+        getBgNotificationData: function getBgNotificationData() {
+            return exec('push_getBgNotificationData', []);
+        },
+        getForegroundNotificationData: function getForegroundNotificationData(successCallback, errorCallback) {
+            return cordova.exec(successCallback, errorCallback, pluginName, 'push_getForegroundNotificationData', []);
+        }
+    }
     
     var Tuya = {
         Home,
@@ -89,7 +98,8 @@
         Networking,
         Utils,
         IPC,
-        Lock
+        Lock,
+        Push
     }
     
     module.exports = Tuya;
