@@ -23,8 +23,11 @@ import java.io.File;
 public class Constants {
 
     public static final String INTENT_DEV_ID = "intent_devId";
+    public static final String INTENT_BG_COLOR = "bg_color";
+    public static final String INTENT_PRIMARY_COLOR = "primary_color";
     public static final String INTENT_P2P_TYPE = "intent_p2p_type";
     public static final int EXTERNAL_STORAGE_REQ_CODE = 10;
+    public static final int EXTERNAL_STORAGE_READ_REQ_CODE = 0x03;
     public static final int EXTERNAL_AUDIO_REQ_CODE = 11;
 
     public static final int ARG1_OPERATE_SUCCESS = 0;
@@ -63,7 +66,7 @@ public class Constants {
         try {
             File file = new File(filePath);
             if (!file.exists()) {
-                file.mkdirs();
+                file.getParentFile().mkdirs();
                 boolean iscreate = file.createNewFile();
                 if (iscreate) {
                     file.delete();

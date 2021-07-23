@@ -110,5 +110,5 @@
     <color name="switch_off_color">#303030</color>
     <color name="color_dddddd">#dddddd</color>
 
-    <color name="camera_panel_control_color">#ff0000</color>
+    <color name="camera_panel_control_color">#5d5858</color>
 </resources>

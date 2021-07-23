@@ -2,14 +2,18 @@ package com.arihant.tuyaplugin;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Camera;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,8 +64,10 @@ import java.util.Map;
 
 import static com.arihant.tuyaplugin.utils.Constants.ARG1_OPERATE_FAIL;
 import static com.arihant.tuyaplugin.utils.Constants.ARG1_OPERATE_SUCCESS;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_BG_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_DEV_ID;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_P2P_TYPE;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_PRIMARY_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_CONNECT;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_GET_VIDEO_CLARITY;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_MUTE;
@@ -81,6 +88,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private TuyaCameraView mVideoView;
     private ImageView muteImg;
     private TextView qualityTv;
+    private RelativeLayout mMainLayout;
     private TextView speakTxt, recordTxt, photoTxt, replayTxt, settingTxt, cloudStorageTxt, messageCenterTxt, deviceInfoTxt,batteryTxt;
 
     private static final int ASPECT_RATIO_WIDTH = 9;
@@ -98,6 +106,8 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private int p2pType;
 
     private String devId;
+    private String bgColor;
+    private String primaryColor;
     private ITuyaSmartCameraP2P mCameraP2P;
 
     /**
@@ -116,6 +126,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
             actionBar.hide();
         }
         setContentView(_getResource("activity_camera_panel", "layout"));
+        devId = getIntent().getStringExtra(INTENT_DEV_ID);
         initView();
         initData();
         initListener();
@@ -204,11 +215,11 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 
     private void initView() {
 
-//        String battery_val;
-//        DeviceBean deviceBean = TuyaHomeSdk.getDataInstance().getDeviceBean(devId);
-//            Map<String, Object> dps = deviceBean.getDps();
-//            Object battery_value = dps.get(DPConstants.BATTERY);
-//            battery_val = JSON.toJSONString(battery_value);
+        String battery_val;
+        DeviceBean deviceBean = TuyaHomeSdk.getDataInstance().getDeviceBean(devId);
+        Map<String, Object> dps = deviceBean.getDps();
+        Object battery_value = dps.get(DPConstants.BATTERY);
+        battery_val = JSON.toJSONString(battery_value);
 //        toolbar = findViewById(_getResource("toolbar_view", "id"));
 ////        setSupportActionBar(toolbar);
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -217,6 +228,8 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 //                onBackPressed();
 //            }
 //        });
+        bgColor = getIntent().getStringExtra(INTENT_BG_COLOR);
+        primaryColor = getIntent().getStringExtra(INTENT_PRIMARY_COLOR);
         mVideoView = findViewById(_getResource("camera_video_view", "id"));
         muteImg = findViewById(_getResource("camera_mute", "id"));
         qualityTv = findViewById(_getResource("camera_quality", "id"));
@@ -232,7 +245,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         deviceInfoTxt = findViewById(_getResource("info_Txt", "id"));
         deviceInfoTxt.setOnClickListener(this);
         ((ViewGroup) deviceInfoTxt.getParent()).removeView(deviceInfoTxt);
-        findViewById(_getResource("get_clarity_Txt", "id")).setOnClickListener(this);
+//        findViewById(_getResource("get_clarity_Txt", "id")).setOnClickListener(this);
         cloudStorageTxt = findViewById(_getResource("cloud_Txt", "id"));
         ((ViewGroup) cloudStorageTxt.getParent()).removeView(cloudStorageTxt);
         messageCenterTxt = findViewById(_getResource("message_center_Txt", "id"));
@@ -243,12 +256,14 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
 //        layoutParams.addRule(RelativeLayout.BELOW, _getResource("toolbar_view", "id"));
         findViewById(_getResource("camera_video_view_Rl", "id")).setLayoutParams(layoutParams);
-       // batteryTxt.setText(battery_val);
+        batteryTxt.setText(battery_val);
+        batteryTxt.setTextColor(Color.parseColor(primaryColor));
+        mMainLayout = findViewById(_getResource("main_layout", "id"));
+        mMainLayout.setBackgroundColor(Color.parseColor(bgColor));
         muteImg.setSelected(true);
     }
 
     private void initData() {
-        devId = getIntent().getStringExtra(INTENT_DEV_ID);
         ITuyaIPCCore cameraInstance = TuyaIPCSdk.getCameraInstance();
         if (cameraInstance != null) {
             mCameraP2P = cameraInstance.createCameraP2P(devId);
@@ -465,18 +480,29 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         });
     }
 
+    private void setSpeakIconColor() {
+        TextView tv = (TextView) findViewById(_getResource("speak_Txt", "id"));
+        if (isSpeaking) {
+            tv.setTextColor(Color.parseColor(primaryColor));
+        } else {
+            tv.setTextColor(ContextCompat.getColor(tv.getContext(),  _getResource("camera_panel_control_color", "color")));
+        }
+    }
+
     private void speakClick() {
         if (isSpeaking) {
             mCameraP2P.stopAudioTalk(new OperationDelegateCallBack() {
                 @Override
                 public void onSuccess(int sessionId, int requestId, String data) {
                     isSpeaking = false;
+                    setSpeakIconColor();
                     mHandler.sendMessage(MessageUtil.getMessage(MSG_TALK_BACK_OVER, ARG1_OPERATE_SUCCESS));
                 }
 
                 @Override
                 public void onFailure(int sessionId, int requestId, int errCode) {
                     isSpeaking = false;
+                    setSpeakIconColor();
                     mHandler.sendMessage(MessageUtil.getMessage(MSG_TALK_BACK_OVER, ARG1_OPERATE_FAIL));
 
                 }
@@ -487,12 +513,14 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
                     @Override
                     public void onSuccess(int sessionId, int requestId, String data) {
                         isSpeaking = true;
+                        setSpeakIconColor();
                         mHandler.sendMessage(MessageUtil.getMessage(MSG_TALK_BACK_BEGIN, ARG1_OPERATE_SUCCESS));
                     }
 
                     @Override
                     public void onFailure(int sessionId, int requestId, int errCode) {
                         isSpeaking = false;
+                        setSpeakIconColor();
                         mHandler.sendMessage(MessageUtil.getMessage(MSG_TALK_BACK_BEGIN, ARG1_OPERATE_FAIL));
                     }
                 });
@@ -711,7 +739,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 
     private void handleStopTalk(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
+//            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
             ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
@@ -719,7 +747,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 
     private void handleStartTalk(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
+//            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
             ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
@@ -727,7 +755,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 
     private void handleVideoRecordOver(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
+//            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
             ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }
@@ -744,7 +772,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private void handleMute(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
             muteImg.setSelected(previewMute == ICameraP2P.MUTE);
-            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
+//            ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_suc", "string")));
         } else {
             ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("operation_failed", "string")));
         }

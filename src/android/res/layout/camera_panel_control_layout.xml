@@ -2,20 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/camera_mute"
-            android:layout_width="20dp"
+<!--        <ImageView-->
+<!--            android:id="@+id/camera_mute"-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="@dimen/wh_28"-->
+<!--            android:layout_gravity="right"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:gravity="center"-->
+<!--            android:src="@drawable/lighting" />-->
+        <TextView
+            android:id="@+id/battery_Txt"
+            android:layout_width="55dp"
             android:layout_height="@dimen/wh_28"
             android:layout_gravity="right"
-            android:layout_marginLeft="10dp"
             android:gravity="center"
-            android:src="@drawable/lighting" />
+            android:text="@string/battery_level"
+            android:textColor="@color/gray_30"
+            android:textSize="@dimen/ts_12" />
 
         <TextView
             android:id="@+id/battery"
@@ -24,7 +32,6 @@
             android:layout_gravity="left"
             android:gravity="center"
             android:text="@string/hd"
-            android:textColor="@color/black"
             android:textSize="@dimen/ts_12" />
     </LinearLayout>
     <LinearLayout
@@ -37,7 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/camera_item_control_btn"
             android:drawableTop="@drawable/camera_icon_mic_selector"
             android:drawablePadding="@dimen/mg_5"
             android:gravity="center"
@@ -52,7 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_weight="1"
-            android:background="@drawable/camera_item_control_btn"
             android:drawableTop="@drawable/camera_icon_photo_selector"
             android:drawablePadding="@dimen/mg_5"
             android:gravity="center"
@@ -66,7 +71,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/camera_item_control_btn"
             android:drawableTop="@drawable/camera_icon_record_selector"
             android:drawablePadding="@dimen/mg_5"
             android:gravity="center"
@@ -81,16 +85,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/get_clarity_Txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/camera_icon_hd"
-            android:gravity="center"
-            android:padding="@dimen/mg_20"
-            android:text="@string/get_clarity"
-            android:textColor="@color/camera_panel_control_color" />
+<!--        <TextView-->
+<!--            android:id="@+id/get_clarity_Txt"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:drawableTop="@drawable/camera_icon_hd"-->
+<!--            android:gravity="center"-->
+<!--            android:padding="@dimen/mg_20"-->
+<!--            android:text="@string/get_clarity"-->
+<!--            android:textColor="@color/camera_panel_control_color" />-->
 
         <TextView
             android:id="@+id/cloud_Txt"

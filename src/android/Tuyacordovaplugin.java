@@ -47,7 +47,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_BG_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_DEV_ID;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_PRIMARY_COLOR;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -470,6 +473,8 @@ public class Tuyacordovaplugin extends CordovaPlugin {
 
     public void ipc_startCameraLivePlay(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
         String devId = args.getString(0);
+        String bgColor = args.getString(1);
+        String primaryColor = args.getString(2);
         ITuyaIPCCore cameraInstance = TuyaIPCSdk.getCameraInstance();
         if (cameraInstance != null) {
             if (cameraInstance.isIPCDevice(devId)) {
@@ -479,6 +484,8 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 Log.d(TAG, "startCameraLivePlay: " + devId);
                 Intent intent = new Intent(activity, CameraPanelActivity.class);
                 intent.putExtra(INTENT_DEV_ID, devId);
+                intent.putExtra(INTENT_BG_COLOR, bgColor);
+                intent.putExtra(INTENT_PRIMARY_COLOR, primaryColor);
                 cordova.setActivityResultCallback (this);
                 cordova.startActivityForResult(this,intent, 1000);
             }
