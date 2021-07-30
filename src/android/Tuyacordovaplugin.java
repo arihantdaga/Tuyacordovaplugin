@@ -84,9 +84,17 @@ public class Tuyacordovaplugin extends CordovaPlugin {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        TuyaHomeSdk.onDestroy();
+        try {
+            TuyaHomeSdk.onDestroy();
+        } catch (Exception e) {
+            //ignoring this too
+        }
         this.sdkInitialized = false;
-        activity.unregisterReceiver(br);
+        try {
+            activity.unregisterReceiver(br);
+        } catch (IllegalArgumentException e) {
+            //We can ignore this exception
+        }
     }
 
     @Override
