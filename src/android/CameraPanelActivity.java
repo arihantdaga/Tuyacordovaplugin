@@ -1,5 +1,6 @@
 package com.arihant.tuyaplugin;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -9,16 +10,19 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Application;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Camera;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -49,15 +53,21 @@ import com.tuya.smart.camera.middleware.p2p.ITuyaSmartCameraP2P;
 import com.tuya.smart.camera.middleware.widget.AbsVideoViewCallback;
 import com.tuya.smart.camera.middleware.widget.TuyaCameraView;
 import com.tuya.smart.camera.utils.AudioUtils;
+import com.tuya.smart.camera.utils.permission.PermissionChecker;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.sdk.api.IResultCallback;
 import com.tuya.smart.sdk.api.ITuyaDevice;
 import com.tuya.smart.sdk.bean.DeviceBean;
+import com.tuya.smart.camera.utils.IPCCameraUtils;
+
 
 import org.apache.cordova.LOG;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
@@ -109,6 +119,8 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private String bgColor;
     private String primaryColor;
     private ITuyaSmartCameraP2P mCameraP2P;
+
+
 
     /**
      * the lower power Doorbell device change to true
@@ -393,12 +405,18 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     private void recordClick() {
         if (!isRecording) {
             ToastUtil.shortToast(CameraPanelActivity.this, "Enter Recording");
-            if (Constants.hasStoragePermission(CameraPanelActivity.this)) {
-                String picPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera/";
-                File file = new File(picPath);
-                if (!file.exists()) {
-                    file.mkdirs();
+            if (PermissionChecker.hasStoragePermission()) {
+                String picPath;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                    picPath = IPCCameraUtils.recordPathSupportQ(devId);
+                } else {
+                    picPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera/";
+                    File file = new File(picPath);
+                    if (!file.exists()) {
+                        file.mkdirs();
+                    }
                 }
+
                 String fileName = System.currentTimeMillis() + ".mp4";
                 videoPath = picPath + fileName;
                 mCameraP2P.startRecordLocalMp4(picPath, CameraPanelActivity.this, new OperationDelegateCallBack() {
@@ -416,7 +434,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
                 });
                 recordStatue(true);
             } else {
-                Constants.requestPermission(CameraPanelActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Constants.EXTERNAL_STORAGE_REQ_CODE, "open_storage");
+                PermissionChecker.requestPermission(CameraPanelActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE, 3782, _getResource("pps_external_storage", "string"));
             }
         } else {
             mCameraP2P.stopRecordLocalMp4(new OperationDelegateCallBack() {
@@ -436,17 +454,21 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         }
     }
 
+
     private void snapShotClick() {
-        if (Constants.hasStoragePermission(CameraPanelActivity.this)) {
+        if (PermissionChecker.hasStoragePermission()) {
             ToastUtil.shortToast(CameraPanelActivity.this, "Enter Snapshot");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera/";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                String path = IPCCameraUtils.recordPathSupportQ(devId);
+                picPath = path;
+            } else {
+                String path = IPCCameraUtils.recordSnapshotPath(devId);
                 File file = new File(path);
                 if (!file.exists()) {
                     file.mkdirs();
                 }
-                picPath = path;
             }
+
             mCameraP2P.snapshot(picPath, CameraPanelActivity.this, new OperationDelegateCallBack() {
                 @Override
                 public void onSuccess(int sessionId, int requestId, String data) {
@@ -459,7 +481,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
                 }
             });
         } else {
-            Constants.requestPermission(CameraPanelActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Constants.EXTERNAL_STORAGE_REQ_CODE, "open_storage");
+            PermissionChecker.requestPermission(CameraPanelActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE, 8132, _getResource("pps_external_storage", "string"));
         }
     }
 
