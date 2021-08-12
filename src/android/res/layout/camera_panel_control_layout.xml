@@ -15,19 +15,10 @@
 <!--            android:layout_marginLeft="10dp"-->
 <!--            android:gravity="center"-->
 <!--            android:src="@drawable/lighting" />-->
-        <TextView
-            android:id="@+id/battery_Txt"
-            android:layout_width="55dp"
-            android:layout_height="@dimen/wh_28"
-            android:layout_gravity="right"
-            android:gravity="center"
-            android:text="@string/battery_level"
-            android:textColor="@color/gray_30"
-            android:textSize="@dimen/ts_12" />
 
         <TextView
             android:id="@+id/battery"
-            android:layout_width="@dimen/wh_60"
+            android:layout_width="@dimen/wh_100"
             android:layout_height="@dimen/wh_28"
             android:layout_gravity="left"
             android:gravity="center"
@@ -131,9 +122,9 @@
         <TextView
             android:id="@+id/setting_Txt"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="72dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/camera_icon_arrow"
+            android:drawableTop="@android:drawable/ic_menu_manage"
             android:gravity="center"
             android:text="@string/settings"
             android:textColor="@color/camera_panel_control_color" />

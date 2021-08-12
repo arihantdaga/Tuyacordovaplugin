@@ -24,8 +24,14 @@ public class Constants {
 
     public static final String INTENT_DEV_ID = "intent_devId";
     public static final String INTENT_BG_COLOR = "bg_color";
+    public static final String INTENT_ITEM_BG_COLOR = "item_bg_color";
+    public static final String INTENT_TEXT_COLOR_1 = "text_color_1";
+    public static final String INTENT_TEXT_COLOR_2 = "text_color_2";
     public static final String INTENT_PRIMARY_COLOR = "primary_color";
     public static final String INTENT_P2P_TYPE = "intent_p2p_type";
+    public static final String INTENT_DP_CONFIG = "intent_dp_config";
+
+    public static final int SETTING_ACTIVITY_REQ_CODE = 13490;
     public static final int EXTERNAL_STORAGE_REQ_CODE = 10;
     public static final int EXTERNAL_STORAGE_READ_REQ_CODE = 0x03;
     public static final int EXTERNAL_AUDIO_REQ_CODE = 11;

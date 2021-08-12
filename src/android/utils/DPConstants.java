@@ -8,6 +8,7 @@ public class DPConstants {
     //Data type: boolean
     public static final String WATERMARK = "104";
     public static final String BATTERY = "145";
+    public static final String POWER_SOURCE = "146";
 
     public static final String SD_STATUS = "110";
     public static final String SD_STORAGE = "109";
@@ -25,5 +26,8 @@ public class DPConstants {
     public static final String PTZ_LEFT = "2";
     public static final String PTZ_DOWN = "4";
     public static final String PTZ_RIGHT = "6";
+
+    public static final String POWER_SOURCE_BATTERY = "1";
+    public static final String POWER_SOURCE_PLUG_SUPPLY = "2";
 
 }

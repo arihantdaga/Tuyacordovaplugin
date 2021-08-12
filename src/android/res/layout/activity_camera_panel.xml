@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main_layout"
     android:background="@color/white">
-
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:id="@+id/toolbar_view"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        app:title="@string/panel_title"-->
-<!--        app:navigationIcon="?attr/homeAsUpIndicator"-->
-<!--        ></androidx.appcompat.widget.Toolbar>-->
-
     <RelativeLayout
         android:id="@+id/camera_video_view_Rl"
         android:layout_width="match_parent"

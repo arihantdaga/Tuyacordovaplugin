@@ -6,16 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.telecom.Call;
 import android.util.Log;
-import android.view.View;
 
 import com.alibaba.fastjson.JSON;
-import com.google.zxing.WriterException;
 import com.tuya.smart.android.camera.sdk.TuyaIPCSdk;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCCore;
-import com.tuya.smart.android.user.api.ILoginCallback;
 import com.tuya.smart.android.user.api.ILogoutCallback;
 import com.tuya.smart.android.user.api.IUidLoginCallback;
 import com.tuya.smart.android.user.bean.User;
@@ -50,7 +45,11 @@ import java.util.List;
 
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_BG_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_DEV_ID;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_DP_CONFIG;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_ITEM_BG_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_PRIMARY_COLOR;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_TEXT_COLOR_1;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_TEXT_COLOR_2;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -273,28 +272,10 @@ public class Tuyacordovaplugin extends CordovaPlugin {
     public void device_data(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
         String devId = args.getString(0);
         long homeId = Long.parseLong(args.getString(1));
-        TuyaHomeSdk.newHomeInstance(homeId).getHomeDetail(new ITuyaHomeResultCallback() {
-            @Override
-            public void onSuccess(HomeBean homeBean) {
-                List<DeviceBean> deviceBeans = homeBean != null ? homeBean.getDeviceList() : null;
-                ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
-                //ArrayList deviceList = (ArrayList) deviceBeans;
-                for(DeviceBean device: deviceBeans){
-                    if(device.getDevId().equalsIgnoreCase(devId)){
-                        String devicedata = JSON.toJSONString(device);
-                        PluginResult deviceresult = new PluginResult(PluginResult.Status.OK, devicedata);
-                        deviceresult.setKeepCallback(true);
-                        callbackContext.sendPluginResult(deviceresult);
-                    }
-                }
-
-            }
-
-            @Override
-            public void onError(String errorCode, String errorMsg) {
-                callbackContext.error(makeError(errorCode,errorMsg));
-            }
-        });
+        DeviceBean mDevBean = TuyaHomeSdk.getDataInstance().getDeviceBean(devId);
+        String devicedata = JSON.toJSONString(mDevBean);
+        PluginResult deviceresult = new PluginResult(PluginResult.Status.OK, devicedata);
+        callbackContext.sendPluginResult(deviceresult);
     }
 
     public void renameDevice(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
@@ -354,16 +335,18 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         });
     }
 
+
     public void setDPs(CordovaArgs args, CallbackContext callbackContext) throws  JSONException{
         String devId = args.getString(0);
         String dps = args.getString(1);
         ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
+
         mDevice.registerDevListener(new IDevListener() {
             @Override
             public void onDpUpdate(String devId, String dpStr) {
                 PluginResult dpUpdateResult = new PluginResult(PluginResult.Status.OK, dpStr);
-                dpUpdateResult.setKeepCallback(true);
                 callbackContext.sendPluginResult(dpUpdateResult);
+                mDevice.onDestroy();
             }
             @Override
             public void onRemoved(String devId) {
@@ -388,14 +371,12 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 //Log.d(TAG, "onSuccess12312",code);
                 Log.e(TAG, "publishDps err " + code);
                 callbackContext.error(makeError(code,error));
+                mDevice.onDestroy();
             }
 
             @Override
             public void onSuccess() {
                 Log.d(TAG, "onSucasdasd12323" );
-                PluginResult dpUpdateResult = new PluginResult(PluginResult.Status.OK, dps);
-                dpUpdateResult.setKeepCallback(true);
-                callbackContext.sendPluginResult(dpUpdateResult);
             }
         });
     }
@@ -483,6 +464,10 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         String devId = args.getString(0);
         String bgColor = args.getString(1);
         String primaryColor = args.getString(2);
+        String itemBgColor = args.getString(3);
+        String textColor1 = args.getString(4);
+        String textColor2 = args.getString(5);
+        String dpConfig = args.getString(6);
         ITuyaIPCCore cameraInstance = TuyaIPCSdk.getCameraInstance();
         if (cameraInstance != null) {
             if (cameraInstance.isIPCDevice(devId)) {
@@ -494,6 +479,10 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 intent.putExtra(INTENT_DEV_ID, devId);
                 intent.putExtra(INTENT_BG_COLOR, bgColor);
                 intent.putExtra(INTENT_PRIMARY_COLOR, primaryColor);
+                intent.putExtra(INTENT_DP_CONFIG, dpConfig);
+                intent.putExtra(INTENT_ITEM_BG_COLOR, itemBgColor);
+                intent.putExtra(INTENT_TEXT_COLOR_1, textColor1);
+                intent.putExtra(INTENT_TEXT_COLOR_2, textColor2);
                 cordova.setActivityResultCallback (this);
                 cordova.startActivityForResult(this,intent, 1000);
             }

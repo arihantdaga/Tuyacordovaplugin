@@ -1,28 +1,21 @@
 package com.arihant.tuyaplugin;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.ActionBar;
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Camera;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -31,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,9 +57,6 @@ import org.apache.cordova.LOG;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
@@ -76,8 +65,11 @@ import static com.arihant.tuyaplugin.utils.Constants.ARG1_OPERATE_FAIL;
 import static com.arihant.tuyaplugin.utils.Constants.ARG1_OPERATE_SUCCESS;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_BG_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_DEV_ID;
-import static com.arihant.tuyaplugin.utils.Constants.INTENT_P2P_TYPE;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_DP_CONFIG;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_ITEM_BG_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_PRIMARY_COLOR;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_TEXT_COLOR_1;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_TEXT_COLOR_2;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_CONNECT;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_GET_VIDEO_CLARITY;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_MUTE;
@@ -88,13 +80,12 @@ import static com.arihant.tuyaplugin.utils.Constants.MSG_TALK_BACK_OVER;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_VIDEO_RECORD_BEGIN;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_VIDEO_RECORD_FAIL;
 import static com.arihant.tuyaplugin.utils.Constants.MSG_VIDEO_RECORD_OVER;
+import static com.arihant.tuyaplugin.utils.Constants.SETTING_ACTIVITY_REQ_CODE;
 
-public class CameraPanelActivity extends Activity implements View.OnClickListener {
-    private Activity activity;
+public class CameraPanelActivity extends AppCompatActivity implements View.OnClickListener {
     String TAG = "Tuyacordovaplugin";
     public static final String BROADCAST_LISTENER = "com.arihant.tuyaplugin.Listener";
 
-//    private Toolbar toolbar;
     private TuyaCameraView mVideoView;
     private ImageView muteImg;
     private TextView qualityTv;
@@ -115,28 +106,21 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 
     private int p2pType;
 
+    private boolean dontPause = false;
+
     private String devId;
     private String bgColor;
     private String primaryColor;
+    private String itemBgColor;
+    private String textColor1;
+    private String textColor2;
     private ITuyaSmartCameraP2P mCameraP2P;
 
-
-
-    /**
-     * the lower power Doorbell device change to true
-     */
-    private boolean isDoorbell = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        activity = this;
-        ActionBar actionBar = activity.getActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
         setContentView(_getResource("activity_camera_panel", "layout"));
         devId = getIntent().getStringExtra(INTENT_DEV_ID);
         initView();
@@ -176,17 +160,16 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 
     }
 
-    BroadcastReceiver br = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent != null) {
-                String method = intent.getStringExtra("method");
-                LOG.d(TAG, "Camera panel activity onReceive: method = %s", method);
-            }
+    @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if (reqCode == SETTING_ACTIVITY_REQ_CODE) {
+            dontPause = false;
         }
-    };
+    }
 
     private Handler mHandler = new Handler() {
+        @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -242,10 +225,14 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
 //        });
         bgColor = getIntent().getStringExtra(INTENT_BG_COLOR);
         primaryColor = getIntent().getStringExtra(INTENT_PRIMARY_COLOR);
+        itemBgColor = getIntent().getStringExtra(INTENT_ITEM_BG_COLOR);
+        textColor1 = getIntent().getStringExtra(INTENT_TEXT_COLOR_1);
+        textColor2 = getIntent().getStringExtra(INTENT_TEXT_COLOR_2);
         mVideoView = findViewById(_getResource("camera_video_view", "id"));
         muteImg = findViewById(_getResource("camera_mute", "id"));
         qualityTv = findViewById(_getResource("camera_quality", "id"));
         batteryTxt = findViewById(_getResource("battery","id"));
+        batteryTxt.setVisibility(View.INVISIBLE);
         speakTxt = findViewById(_getResource("speak_Txt", "id"));
         recordTxt = findViewById(_getResource("record_Txt", "id"));
         photoTxt = findViewById(_getResource("photo_Txt", "id"));
@@ -253,7 +240,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         ((ViewGroup) replayTxt.getParent()).removeView(replayTxt);
         settingTxt = findViewById(_getResource("setting_Txt", "id"));
         settingTxt.setOnClickListener(this);
-        ((ViewGroup) settingTxt.getParent()).removeView(settingTxt);
+//        ((ViewGroup) settingTxt.getParent()).removeView(settingTxt);
         deviceInfoTxt = findViewById(_getResource("info_Txt", "id"));
         deviceInfoTxt.setOnClickListener(this);
         ((ViewGroup) deviceInfoTxt.getParent()).removeView(deviceInfoTxt);
@@ -329,7 +316,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         recordTxt.setOnClickListener(this);
         photoTxt.setOnClickListener(this);
         replayTxt.setOnClickListener(this);
-
+        settingTxt.setOnClickListener(this);
         cloudStorageTxt.setOnClickListener(this);
         messageCenterTxt.setOnClickListener(this);
     }
@@ -356,11 +343,16 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
             intent.putExtra(INTENT_DEV_ID, devId);
             startActivity(intent);*/
         } else if (id == _getResource("setting_Txt", "id")) {
-            Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
-
-            /*Intent intent1 = new Intent(CameraPanelActivity.this, CameraSettingActivity.class);
+            Intent intent1 = new Intent(CameraPanelActivity.this, CameraSettingActivity.class);
             intent1.putExtra(INTENT_DEV_ID, devId);
-            startActivity(intent1);*/
+            intent1.putExtra(INTENT_DP_CONFIG, getIntent().getStringExtra(INTENT_DP_CONFIG));
+            intent1.putExtra(INTENT_BG_COLOR, bgColor);
+            intent1.putExtra(INTENT_PRIMARY_COLOR, primaryColor);
+            intent1.putExtra(INTENT_ITEM_BG_COLOR, itemBgColor);
+            intent1.putExtra(INTENT_TEXT_COLOR_1, textColor1);
+            intent1.putExtra(INTENT_TEXT_COLOR_2, textColor2);
+            dontPause = true;
+            startActivityForResult(intent1, SETTING_ACTIVITY_REQ_CODE);
         } else if (id == _getResource("cloud_Txt", "id")) {
             Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
 
@@ -637,7 +629,7 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
     protected void onPause() {
         super.onPause();
         mVideoView.onPause();
-        if (null != mCameraP2P) {
+        if (null != mCameraP2P && !dontPause) {
             if (isSpeaking) {
                 mCameraP2P.stopAudioTalk(null);
             }
@@ -692,10 +684,20 @@ public class CameraPanelActivity extends Activity implements View.OnClickListene
         DeviceBean deviceBean = TuyaHomeSdk.getDataInstance().getDeviceBean(devId);
         if (deviceBean != null) {
             Map<String, Object> dps = deviceBean.getDps();
-            Object res = dps.get(DPConstants.BATTERY);
-            batteryLevel = JSON.toJSONString(res);
-            Log.d(TAG, "startCameraLivePlay: " + JSON.toJSONString(res));
-            batteryTxt.setText(" : "+batteryLevel+" %");
+            if (dps.containsKey(DPConstants.POWER_SOURCE)) {
+                String bStatus = (String) dps.get(DPConstants.POWER_SOURCE);
+                if (bStatus.equals(DPConstants.POWER_SOURCE_BATTERY)) {
+                    batteryTxt.setVisibility(View.VISIBLE);
+                    Object res = dps.get(DPConstants.BATTERY);
+                    batteryLevel = JSON.toJSONString(res);
+                    batteryTxt.setText("Battery : "+batteryLevel+" %");
+                } else if (bStatus.equals(DPConstants.POWER_SOURCE_PLUG_SUPPLY)){
+                    batteryTxt.setVisibility(View.VISIBLE);
+                    batteryTxt.setText("Plugged in Power");
+                } else {
+                    batteryTxt.setVisibility(View.INVISIBLE);
+                }
+            }
         }
         return null;
     }
