@@ -1,22 +1,31 @@
 {
-    "name": "cordova-plugin-tuya-unofficial",
-    "version": "0.0.2",
-    "description": "Tuya SDK Unofficial Plugin",
-    "scripts": {
-      "build": ""
-    },
-    "cordova": {
-      "id": "cordova-plugin-tuya-unofficial",
-      "platforms": [
-        "android"
-      ]
-    },
-    "keywords": [
-      "tuya",
-      "cordova-ios",
-      "cordova-android"
-    ],
-    "author": "Arihant Daga",
-    "license": "Apache-2.0"
-  }
-  
+  "name": "cordova-plugin-tuya-unofficial",
+  "version": "0.0.3",
+  "description": "Tuya SDK Unofficial Plugin",
+  "scripts": {
+    "build": ""
+  },
+  "cordova": {
+    "id": "cordova-plugin-tuya-unofficial",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "tuya",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "author": "Arihant Daga",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arihantdaga/Tuyacordovaplugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arihantdaga/Tuyacordovaplugin/issues"
+  },
+  "homepage": "https://github.com/arihantdaga/Tuyacordovaplugin#readme"
+}
