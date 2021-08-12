@@ -848,19 +848,4 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         return resources.getIdentifier(name, type, package_name);
     }
 
-    private void _sendBroadCast(String methodName) {
-        Intent intent = new Intent();
-        intent.setAction(BROADCAST_LISTENER);
-        intent.putExtra("method", methodName);
-        activity.sendBroadcast(intent);
-    }
-
-    private void _sendBroadCast(String methodName, JSONObject object) {
-        Intent intent = new Intent();
-        intent.setAction(BROADCAST_LISTENER);
-        intent.putExtra("method", methodName);
-        intent.putExtra("data", object.toString());
-        activity.sendBroadcast(intent);
-    }
-
 }
