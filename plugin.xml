@@ -51,6 +51,7 @@
       <source-file src="src/android/utils/TimeZoneUtils.java" target-dir="src/com/arihant/tuyaplugin/utils" />
       <source-file src="src/android/utils/ToastUtil.java" target-dir="src/com/arihant/tuyaplugin/utils" />
       <source-file src="src/android/utils/CameraDoorbellManager.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <source-file src="src/android/utils/DPConfig.java" target-dir="src/com/arihant/tuyaplugin/utils" />
 
       <!-- Layouts -->
       
