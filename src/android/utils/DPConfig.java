@@ -8,4 +8,7 @@ public class DPConfig {
     public String inputType;
     public String[] supportedValues;
     public String[] supportedValueLabels;
+
+    public static final String TYPE_BOOLEAN = "bool";
+    public static final String TYPE_SELECT = "select";
 }
