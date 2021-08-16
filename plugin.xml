@@ -191,8 +191,6 @@
       <source-file src="src/ios/IPC/Assets/tysmart_selected@3x.png" />
 
 
-      <!-- IPC/Camera -->
-      <header-file src="src/ios/IPC/Camera/Tuyacordovaplugin-Bridging-Header.h" />
 
       <!-- IPC/Config -->
       <resource-file src="src/ios/IPC/Config/IPCLocalizable.strings" />

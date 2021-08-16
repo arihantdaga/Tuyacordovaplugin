@@ -6,6 +6,7 @@
 
 #import <UIKit/UIKit.h>
 #import <TuyaSmartCameraKit/TuyaSmartCameraKit.h>
+#import "CameraViewConstants.h"
 
 @interface CameraSDCardViewController : UIViewController
 

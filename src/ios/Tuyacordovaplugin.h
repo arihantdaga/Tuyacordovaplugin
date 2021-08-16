@@ -2,6 +2,10 @@
 #import <Cordova/CDVPlugin.h>
 #import <Cordova/CDV.h>
 #import <TuyaSmartActivatorKit/TuyaSmartActivatorKit.h>
+#import <TuyaSmartHomeKit/TuyaSmartKit.h>
+#import <TuyaSmartCameraKit/TuyaSmartCameraKit.h>
+#import "CameraViewConstants.h"
+#import "UIView+CameraAdditions.h"
 
 @interface Tuyacordovaplugin: CDVPlugin
 
