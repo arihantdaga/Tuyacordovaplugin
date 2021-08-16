@@ -6,6 +6,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIView+CameraAdditions.h"
+#import "CameraViewConstants.h"
 
 @interface CameraPlaybackViewController : UIViewController
 
