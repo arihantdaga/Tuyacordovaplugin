@@ -106,7 +106,6 @@
       </config-file>
       <podspec>
          <config>
-            <source url="https://cdn.cocoapods.org/" />
             <source url="https://github.com/TuyaInc/TuyaPublicSpecs.git"/>
          </config>
          <pods use-frameworks="true">
