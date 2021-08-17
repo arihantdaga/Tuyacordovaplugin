@@ -19,10 +19,15 @@ static Tuyacordovaplugin* tuyacordovaplugin;
 }
 
 - (void) pluginInitialize {
-    tuyacordovaplugin = self;
-    NSString *appKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleTuyaAppKey"];
-    NSString *appSecret = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleTuyaAppSecret"];
-    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
+    @try {
+        tuyacordovaplugin = self;
+        NSString *appKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleTuyaAppKey"];
+        NSString *appSecret = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleTuyaAppSecret"];
+        [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
+    } 
+    @catch (NSException* e) {
+        NSLog(@"Tuya init err", e);
+    }
 }
 
 - (void) user_loginOrRegitserWithUID: (CDVInvokedUrlCommand *) command {
