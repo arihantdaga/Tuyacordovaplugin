@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-tuya-unofficial",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tuya SDK Unofficial Plugin",
   "scripts": {
     "build": ""
@@ -22,7 +22,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/arihantdaga/Tuyacordovaplugin.git"
+    "url": "https://github.com/arihantdaga/Tuyacordovaplugin"
   },
   "bugs": {
     "url": "https://github.com/arihantdaga/Tuyacordovaplugin/issues"
