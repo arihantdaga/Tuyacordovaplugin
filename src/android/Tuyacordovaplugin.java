@@ -249,7 +249,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             public void onSuccess(HomeBean homeBean) {
                 List<DeviceBean> deviceBeans = homeBean != null ? homeBean.getDeviceList() : null;
                 ArrayList deviceList = (ArrayList) deviceBeans;
-                Log.d(TAG, "onSuccess: List Home Devices : device length : " + deviceList.size());
+               // Log.d(TAG,  JSON.toJSONString(deviceList.get(0)));
                 String deviceListResponse = JSON.toJSONString(deviceList);
                 try{
                     JSONArray deviceListRespArray = new JSONArray(deviceListResponse);

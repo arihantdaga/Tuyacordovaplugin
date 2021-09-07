@@ -36,12 +36,14 @@
       <config-file target="AndroidManifest.xml" parent="/manifest/application">
 			<activity android:name="com.arihant.tuyaplugin.CameraPanelActivity"  android:theme="@style/Theme.AppCompat.NoActionBar"/>
          <activity android:name="com.arihant.tuyaplugin.CameraSettingActivity" android:theme="@style/Theme.AppCompat"/>
+         <activity android:name="com.arihant.tuyaplugin.CameraPlaybackActivity" android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
 		</config-file>
 
       <!-- Activities  -->
       <source-file src="src/android/Tuyacordovaplugin.java" target-dir="src/com/arihant/tuyaplugin" />
       <source-file src="src/android/CameraPanelActivity.java" target-dir="src/com/arihant/tuyaplugin" />
       <source-file src="src/android/CameraSettingActivity.java" target-dir="src/com/arihant/tuyaplugin"  />
+      <source-file src="src/android/CameraPlaybackActivity.java" target-dir="src/com/arihant/tuyaplugin" />
       <!-- Utilities  -->
       <source-file src="src/android/utils/Constants.java" target-dir="src/com/arihant/tuyaplugin/utils" />
       <source-file src="src/android/utils/DateUtils.java" target-dir="src/com/arihant/tuyaplugin/utils" />
@@ -52,12 +54,17 @@
       <source-file src="src/android/utils/ToastUtil.java" target-dir="src/com/arihant/tuyaplugin/utils" />
       <source-file src="src/android/utils/CameraDoorbellManager.java" target-dir="src/com/arihant/tuyaplugin/utils" />
       <source-file src="src/android/utils/DPConfig.java" target-dir="src/com/arihant/tuyaplugin/utils" />
+      <!-- Bean  -->
+      <source-file src="src/android/bean/RecordInfoBean.java" target-dir="src/com/arihant/tuyaplugin/bean" />
+      <source-file src="src/android/bean/TimePieceBean.java" target-dir="src/com/arihant/tuyaplugin/bean" />
 
       <!-- Layouts -->
       
       <resource-file src="src/android/res/layout/activity_camera_panel.xml" target="res/layout/activity_camera_panel.xml" />
 		<resource-file src="src/android/res/layout/camera_panel_control_layout.xml" target="res/layout/camera_panel_control_layout.xml" />
       <resource-file src="src/android/res/layout/activity_camera_setting.xml" target="res/layout/activity_camera_setting.xml" />
+      <resource-file src="src/android/res/layout/activity_camera_playback.xml" target="res/layout/activity_camera_playback.xml" />
+      <resource-file src="src/android/res/layout/activity_camera_playback_time_tem.xml" taget="res/layout/activity_camera_playback_time_tem.xml" />
 		
       <!-- Drawables -->
       <resource-file src="src/android/res/drawable/bg_button_selector.xml" target="res/drawable/bg_button_selector.xml" />
@@ -89,6 +96,10 @@
       <resource-file src="src/android/res/drawable-xhdpi/camera_tab_speak_btn_unenable.png" target="res/drawable-xhdpi/camera_tab_speak_btn_unenable.png" />
       <resource-file src="src/android/res/drawable-xhdpi/tysmart_back.png" target="res/drawable-xhdpi/tysmart_back.png" />
       <resource-file src="src/android/res/drawable-xhdpi/lighting.png" target="res/drawable-xhdpi/lighting.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/play.png" target="res/drawable-xhdpi/play.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/pause.png" target="res/drawable-xhdpi/pause.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/resume.png" target="res/drawable-xhdpi/resume.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/stop.png" target="res/drawable-xhdpi/stop.png" />
 		
       <!-- Values -->
       <resource-file src="src/android/res/values/tuyacordovaplugin_colors.xml" target="res/values/tuyacordovaplugin_colors.xml" />

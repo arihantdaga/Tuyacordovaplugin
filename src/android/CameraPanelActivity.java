@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.arihant.tuyaplugin.utils.Constants;
@@ -65,6 +66,7 @@ import static com.arihant.tuyaplugin.utils.Constants.ARG1_OPERATE_FAIL;
 import static com.arihant.tuyaplugin.utils.Constants.ARG1_OPERATE_SUCCESS;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_BG_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_DEV_ID;
+import static com.arihant.tuyaplugin.utils.Constants.INTENT_P2P_TYPE;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_DP_CONFIG;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_ITEM_BG_COLOR;
 import static com.arihant.tuyaplugin.utils.Constants.INTENT_PRIMARY_COLOR;
@@ -85,11 +87,13 @@ import static com.arihant.tuyaplugin.utils.Constants.SETTING_ACTIVITY_REQ_CODE;
 public class CameraPanelActivity extends AppCompatActivity implements View.OnClickListener {
     String TAG = "Tuyacordovaplugin";
     public static final String BROADCAST_LISTENER = "com.arihant.tuyaplugin.Listener";
+    private static Context sContext;
 
     private TuyaCameraView mVideoView;
     private ImageView muteImg;
     private TextView qualityTv;
     private RelativeLayout mMainLayout;
+    private FrameLayout  progressOverlay;
     private TextView speakTxt, recordTxt, photoTxt, replayTxt, settingTxt, cloudStorageTxt, messageCenterTxt, deviceInfoTxt,batteryTxt;
 
     private static final int ASPECT_RATIO_WIDTH = 9;
@@ -122,7 +126,9 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(_getResource("activity_camera_panel", "layout"));
+        progressOverlay = findViewById(_getResource("progress_overlay","id"));
         devId = getIntent().getStringExtra(INTENT_DEV_ID);
+        sContext= getApplication();
         initView();
         initData();
         initListener();
@@ -237,7 +243,8 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         recordTxt = findViewById(_getResource("record_Txt", "id"));
         photoTxt = findViewById(_getResource("photo_Txt", "id"));
         replayTxt = findViewById(_getResource("replay_Txt", "id"));
-        ((ViewGroup) replayTxt.getParent()).removeView(replayTxt);
+        replayTxt.setOnClickListener(this);
+       // ((ViewGroup) replayTxt.getParent()).removeView(replayTxt);
         settingTxt = findViewById(_getResource("setting_Txt", "id"));
         settingTxt.setOnClickListener(this);
 //        ((ViewGroup) settingTxt.getParent()).removeView(settingTxt);
@@ -335,13 +342,21 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         } else if (id == _getResource("photo_Txt", "id")) {
             snapShotClick();
         } else if (id == _getResource("replay_Txt", "id")) {
-            Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
-            /*
+           //Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
+
 
             Intent intent = new Intent(CameraPanelActivity.this, CameraPlaybackActivity.class);
             intent.putExtra(INTENT_P2P_TYPE, p2pType);
             intent.putExtra(INTENT_DEV_ID, devId);
-            startActivity(intent);*/
+            dontPause = true;
+            intent.putExtra(INTENT_DP_CONFIG, getIntent().getStringExtra(INTENT_DP_CONFIG));
+            intent.putExtra(INTENT_BG_COLOR, bgColor);
+            intent.putExtra(INTENT_PRIMARY_COLOR, primaryColor);
+            intent.putExtra(INTENT_ITEM_BG_COLOR, itemBgColor);
+            intent.putExtra(INTENT_TEXT_COLOR_1, textColor1);
+            intent.putExtra(INTENT_TEXT_COLOR_2, textColor2);
+            //startActivity(intent);
+            startActivityForResult(intent,SETTING_ACTIVITY_REQ_CODE);
         } else if (id == _getResource("setting_Txt", "id")) {
             Intent intent1 = new Intent(CameraPanelActivity.this, CameraSettingActivity.class);
             intent1.putExtra(INTENT_DEV_ID, devId);
@@ -846,6 +861,10 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         String package_name = getApplication().getPackageName();
         Resources resources = getApplication().getResources();
         return resources.getIdentifier(name, type, package_name);
+    }
+
+    public static Context getContext() {
+        return sContext;
     }
 
 }

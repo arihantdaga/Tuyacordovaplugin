@@ -145,14 +145,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/camera_item_control_btn"
             android:drawableTop="@drawable/camera_icon_playback_selector"
-            android:drawablePadding="@dimen/mg_5"
             android:gravity="center"
             android:padding="@dimen/mg_20"
             android:text="@string/replay"
             android:textColor="@color/camera_panel_control_color"
-            android:textSize="@dimen/ts_13" />
+             />
 
 
     </LinearLayout>

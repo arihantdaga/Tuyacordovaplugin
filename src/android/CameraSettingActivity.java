@@ -269,6 +269,7 @@ public class CameraSettingActivity extends AppCompatActivity implements IDevList
             @Override
             public void onSuccess() {
                 Log.d(TAG, "onSucasdasd12323" );
+                Log.d("dps",dps);
             }
         });
     }
