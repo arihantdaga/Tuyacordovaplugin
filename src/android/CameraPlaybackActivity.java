@@ -283,10 +283,10 @@ public class CameraPlaybackActivity extends AppCompatActivity implements View.On
         queryRv = findViewById(_getResource("query_list","id"));
         pgsBar = findViewById(_getResource("pBar","id"));
         progressbarOverlay = findViewById(_getResource("progress_bar_overlay","id"));
-       // progressOverlay = findViewById(_getResource("progress_overlay","id"));
+        // progressOverlay = findViewById(_getResource("progress_overlay","id"));
         if(bgColor!=null && textColor1!=null){
             queryBtn.setBackgroundColor(Color.parseColor(itemBgColor));
-           // queryListBox.setBackgroundColor(Color.parseColor(itemBgColor));
+            // queryListBox.setBackgroundColor(Color.parseColor(itemBgColor));
             queryBtn.setTextColor(Color.parseColor(primaryColor));
         }
         if(itemBgColor!=null){
@@ -432,7 +432,7 @@ public class CameraPlaybackActivity extends AppCompatActivity implements View.On
     }
 
     private void playback(int startTime, int endTime, int playTime) {
-       int playbackViewVisible = View.VISIBLE;
+        int playbackViewVisible = View.VISIBLE;
 //        int playbackViewGone = View.GONE;
         //int playback = View.generateViewId();
         progressOverlay.setVisibility(playbackViewVisible);
@@ -448,19 +448,19 @@ public class CameraPlaybackActivity extends AppCompatActivity implements View.On
 
                     @Override
                     public void onFailure(int sessionId, int requestId, int errCode) {
-                       // progressOverlay.setVisibility(playbackViewGone);
+                        // progressOverlay.setVisibility(playbackViewGone);
                         isPlayback = false;
                     }
                 }, new OperationDelegateCallBack() {
                     @Override
                     public void onSuccess(int sessionId, int requestId, String data) {
-                       // progressOverlay.setVisibility(playbackViewGone);
+                        // progressOverlay.setVisibility(playbackViewGone);
                         isPlayback = false;
                     }
 
                     @Override
                     public void onFailure(int sessionId, int requestId, int errCode) {
-                       // progressOverlay.setVisibility(playbackViewGone);
+                        // progressOverlay.setVisibility(playbackViewGone);
                         isPlayback = false;
                     }
                 });

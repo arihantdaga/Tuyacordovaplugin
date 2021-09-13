@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:id="@+id/main_layout"
     android:background="@color/white">
-<ScrollView android:id="@+id/dpsContainer"
-    android:clickable="true"
-    android:layout_weight="1"
-    android:layout_width="match_parent"
-    android:layout_marginBottom="20dp"
-    android:layout_height="0dp"
-    android:focusable="true">
-</ScrollView>
+    <ScrollView android:id="@+id/dpsContainer"
+        android:clickable="true"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_height="0dp"
+        android:focusable="true">
+    </ScrollView>
 </LinearLayout>

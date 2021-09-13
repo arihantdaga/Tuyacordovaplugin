@@ -244,7 +244,7 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         photoTxt = findViewById(_getResource("photo_Txt", "id"));
         replayTxt = findViewById(_getResource("replay_Txt", "id"));
         replayTxt.setOnClickListener(this);
-       // ((ViewGroup) replayTxt.getParent()).removeView(replayTxt);
+        // ((ViewGroup) replayTxt.getParent()).removeView(replayTxt);
         settingTxt = findViewById(_getResource("setting_Txt", "id"));
         settingTxt.setOnClickListener(this);
 //        ((ViewGroup) settingTxt.getParent()).removeView(settingTxt);
@@ -342,7 +342,7 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         } else if (id == _getResource("photo_Txt", "id")) {
             snapShotClick();
         } else if (id == _getResource("replay_Txt", "id")) {
-           //Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
 
 
             Intent intent = new Intent(CameraPanelActivity.this, CameraPlaybackActivity.class);
@@ -367,7 +367,13 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
             intent1.putExtra(INTENT_TEXT_COLOR_1, textColor1);
             intent1.putExtra(INTENT_TEXT_COLOR_2, textColor2);
             dontPause = true;
-            startActivityForResult(intent1, SETTING_ACTIVITY_REQ_CODE);
+            if (!mCameraP2P.isConnecting()) {
+                //pgsBar.setVisibility(progressView.GONE);
+                ToastUtil.shortToast(CameraPanelActivity.this, getString(_getResource("connect_first","string")));
+                return;
+            } else {
+                startActivityForResult(intent1, SETTING_ACTIVITY_REQ_CODE);
+            }
         } else if (id == _getResource("cloud_Txt", "id")) {
             Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
 

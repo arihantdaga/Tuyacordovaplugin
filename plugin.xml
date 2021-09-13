@@ -44,6 +44,7 @@
       <source-file src="src/android/CameraPanelActivity.java" target-dir="src/com/arihant/tuyaplugin" />
       <source-file src="src/android/CameraSettingActivity.java" target-dir="src/com/arihant/tuyaplugin"  />
       <source-file src="src/android/CameraPlaybackActivity.java" target-dir="src/com/arihant/tuyaplugin" />
+      <source-file src="src/android/CameraPlaybackTimeAdapter.java" target-dir="src/com/arihant/tuyaplugin" />
       <!-- Utilities  -->
       <source-file src="src/android/utils/Constants.java" target-dir="src/com/arihant/tuyaplugin/utils" />
       <source-file src="src/android/utils/DateUtils.java" target-dir="src/com/arihant/tuyaplugin/utils" />

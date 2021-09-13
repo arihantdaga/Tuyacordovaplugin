@@ -146,7 +146,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
     };
 
     public void login(CordovaArgs args, CallbackContext callbackContext){
-        
+
     }
 
     public void home_initNotifications(CordovaArgs args, CallbackContext callbackContext) throws  JSONException{
@@ -249,7 +249,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             public void onSuccess(HomeBean homeBean) {
                 List<DeviceBean> deviceBeans = homeBean != null ? homeBean.getDeviceList() : null;
                 ArrayList deviceList = (ArrayList) deviceBeans;
-               // Log.d(TAG,  JSON.toJSONString(deviceList.get(0)));
+                // Log.d(TAG,  JSON.toJSONString(deviceList.get(0)));
                 String deviceListResponse = JSON.toJSONString(deviceList);
                 try{
                     JSONArray deviceListRespArray = new JSONArray(deviceListResponse);
@@ -292,8 +292,8 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             public void onSuccess() {
                 // The device is renamed successfully.
                 PluginResult renameResult = new PluginResult(PluginResult.Status.OK, deviceName);
-                        renameResult.setKeepCallback(true);
-                        callbackContext.sendPluginResult(renameResult);
+                renameResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(renameResult);
             }
         });
     }
@@ -310,13 +310,13 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             @Override
             public void onSuccess() {
                 PluginResult removeResult = new PluginResult(PluginResult.Status.OK,devId );
-                        removeResult.setKeepCallback(true);
-                        callbackContext.sendPluginResult(removeResult);
+                removeResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(removeResult);
             }
         });
     }
 
-      public void signalStrength(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
+    public void signalStrength(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
         String devId = args.getString(0);
         ITuyaDevice mDevice = TuyaHomeSdk.newDeviceInstance(devId);
         mDevice.requestWifiSignal(new WifiSignalListener() {
@@ -324,8 +324,8 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             @Override
             public void onSignalValueFind(String signal) {
                 PluginResult signalResult = new PluginResult(PluginResult.Status.OK,signal);
-                        signalResult.setKeepCallback(true);
-                        callbackContext.sendPluginResult(signalResult);
+                signalResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(signalResult);
             }
 
             @Override
