@@ -76,6 +76,9 @@
     var IPC = {
         startCameraLivePlay : function startCameraLivePlay({devId, bgColor, primaryColor, itemBgColor, textColor1, textColor2, dpConfig}, successCallback, errorCallback){
             return cordova.exec(successCallback, errorCallback, pluginName, 'ipc_startCameraLivePlay', [devId, bgColor, primaryColor, itemBgColor, textColor1, textColor2, dpConfig]);
+        },
+        getImagesOnMotionDetection: function getImagesOnMotionDetection({devId, startTime, endTime, limit, offset}, successCallback, errorCallback){
+            return cordova.exec(successCallback, errorCallback, pluginName, 'ipc_getImagesOnMotionDetection', [devId, startTime, endTime, limit, offset]);
         }
     }
     

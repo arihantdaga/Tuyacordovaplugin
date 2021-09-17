@@ -9,12 +9,16 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.arihant.tuyaplugin.utils.MessageUtil;
 import com.tuya.smart.android.camera.sdk.TuyaIPCSdk;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCCore;
+import com.tuya.smart.android.network.Business;
+import com.tuya.smart.android.network.http.BusinessResponse;
 import com.tuya.smart.android.user.api.ILogoutCallback;
 import com.tuya.smart.android.user.api.IUidLoginCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
+import com.tuya.smart.ipc.messagecenter.bean.CameraMessageBean;
 import com.tuya.smart.sdk.api.ITuyaDevice;
 import com.tuya.smart.sdk.api.IDevListener;
 import com.tuya.smart.sdk.api.IResultCallback;
@@ -488,6 +492,43 @@ public class Tuyacordovaplugin extends CordovaPlugin {
             }
         }else{
             callbackContext.error(makeError("0", "Unknown error"));
+        }
+    }
+
+    public void ipc_getImagesOnMotionDetection(CordovaArgs args, CallbackContext callbackContext) {
+        try {
+            String devId = args.getString(0);
+            long startTime = Long.parseLong(args.getString(1));
+            long endTime = Long.parseLong(args.getString(2));
+            int limit = Integer.parseInt(args.getString(3));
+            int offset = Integer.parseInt(args.getString(4));
+            JSONObject object = new JSONObject();
+            object.put("msgSrcId", devId);
+            object.put("startTime", startTime);
+            object.put("endTime", endTime);
+            object.put("msgType", 4);
+            object.put("limit", limit);
+            object.put("keepOrig", true);
+            object.put("offset", offset);
+//        if (null != selectClassify) {
+//            object.put("msgCodes", selectClassify.getMsgCode());
+//        }
+            TuyaIPCSdk.getMessage().createMsgManager().getAlarmDetectionMessageList(JSON.toJSONString(object), new Business.ResultListener() {
+                @Override
+                public void onFailure(BusinessResponse businessResponse, Object o, String s) {
+                    callbackContext.error(makeError("101", "Unknown error"));
+                }
+
+                @Override
+                public void onSuccess(BusinessResponse businessResponse, Object o, String s) {
+                    List<CameraMessageBean> msgList;
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, o.toString());
+                    callbackContext.sendPluginResult(pluginResult);
+                }
+
+            });
+        } catch (Exception e) {
+            callbackContext.error(makeError("103", "Unknown error"));
         }
     }
 
