@@ -192,6 +192,46 @@ static Tuyacordovaplugin* tuyacordovaplugin;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void) ipc_getImagesOnMotionDetection: (CDVInvokedUrlCommand *) command {
+    NSString *devId = (NSString *)[command argumentAtIndex:0];
+    long long startTime = [(NSString *)[command argumentAtIndex:1] longLongValue];
+    long long endTime = [(NSString *)[command argumentAtIndex:2] longLongValue];
+    NSInteger limit = [(NSString *)[command argumentAtIndex:3] intValue];
+    NSInteger offset = [(NSString *)[command argumentAtIndex:4] intValue];
+    TuyaSmartCameraMessage *cameraMessage = [[TuyaSmartCameraMessage alloc] initWithDeviceId:devId timeZone:[NSTimeZone defaultTimeZone]];
+    [cameraMessage getMessageSchemes:^(NSArray<TuyaSmartCameraMessageSchemeModel *> *result) {
+        [cameraMessage messagesWithMessageCodes:result.firstObject.msgCodes Offset:offset limit:limit startTime:startTime endTime:endTime success:^(NSArray<TuyaSmartCameraMessageModel *> *msgs) {
+            NSMutableArray<NSDictionary *> *mainResult = [NSMutableArray new];
+            for (int i=0; i < msgs.count; i++) {
+                NSDictionary *newMsg = @{
+                    @"attachPics": msgs[i].attachPic,
+                    @"attachVideos": msgs[i].attachVideos,
+                    @"attachAudios": msgs[i].attachAudios,
+                    @"dateTime": msgs[i].dateTime,
+                    @"msgCode": msgs[i].msgCode,
+                    @"msgContent": msgs[i].msgContent,
+                    @"msgId": msgs[i].msgId,
+                    @"msgSrcId": msgs[i].msgSrcId,
+                    @"msgTitle": msgs[i].msgTitle,
+                    @"msgTypeContent": msgs[i].msgTypeContent,
+                    @"time": [NSString stringWithFormat:@"%ld", (long)msgs[i].time]
+                };
+                [mainResult addObject:newMsg];
+            }
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:(NSArray *)mainResult];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        } failure:^(NSError *errorMsg) {
+            NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        }];
+    } failure:^(NSError *errorMsg) {
+        NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
+}
+
 
 - (void) device_data: (CDVInvokedUrlCommand *)command {
     NSString *devId = (NSString *)[command argumentAtIndex:0];

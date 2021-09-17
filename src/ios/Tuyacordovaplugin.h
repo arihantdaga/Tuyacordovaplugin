@@ -18,6 +18,7 @@
 // - (void) home_initNotifications: (CDVInvokedUrlCommand *)command;
 
 - (void) ipc_startCameraLivePlay: (CDVInvokedUrlCommand *)command;
+- (void) ipc_getImagesOnMotionDetection: (CDVInvokedUrlCommand *) command;
 
 - (void) network_smartCameraConfiguration: (CDVInvokedUrlCommand *)command;
 - (void) network_stopCameraConfiguration: (CDVInvokedUrlCommand *)command;
