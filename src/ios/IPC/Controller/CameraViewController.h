@@ -9,6 +9,7 @@
 
 @interface CameraViewController : UIViewController
 
-- (instancetype)initWithDeviceId:(NSString *)devId;
+- (instancetype)initWithDeviceId:(NSDictionary *)params;
+-  (UIColor *) stringToColor:(NSString *) color;
 
 @end

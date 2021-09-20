@@ -26,7 +26,7 @@
     <string name="playback_title">Playback</string>
     <string name="doorbell_title">Doorbell Call</string>
     <string name="playback_input_hint">Input query date: </string>
-    <string name="query">Query</string>
+    <string name="query">Search</string>
     <string name="start">Start</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
