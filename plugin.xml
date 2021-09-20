@@ -65,7 +65,7 @@
 		<resource-file src="src/android/res/layout/camera_panel_control_layout.xml" target="res/layout/camera_panel_control_layout.xml" />
       <resource-file src="src/android/res/layout/activity_camera_setting.xml" target="res/layout/activity_camera_setting.xml" />
       <resource-file src="src/android/res/layout/activity_camera_playback.xml" target="res/layout/activity_camera_playback.xml" />
-      <resource-file src="src/android/res/layout/activity_camera_playback_time_tem.xml" taget="res/layout/activity_camera_playback_time_tem.xml" />
+      <resource-file src="src/android/res/layout/activity_camera_playback_time_tem.xml" target="res/layout/activity_camera_playback_time_tem.xml" />
 		
       <!-- Drawables -->
       <resource-file src="src/android/res/drawable/bg_button_selector.xml" target="res/drawable/bg_button_selector.xml" />
