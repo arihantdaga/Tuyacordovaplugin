@@ -175,9 +175,24 @@ static Tuyacordovaplugin* tuyacordovaplugin;
         }];
 }
 
+
+
 - (void) ipc_startCameraLivePlay: (CDVInvokedUrlCommand *) command {
     NSString *devId = (NSString *)[command argumentAtIndex:0];
-    CameraViewController *vc = [[CameraViewController alloc] initWithDeviceId:devId];
+    NSString *bgColor = (NSString *)[command argumentAtIndex:1];
+    NSString *primaryColor = (NSString *)[command argumentAtIndex:2];
+    NSString *itemBgColor = (NSString *)[command argumentAtIndex:3];
+    NSString *textColor1 = (NSString *)[command argumentAtIndex:4];
+    NSString *textColor2 = (NSString *)[command argumentAtIndex:5];
+    NSDictionary *params = @{
+            @"devId": devId,
+            @"bgColor": bgColor,
+            @"primaryColor": primaryColor,
+            @"itemBgColor": itemBgColor,
+            @"textColor1": textColor1,
+            @"textColor2": textColor2
+    };
+    CameraViewController *vc = [[CameraViewController alloc] initWithDeviceId:params];
     //  [self.navigationController pushViewController:vc animated:YES];
 
 

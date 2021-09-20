@@ -14,6 +14,7 @@
 #import <TuyaSmartCameraM/TuyaSmartCameraM.h>
 #import <AVFoundation/AVFoundation.h>
 #import "CameraVideoView.h"
+#import <TYUIKit/TYUIKit.h>
 
 #define VideoViewWidth [UIScreen mainScreen].bounds.size.width
 #define VideoViewHeight ([UIScreen mainScreen].bounds.size.width / 16 * 9)
@@ -32,6 +33,8 @@
 
 @property (nonatomic, strong) NSString *devId;
 
+@property (nonatomic, strong) NSDictionary *params;
+
 @property (nonatomic, strong) UIView *videoContainer;
 
 @property (nonatomic, strong) CameraControlView *controlView;
@@ -45,6 +48,8 @@
 @property (nonatomic, strong) UILabel *stateLabel;
 
 @property (nonatomic, strong) UIButton *retryButton;
+
+@property (nonatomic, strong) UIColor *colorfunc;
 
 @property (nonatomic, strong) TuyaSmartDevice *device;
 
@@ -72,18 +77,43 @@
 
 @end
 
+
 @implementation CameraViewController
 
 - (void)dealloc {
     [self disConnect];
     [self.cameraType destory];
 }
+//- (instancetype)initWithParams:(NSDictionary *)params {
+//    return self;
+//}
 
-- (instancetype)initWithDeviceId:(NSString *)devId {
+- (UIColor *) stringToColor:(NSString *) color {
+    if([color length] != 7) {
+        return nil;
+    }
+    NSString *color1 = [color substringFromIndex:1];
+
+    NSScanner *scanner = [NSScanner scannerWithString:color1];
+    UInt64 hexNumber = 0;
+    if ([scanner scanHexLongLong:&hexNumber]) {
+        CGFloat r = ((hexNumber & 0xff0000) >> 16) / 255.0;
+        CGFloat g = ((hexNumber & 0x00ff00) >> 8) / 255.0;
+        CGFloat b = ((hexNumber & 0x0000ff)) / 255.0;
+        CGFloat a = 1.0;
+
+        return [UIColor colorWithRed:r green:g blue:b alpha:a];
+    }
+
+    return [UIColor whiteColor];
+}
+
+- (instancetype)initWithDeviceId:(NSDictionary *)params {
     if (self = [super initWithNibName:nil bundle:nil]) {
-        _devId = devId;
-        _device = [TuyaSmartDevice deviceWithDeviceId:devId];
-        _dpManager = [[TuyaSmartCameraDPManager alloc] initWithDeviceId:devId];
+        _devId = params[@"devId"];
+        _params = params;
+        _device = [TuyaSmartDevice deviceWithDeviceId:_devId];
+        _dpManager = [[TuyaSmartCameraDPManager alloc] initWithDeviceId:_devId];
         id p2pType = [_device.deviceModel.skills objectForKey:@"p2pType"];
         _cameraType = [TuyaSmartCameraFactory cameraWithP2PType:p2pType deviceId:_device.deviceModel.devId delegate:self];
         _muted = YES;
@@ -130,7 +160,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"tp_top_bar_more"] forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(settingAction) forControlEvents:UIControlEventTouchUpInside];
@@ -138,9 +167,9 @@
     [rightBtn setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     self.navigationItem.rightBarButtonItems = @[rightItem];
-    
     self.title = self.device.deviceModel.name;
-    self.view.backgroundColor = [UIColor whiteColor];
+    //_colorfunc.ty_colorWithHexString(_params[@"bgColor"]);
+    self.view.backgroundColor = [self stringToColor:_params[@"bgColor"]];// [UIColor whiteColor];
     [self.view addSubview:self.videoContainer];
     [self.view addSubview:self.indicatorView];
     [self.view addSubview:self.stateLabel];
@@ -616,11 +645,11 @@
                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_screenshot", @"IPCLocalizable", @""),
                  @"identifier": kControlPhoto
                  },
-            //  @{
-            //      @"image": @"ty_camera_playback_icon",
-            //      @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
-            //      @"identifier": kControlPlayback
-            //      },
+             @{
+                 @"image": @"ty_camera_playback_icon",
+                 @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
+                 @"identifier": kControlPlayback
+                 },
             //  @{
             //      @"image": @"ty_camera_cloud_icon",
             //      @"title": NSLocalizedStringFromTable(@"ipc_panel_button_cstorage", @"IPCLocalizable", @""),
@@ -636,12 +665,13 @@
 
 - (CameraControlView *)controlView {
     if (!_controlView) {
-        // CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT + (VideoViewHeight/2);
+        CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT + (VideoViewHeight/2);
         CGFloat height = self.view.frame.size.height / 8;
-        CGFloat top = [UIScreen mainScreen].bounds.size.height - APP_TOP_BAR_HEIGHT - height;
+        //CGFloat top = [UIScreen mainScreen].bounds.size.height - APP_TOP_BAR_HEIGHT - height;
         CGFloat width = self.view.frame.size.width;
         _controlView = [[CameraControlView alloc] initWithFrame:CGRectMake(0, top, width, height)];
         _controlView.sourceData = [self controlDatas];
+        _controlView.backgroundColor = [self stringToColor:_params[@"bgColor"]];
         _controlView.delegate = self;
     }
     return _controlView;
