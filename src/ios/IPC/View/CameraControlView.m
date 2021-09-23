@@ -16,7 +16,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-//        self.backgroundColor = [UIColor whiteColor];
+
     }
     return self;
 }
@@ -57,6 +57,7 @@
         controlButton.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         controlButton.titleLabel.text = title;
         controlButton.identifier = identifier;
+        controlButton.themeParams =  [self themeParams];
         [controlButton addTarget:self action:@selector(controlAction:)];
         [self addSubview:controlButton];
     }];

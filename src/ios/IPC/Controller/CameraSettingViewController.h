@@ -11,6 +11,8 @@
 
 @property (nonatomic, strong) NSString *devId;
 
+@property (nonatomic, strong) NSDictionary *themeConfig;
+
 @property (nonatomic, strong) TuyaSmartCameraDPManager *dpManager;
 
 @end

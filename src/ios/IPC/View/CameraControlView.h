@@ -20,6 +20,8 @@
 
 @property (nonatomic, weak) id<CameraControlViewDelegate> delegate;
 
+@property (nonatomic, strong) NSDictionary *themeParams;
+
 - (void)enableControl:(NSString *)identifier;
 
 - (void)disableControl:(NSString *)identifier;

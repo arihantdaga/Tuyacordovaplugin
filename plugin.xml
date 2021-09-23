@@ -236,6 +236,8 @@
       <source-file src="src/ios/IPC/Utils/CameraPermissionUtil.m" />
       <header-file src="src/ios/IPC/Utils/UIView+CameraAdditions.h" />
       <source-file src="src/ios/IPC/Utils/UIView+CameraAdditions.m" />
+      <header-file src="src/ios/IPC/Utils/TyMiscUtils.h" />
+      <source-file src="src/ios/IPC/Utils/TyMiscUtils.m" />
 
       <!-- IPC/View -->
       <header-file src="src/ios/IPC/View/CameraCalendarCollectionViewCell.h" />

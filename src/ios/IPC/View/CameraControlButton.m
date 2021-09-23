@@ -5,6 +5,7 @@
 //  Copyright (c) 2014-2021 Tuya Inc. (https://developer.tuya.com/)
 
 #import "CameraControlButton.h"
+#import "TyMiscUtils.h"
 
 @implementation CameraControlButton
 
@@ -37,22 +38,22 @@
 - (void)setHighLighted:(BOOL)highLighted {
     _highLighted = highLighted;
     if (highLighted) {
-        self.imageView.tintColor = [UIColor blueColor];
-        self.titleLabel.textColor = [UIColor blueColor];
+        self.imageView.tintColor = [TyMiscUtils stringToColor:_themeParams[@"primaryColor"]];
+        self.titleLabel.textColor = [TyMiscUtils stringToColor:_themeParams[@"primaryColor"]];
     }else {
-        self.imageView.tintColor = [UIColor blackColor];
-        self.titleLabel.textColor = [UIColor blackColor];
+        self.imageView.tintColor = [TyMiscUtils stringToColor:_themeParams[@"textColor1"]];
+        self.titleLabel.textColor = [TyMiscUtils stringToColor:_themeParams[@"textColor1"]];
     }
 }
 
 - (void)setDisabled:(BOOL)disabled {
     _disabled = disabled;
     if (disabled) {
-        self.imageView.tintColor = [UIColor lightGrayColor];
-        self.titleLabel.textColor = [UIColor lightGrayColor];
-    }else {
-        self.imageView.tintColor = [UIColor blackColor];
-        self.titleLabel.textColor = [UIColor blackColor];
+        self.imageView.tintColor = [TyMiscUtils stringToColor:_themeParams[@"itemBgColor"]];
+        self.titleLabel.textColor = [TyMiscUtils stringToColor:_themeParams[@"itemBgColor"]];
+    } else {
+        self.imageView.tintColor = [TyMiscUtils stringToColor:_themeParams[@"textColor1"]];
+        self.titleLabel.textColor = [TyMiscUtils stringToColor:_themeParams[@"textColor1"]];
     }
 }
 
