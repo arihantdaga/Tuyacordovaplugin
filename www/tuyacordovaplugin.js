@@ -52,6 +52,9 @@
         },
         stopCameraConfiguration: function smartCameraConfiguration(successCallback, errorCallback){
             return cordova.exec(successCallback, errorCallback, pluginName, 'network_stopCameraConfiguration', []);
+        },
+        startEasyConfiguration: function startEasyConfiguration({ssid, pass, homeId}, successCallback, errorCallback){
+            return cordova.exec(successCallback, errorCallback, pluginName, 'network_startEasyConfiguration', [ssid,pass,homeId]);
         }
     }
     
