@@ -463,6 +463,72 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 });
 
     }
+    public void network_startEasyConfiguration(CordovaArgs args, CallbackContext callbackContext) throws  JSONException {
+        String ssid = args.getString(0);
+        String pass = args.getString(1);
+        long homeId = Long.parseLong(args.getString(2));
+        TuyaHomeSdk.getActivatorInstance().getActivatorToken(homeId,
+                new ITuyaActivatorGetToken() {
+                    @Override
+                    public void onSuccess(String token) {
+                         ActivatorBuilder builder = new ActivatorBuilder()
+                        .setSsid(wifiSSId)
+                        .setContext(MainActivity.this)
+                        .setPassword(wifiPwd)
+                        .setActivatorModel(ActivatorModelEnum.TY_EZ)
+                        .setTimeOut(120)
+                        .setToken(token)
+                        .setListener(new ITuyaSmartActivatorListener() {
+
+                            @Override
+                            public void onError(String errorCode, String errorMsg) {
+                                JSONObject resultObj = new JSONObject();
+                                try {
+                                    resultObj.put("code", errorCode);
+                                    resultObj.put("message", errorMsg);
+                                } catch (Exception e) {
+                                    LOG.d(TAG, "error = %s", e.toString());
+                                }
+                                PluginResult configResult = new PluginResult(PluginResult.Status.ERROR, resultObj);
+                                callbackContext.sendPluginResult(configResult);
+                                mTuyaActivator.stop();
+                            }
+
+                            @Override
+                            public void onActiveSuccess(DeviceBean devResp) {
+                               JSONObject resultObj = new JSONObject();
+                                try {
+                                    resultObj.put("status", "success");
+                                    resultObj.put("deviceId", devResp.devId);
+                                    resultObj.put("mac", devResp.uuid);
+                                    resultObj.put("deviceName", devResp.getName());
+                                } catch (Exception e) {
+                                    LOG.d(TAG, "error = %s", e.toString());
+                                }
+                                PluginResult configResult = new PluginResult(PluginResult.Status.OK, resultObj);
+                                configResult.setKeepCallback(true);
+                                callbackContext.sendPluginResult(configResult);
+                                mTuyaActivator.stop();
+                            }
+
+                            @Override
+                            public void onStep(String step, Object data) {
+                                // Log.d(TAG, "Step: " + step + " ");
+                            }
+                        });
+
+                        mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newMultiActivator(builder);
+                        mTuyaActivator.start();
+                    }
+
+
+                    @Override
+                    public void onFailure(String errorCode, String errorMsg) {
+                        callbackContext.error(makeError("0", "Unknown error"));
+                    }
+                });
+
+    }
 
 
     public void ipc_startCameraLivePlay(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
