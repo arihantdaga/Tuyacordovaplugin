@@ -157,7 +157,8 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         String pushToken = args.getString(0);
         LOG.d(TAG, "registerforNotifications: registerforNotifications is called");
         String pushProvider = "fcm";
-        TuyaHomeSdk.getPushInstance().registerDevice(pushToken, pushProvider, new IResultCallback() {
+        ITuyaPersonalCenterPlugin iTuyaPersonalCenterPlugin = (ITuyaPersonalCenterPlugin) PluginManager.service(ITuyaPersonalCenterPlugin.class);
+        iTuyaPersonalCenterPlugin.getPushInstance().registerDevice(pushToken, pushProvider, new IResultCallback() {
             @Override
             public void onError(String code, String error) {
                 callbackContext.error(makeError(code, error));
