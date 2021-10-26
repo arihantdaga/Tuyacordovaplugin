@@ -1,21 +1,24 @@
 package com.arihant.tuyaplugin;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -54,11 +57,11 @@ import com.tuya.smart.sdk.bean.DeviceBean;
 import com.tuya.smart.camera.utils.IPCCameraUtils;
 
 
-import org.apache.cordova.LOG;
-import org.json.JSONObject;
-
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Map;
 
 
@@ -454,7 +457,10 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onSuccess(int sessionId, int requestId, String data) {
                     isRecording = false;
-                    mHandler.sendMessage(MessageUtil.getMessage(MSG_VIDEO_RECORD_OVER, ARG1_OPERATE_SUCCESS));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        copyFiles(data, true);
+                    }
+                    //mHandler.sendMessage(MessageUtil.getMessage(MSG_VIDEO_RECORD_OVER, ARG1_OPERATE_SUCCESS));
                 }
 
                 @Override
@@ -467,16 +473,56 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void copyFiles(String sourcePath) {
+        copyFiles(sourcePath, false);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void copyFiles(String sourcePath, boolean video) {
+
+        FileChannel source;
+        File sourceFile = new File(sourcePath);
+        String mimeType = "image/jpeg";
+        if (video) {
+            mimeType = "video/mp4";
+        }
+
+        ContentResolver resolver = CameraPanelActivity.this.getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, ""+(System.currentTimeMillis()));
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
+        contentValues.put(
+                MediaStore.MediaColumns.RELATIVE_PATH, (video ? Environment.DIRECTORY_DCIM : Environment.DIRECTORY_PICTURES) + File.separator + devId);
+        Uri temp = resolver.insert(video ? MediaStore.Video.Media.EXTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+        try {
+            source = new FileInputStream(sourceFile).getChannel();
+            OutputStream fos = resolver.openOutputStream(temp);
+            byte[] bytes = new byte[1024 * 100]; //100KB
+            while (source.read(ByteBuffer.wrap(bytes)) != -1) {
+                fos.write(bytes);
+            }
+            fos.flush();
+            source.close();
+            sourceFile.delete();
+        } catch (Exception e) {
+            mHandler.sendMessage(MessageUtil.getMessage(MSG_SCREENSHOT, ARG1_OPERATE_FAIL));
+            return;
+        }
+        mHandler.sendMessage(MessageUtil.getMessage(MSG_SCREENSHOT, ARG1_OPERATE_SUCCESS));
+    }
+
 
     private void snapShotClick() {
         if (PermissionChecker.hasStoragePermission()) {
-            ToastUtil.shortToast(CameraPanelActivity.this, "Enter Snapshot");
+            ToastUtil.shortToast(CameraPanelActivity.this, "Taking a Snapshot ...");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 String path = IPCCameraUtils.recordPathSupportQ(devId);
                 picPath = path;
             } else {
-                String path = IPCCameraUtils.recordSnapshotPath(devId);
-                File file = new File(path);
+                String picPath = IPCCameraUtils.recordSnapshotPath(devId);
+                File file = new File(picPath);
                 if (!file.exists()) {
                     file.mkdirs();
                 }
@@ -485,7 +531,9 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
             mCameraP2P.snapshot(picPath, CameraPanelActivity.this, new OperationDelegateCallBack() {
                 @Override
                 public void onSuccess(int sessionId, int requestId, String data) {
-                    mHandler.sendMessage(MessageUtil.getMessage(MSG_SCREENSHOT, ARG1_OPERATE_SUCCESS));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        copyFiles(data);
+                    }
                 }
 
                 @Override
