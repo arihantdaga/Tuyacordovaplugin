@@ -19,11 +19,13 @@ import com.tuya.smart.android.user.api.ILogoutCallback;
 import com.tuya.smart.android.user.api.IUidLoginCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
+import com.tuya.smart.home.sdk.builder.ActivatorBuilder;
 import com.tuya.smart.interior.api.ITuyaPersonalCenterPlugin;
 import com.tuya.smart.ipc.messagecenter.bean.CameraMessageBean;
 import com.tuya.smart.sdk.api.ITuyaDevice;
 import com.tuya.smart.sdk.api.IDevListener;
 import com.tuya.smart.sdk.api.IResultCallback;
+import com.tuya.smart.sdk.api.ITuyaSmartActivatorListener;
 import com.tuya.smart.sdk.api.WifiSignalListener;
 import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.builder.TuyaCameraActivatorBuilder;
@@ -33,6 +35,7 @@ import com.tuya.smart.sdk.api.ITuyaActivatorGetToken;
 import com.tuya.smart.sdk.api.ITuyaCameraDevActivator;
 import com.tuya.smart.sdk.api.ITuyaSmartCameraActivatorListener;
 import com.tuya.smart.sdk.bean.DeviceBean;
+import com.tuya.smart.sdk.enums.ActivatorModelEnum;
 
 import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaInterface;
@@ -474,9 +477,9 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                     @Override
                     public void onSuccess(String token) {
                          ActivatorBuilder builder = new ActivatorBuilder()
-                        .setSsid(wifiSSId)
-                        .setContext(MainActivity.this)
-                        .setPassword(wifiPwd)
+                        .setSsid(ssid)
+                        .setContext(activity.getApplicationContext())
+                        .setPassword(pass)
                         .setActivatorModel(ActivatorModelEnum.TY_EZ)
                         .setTimeOut(120)
                         .setToken(token)
@@ -519,7 +522,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                             }
                         });
 
-                        mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newMultiActivator(builder);
+                        mTuyaActivator = (ITuyaCameraDevActivator) TuyaHomeSdk.getActivatorInstance().newMultiActivator(builder);
                         mTuyaActivator.start();
                     }
 
