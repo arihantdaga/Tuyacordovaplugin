@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.arihant.tuyaplugin.utils.MessageUtil;
+import com.tuya.sdk.core.PluginManager;
 import com.tuya.smart.android.camera.sdk.TuyaIPCSdk;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCCore;
 import com.tuya.smart.android.network.Business;
@@ -18,6 +19,7 @@ import com.tuya.smart.android.user.api.ILogoutCallback;
 import com.tuya.smart.android.user.api.IUidLoginCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
+import com.tuya.smart.interior.api.ITuyaPersonalCenterPlugin;
 import com.tuya.smart.ipc.messagecenter.bean.CameraMessageBean;
 import com.tuya.smart.sdk.api.ITuyaDevice;
 import com.tuya.smart.sdk.api.IDevListener;
