@@ -196,12 +196,35 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 @Override
                 public void onSuccess(User user, long homeId) {
                     JSONObject successObj = new JSONObject();
+                    if(TuyaHomeSdk.getUserInstance().getUser().getNickName() == null){
+                     TuyaHomeSdk.getUserInstance().updateNickName(uid, new IReNickNameCallback() {
+                        @Override
+                        public void onSuccess() {
+                            LOG.d(TAG, "user_loginsetNickname = %s", TuyaHomeSdk.getUserInstance().getUser().getNickName());
+                        }
+
+                        @Override
+                        public void onError(String code, String error) {
+                            LOG.d(TAG, "user_loginsetNickname error = %s", e.toString());
+                        }
+                    });
+                    }
                     try{
                         successObj.put("homeId", homeId);
+                        TuyaHomeSdk.newHomeInstance(homeId).getHomeDetail(new ITuyaHomeResultCallback() {
+                            @Override
+                            public void onSuccess(HomeBean bean) {
+                                sendPluginResult(callbackContext, successObj);
+                            }
+
+                            @Override
+                            public void onError(String errorCode, String errorMsg) {
+                                callbackContext.error(makeError(errorCode,errorMsg));
+                            }
+                        });
                     }catch (Exception e){
                         LOG.d(TAG, "user_loginOrRegitserWithUID error = %s", e.toString());
                     }
-                    sendPluginResult(callbackContext, successObj);
                 }
                 @Override
                 public void onError(String code, String error) {

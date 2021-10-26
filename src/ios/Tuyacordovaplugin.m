@@ -38,7 +38,13 @@ static Tuyacordovaplugin* tuyacordovaplugin;
 
     [[TuyaSmartUser sharedInstance] loginOrRegisterWithCountryCode:countryCode uid:uid password:pass createHome:YES success:^(id result) {
         
-        
+        if([[TuyaSmartUser sharedInstance].getUser().nickname == null){
+                    [[TuyaSmartUser sharedInstance] updateNickname:uid success:^{
+		NSLog(@"updateNickname success");
+	} failure:^(NSError *error) {
+		NSLog(@"updateNickname failure: %@", error);
+	}];
+         }
         [self.homeManager getHomeListWithSuccess:^(NSArray<TuyaSmartHomeModel *> *homes) {
             if (homes && homes[0] && homes[0].homeId) {
             NSDictionary *resultDict = @{
