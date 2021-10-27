@@ -216,6 +216,9 @@ public class CameraSettingActivity extends AppCompatActivity {
                                     if (itemBgColor != null) {
                                         ((TextView) v).setBackgroundColor(Color.parseColor(itemBgColor));
                                     }
+                                    if (textColor1 != null) {
+                                        ((TextView) v).setTextColor(Color.parseColor(textColor1));
+                                    }
                                     return v;
 
                                 }
