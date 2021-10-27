@@ -18,6 +18,7 @@ import com.tuya.smart.android.network.Business;
 import com.tuya.smart.android.network.http.BusinessResponse;
 import com.tuya.smart.android.user.api.ILogoutCallback;
 import com.tuya.smart.android.user.api.IUidLoginCallback;
+import com.tuya.smart.android.user.api.IReNickNameCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.home.sdk.builder.ActivatorBuilder;
@@ -207,17 +208,17 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                 public void onSuccess(User user, long homeId) {
                     JSONObject successObj = new JSONObject();
                     if(TuyaHomeSdk.getUserInstance().getUser().getNickName() == null){
-                     TuyaHomeSdk.getUserInstance().updateNickName(uid, new IReNickNameCallback() {
-                        @Override
-                        public void onSuccess() {
-                            LOG.d(TAG, "user_loginsetNickname = %s", TuyaHomeSdk.getUserInstance().getUser().getNickName());
-                        }
+                            TuyaHomeSdk.getUserInstance().updateNickName(uid, new IReNickNameCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    LOG.d(TAG, "user_loginsetNickname = %s", TuyaHomeSdk.getUserInstance().getUser().getNickName());
+                                }
 
-                        @Override
-                        public void onError(String code, String error) {
-                            LOG.d(TAG, "user_loginsetNickname error = %s", e.toString());
-                        }
-                    });
+                                @Override
+                                public void onError(String code, String error) {
+                                    LOG.d(TAG, "user_loginsetNickname error = %s", error);
+                                }
+                            });
                     }
                     try{
                         successObj.put("homeId", homeId);
