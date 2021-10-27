@@ -13,6 +13,7 @@ import com.arihant.tuyaplugin.utils.MessageUtil;
 import com.tuya.sdk.core.PluginManager;
 import com.tuya.smart.android.camera.sdk.TuyaIPCSdk;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCCore;
+import com.tuya.smart.android.device.bean.UpgradeInfoBean;
 import com.tuya.smart.android.network.Business;
 import com.tuya.smart.android.network.http.BusinessResponse;
 import com.tuya.smart.android.user.api.ILogoutCallback;
@@ -22,9 +23,12 @@ import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.home.sdk.builder.ActivatorBuilder;
 import com.tuya.smart.interior.api.ITuyaPersonalCenterPlugin;
 import com.tuya.smart.ipc.messagecenter.bean.CameraMessageBean;
+import com.tuya.smart.sdk.api.IGetOtaInfoCallback;
+import com.tuya.smart.sdk.api.IOtaListener;
 import com.tuya.smart.sdk.api.ITuyaDevice;
 import com.tuya.smart.sdk.api.IDevListener;
 import com.tuya.smart.sdk.api.IResultCallback;
+import com.tuya.smart.sdk.api.ITuyaOta;
 import com.tuya.smart.sdk.api.ITuyaSmartActivatorListener;
 import com.tuya.smart.sdk.api.WifiSignalListener;
 import com.tuya.smart.home.sdk.bean.HomeBean;
@@ -35,6 +39,7 @@ import com.tuya.smart.sdk.api.ITuyaActivatorGetToken;
 import com.tuya.smart.sdk.api.ITuyaCameraDevActivator;
 import com.tuya.smart.sdk.api.ITuyaSmartCameraActivatorListener;
 import com.tuya.smart.sdk.bean.DeviceBean;
+import com.tuya.smart.sdk.bean.OTAErrorMessageBean;
 import com.tuya.smart.sdk.enums.ActivatorModelEnum;
 
 import org.apache.cordova.CordovaArgs;
@@ -286,6 +291,104 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         String devicedata = JSON.toJSONString(mDevBean);
         PluginResult deviceresult = new PluginResult(PluginResult.Status.OK, devicedata);
         callbackContext.sendPluginResult(deviceresult);
+    }
+
+    public void firmwareUpdate(CordovaArgs args, CallbackContext callbackContext) throws JSONException {
+        String devId = args.getString(0);
+        ITuyaOta iTuyaOta = TuyaHomeSdk.newOTAInstance(devId);
+
+        iTuyaOta.setOtaListener(new IOtaListener() {
+            @Override
+            public void onSuccess(int otaType) {
+                iTuyaOta.onDestroy();
+                Log.i(TAG, "upgrade success");
+                JSONObject resultObj = new JSONObject();
+                try {
+                    resultObj.put("progress", 100);
+                    resultObj.put("status", 3);
+                } catch (Exception e) {
+                    LOG.d(TAG, "error = %s", e.toString());
+                }
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, resultObj);
+                pluginResult.setKeepCallback(false);
+                callbackContext.sendPluginResult(pluginResult);
+            }
+
+            @Override
+            public void onFailure(int otaType, String code, String error) {
+                iTuyaOta.onDestroy();
+                callbackContext.error(makeError(code, "Upgrade failed, try again"));
+            }
+
+            @Override
+            public void onFailureWithText(int otaType, String code, OTAErrorMessageBean messageBean) {
+                iTuyaOta.onDestroy();
+                callbackContext.error(makeError(code, "Upgrade failed - "+messageBean.text));
+            }
+
+            @Override
+            public void onProgress(int otaType, int progress) {
+                Log.i(TAG, "upgrade progress = " + progress);
+                JSONObject resultObj = new JSONObject();
+                try {
+                    resultObj.put("progress", progress);
+                    resultObj.put("status", 2);
+                } catch (Exception e) {
+                    LOG.d(TAG, "error = %s", e.toString());
+                }
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, resultObj);
+                pluginResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(pluginResult);
+            }
+
+            @Override
+            public void onTimeout(int otaType) {
+                iTuyaOta.onDestroy();
+                callbackContext.error(makeError("TO1", "Upgrade timed out, please check internet connection and try again"));
+            }
+
+            @Override
+            public void onStatusChanged(int otaStatus, int otaType) {
+
+            }
+        });
+
+        iTuyaOta.getOtaInfo(new IGetOtaInfoCallback() {
+            @Override
+            public void onSuccess(List<UpgradeInfoBean> upgradeInfoBeans) {
+                if (hasHardwareUpdate(upgradeInfoBeans)) {
+                    //Starts an OTA update.
+                    iTuyaOta.startOta();
+                    JSONObject resultObj = new JSONObject();
+                    try {
+                        resultObj.put("status", 1);
+                    } catch (Exception e) {
+                        LOG.d(TAG, "error = %s", e.toString());
+                    }
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, resultObj);
+                    pluginResult.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pluginResult);
+                }
+            }
+
+            @Override
+            public void onFailure(String code, String error) {
+                callbackContext.error(makeError(code, "Unable to get OTA Update info, please try again"));
+            }
+        });
+
+    }
+
+    private boolean hasHardwareUpdate(List<UpgradeInfoBean> list) {
+        if (null == list || list.size() == 0) {
+            return false;
+        }
+        for (UpgradeInfoBean upgradeInfoBean : list) {
+            if (upgradeInfoBean != null && upgradeInfoBean.getUpgradeStatus() == 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void renameDevice(CordovaArgs args, CallbackContext callbackContext) throws JSONException{

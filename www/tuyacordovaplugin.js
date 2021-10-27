@@ -73,6 +73,9 @@
         },
         signalStrength: function signalStrength({devId}){
             return exec('signalStrength',[devId]);
+        },
+        firmwareUpdate: function firmwareUpdate({ devId }) {
+            return cordova.exec(successCallback, errorCallback, pluginName, 'firmwareUpdate', [devId]);
         }
     }
     

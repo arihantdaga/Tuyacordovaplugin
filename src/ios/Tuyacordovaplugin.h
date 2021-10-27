@@ -28,6 +28,7 @@
 - (void) renameDevice: (CDVInvokedUrlCommand *)command;
 - (void) removeDevice: (CDVInvokedUrlCommand *)command;
 - (void) signalStrength: (CDVInvokedUrlCommand *)command;
+- (void) firmwareUpdate: (CDVInvokedUrlCommand *)command;
 
 - (void) push_getBgNotificationData: (CDVInvokedUrlCommand *)command;
 - (void) push_getForegroundNotificationData: (CDVInvokedUrlCommand *)command;

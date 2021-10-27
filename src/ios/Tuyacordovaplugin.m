@@ -346,6 +346,36 @@ static Tuyacordovaplugin* tuyacordovaplugin;
     }];
 }
 
+- (void) firmwareUpdate: (CDVInvokedUrlCommand *)command {
+    NSString *devId = (NSString *)[command argumentAtIndex:0];
+    TuyaSmartDevice *device = [TuyaSmartDevice deviceWithDeviceId:devId];
+    [device getFirmwareUpgradeInfo:^(NSArray<TuyaSmartFirmwareUpgradeModel *> *upgradeModelList) {
+            NSDictionary *response1 = @{
+                @"status": @"1"
+            };
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:response1];
+            [pluginResult setKeepCallbackAsBool:true];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            [self.device upgradeFirmware:type success:^{
+                NSDictionary *response2 = @{
+                    @"status": @"3",
+                    @"progress": @"100"
+                };
+                CDVPluginResult* pluginResult2 = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:response2];
+                [pluginResult2 setKeepCallbackAsBool:false];
+                [self.commandDelegate sendPluginResult:pluginResult2 callbackId:command.callbackId];
+            } failure:^(NSError *error) {
+                NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
+                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            }];
+	} failure:^(NSError *error) {
+		NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+	}];]
+}
+
 - (void) push_getBgNotificationData: (CDVInvokedUrlCommand *)command {
     if (self.bgNotificationData != nil) {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:self.bgNotificationData];
