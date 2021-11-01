@@ -308,6 +308,26 @@ public class Tuyacordovaplugin extends CordovaPlugin {
         });
     }
 
+    public void home_initHome(CordovaArgs args, CallbackContext callbackContext) throws JSONException {
+        long homeId = Long.parseLong(args.getString(0));
+        try {
+            TuyaHomeSdk.newHomeInstance(homeId).getHomeDetail(new ITuyaHomeResultCallback() {
+                @Override
+                public void onSuccess(HomeBean bean) {
+                    PluginResult successResult = new PluginResult(PluginResult.Status.OK, "success");
+                    callbackContext.sendPluginResult(successResult);
+                }
+
+                @Override
+                public void onError(String errorCode, String errorMsg) {
+                    callbackContext.error(makeError(errorCode,errorMsg));
+                }
+            });
+        } catch (Exception e){
+            LOG.d(TAG, "home_initHome error = %s", e.toString());
+        }
+    }
+
     public void device_data(CordovaArgs args, CallbackContext callbackContext) throws JSONException{
         String devId = args.getString(0);
         long homeId = Long.parseLong(args.getString(1));

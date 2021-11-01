@@ -24,6 +24,9 @@
         },
         initNotifications: function initNotifications(pushToken) {
             return exec('home_initNotifications', [pushToken]);
+        },
+        initHome: function initHome(homeId) {
+            return exec('home_initHome', [homeId]);
         }
     
     }
