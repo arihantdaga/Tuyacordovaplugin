@@ -50,8 +50,17 @@ static Tuyacordovaplugin* tuyacordovaplugin;
             NSDictionary *resultDict = @{
                 @"homeId": [NSString stringWithFormat:@"%lld", homes[0].homeId]
             };
-            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
+            TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homes[0].homeId];
+            home.delegate = self;
+            [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+                    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
+                    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                } failure:^(NSError *errorMsg) {
+                    NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
+                    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+                    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            }];
             } else {
                 CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Internal Error TNH001"];
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -179,6 +188,21 @@ static Tuyacordovaplugin* tuyacordovaplugin;
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }];
+}
+
+- (void) home_initHome: (CDVInvokedUrlCommand *) command {
+    NSString *homeIdString = (NSString *)[command argumentAtIndex:0];
+    long long homeId = [homeIdString longLongValue];
+    TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeId];
+    home.delegate = self;
+    [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        } failure:^(NSError *errorMsg) {
+            NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
 }
 
 

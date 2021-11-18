@@ -14,6 +14,7 @@
 
 - (void) home_listHomes: (CDVInvokedUrlCommand *)command;
 - (void) home_listDevices: (CDVInvokedUrlCommand *)command;
+- (void) home_initHome: (CDVInvokedUrlCommand *)command;
 // TODO
 // - (void) home_initNotifications: (CDVInvokedUrlCommand *)command;
 
