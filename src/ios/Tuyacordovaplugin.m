@@ -47,20 +47,23 @@ static Tuyacordovaplugin* tuyacordovaplugin;
     //      }
         [self.homeManager getHomeListWithSuccess:^(NSArray<TuyaSmartHomeModel *> *homes) {
             if (homes && homes[0] && homes[0].homeId) {
-            NSDictionary *resultDict = @{
-                @"homeId": [NSString stringWithFormat:@"%lld", homes[0].homeId]
-            };
+                NSDictionary *resultDict = @{
+                    @"homeId": [NSString stringWithFormat:@"%lld", homes[0].homeId]
+                };
 
-            TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homes[0].homeId];
-            home.delegate = self;
-            [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
-                    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
-                    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-                } failure:^(NSError *errorMsg) {
-                    NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
-                    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
-                    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-            }];
+                [homes enumerateObjectsUsingBlock:^(TuyaSmartHomeModel *homeMode, NSUInteger idx, BOOL *stop) {
+                    TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeMode.homeId];
+                    [temp addObject:home];
+                    home.delegate = self;
+                    [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+                        [deviceList addObjectsFromArray:home.deviceList];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"deviceDidUpdate" object:nil];
+                        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
+                        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                    } failure:^(NSError *error) {
+                        NSLog(@"get home detail error: %@", error);
+                    }];
+                }];
             } else {
                 CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Internal Error TNH001"];
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
