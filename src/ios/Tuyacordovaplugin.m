@@ -50,7 +50,8 @@ static Tuyacordovaplugin* tuyacordovaplugin;
                 NSDictionary *resultDict = @{
                     @"homeId": [NSString stringWithFormat:@"%lld", homes[0].homeId]
                 };
-
+                NSMutableArray *temp = [NSMutableArray array];
+                NSMutableArray *deviceList = [NSMutableArray array];
                 [homes enumerateObjectsUsingBlock:^(TuyaSmartHomeModel *homeMode, NSUInteger idx, BOOL *stop) {
                     TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeMode.homeId];
                     [temp addObject:home];
