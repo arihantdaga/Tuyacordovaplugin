@@ -76,6 +76,8 @@ public class Tuyacordovaplugin extends CordovaPlugin {
     private boolean sdkInitialized = false;
 
     private ITuyaCameraDevActivator mTuyaActivator;
+    private ITuyaActivator mTuyaActivator2;
+
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
@@ -643,7 +645,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                                 }
                                 PluginResult configResult = new PluginResult(PluginResult.Status.ERROR, resultObj);
                                 callbackContext.sendPluginResult(configResult);
-                                mTuyaActivator.stop();
+                                mTuyaActivator2.stop();
                             }
 
                             @Override
@@ -660,7 +662,7 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                                 PluginResult configResult = new PluginResult(PluginResult.Status.OK, resultObj);
                                 configResult.setKeepCallback(true);
                                 callbackContext.sendPluginResult(configResult);
-                                mTuyaActivator.stop();
+                                mTuyaActivator2.stop();
                             }
 
                             @Override
@@ -669,8 +671,8 @@ public class Tuyacordovaplugin extends CordovaPlugin {
                             }
                         });
 
-                        mTuyaActivator = (ITuyaCameraDevActivator) TuyaHomeSdk.getActivatorInstance().newMultiActivator(builder);
-                        mTuyaActivator.start();
+                        mTuyaActivator2 = TuyaHomeSdk.getActivatorInstance().newMultiActivator(builder);
+                        mTuyaActivator2.start();
                     }
 
 
