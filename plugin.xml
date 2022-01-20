@@ -121,12 +121,17 @@
             <source url="https://github.com/TuyaInc/TuyaPublicSpecs.git"/>
          </config>
          <pods use-frameworks="true">
+            <pod name="SDWebImage" />   
             <pod name="SVProgressHUD" />
-            <pod name="SDWebImage" />
-            <pod name="TuyaSmartHomeKit" />
+            <pod name="TuyaSmartHomeKit" />       
+            <pod name="TuyaSmartActivatorKit" />
             <pod name="TuyaSmartCameraKit" />
+            <pod name="TuyaSmartPanelBizBundle" />
+            <pod name="TuyaSmartActivatorBizBundle" />
+            <pod name="TuyaSmartCameraSettingBizBundle" />
+            <pod name="TuyaSmartDeviceDetailBizBundle" />
             <pod name="TuyaCameraUIKit" />
-            <pod name="TuyaSmartCloudServiceBizBundle" />
+            <pod name="TuyaCloudStorageDebugger" />
          </pods>
       </podspec>
       <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
@@ -259,6 +264,8 @@
       <source-file src="src/ios/IPC/View/TYCameraRecordCell.m" />
       <header-file src="src/ios/IPC/View/TYCameraRecordListView.h" />
       <source-file src="src/ios/IPC/View/TYCameraRecordListView.m" />
+      <header-file src="src/ios/IPC/View/CameraPTZControlView.h" />
+      <source-file src="src/ios/IPC/View/CameraPTZControlView.m" />
 
       <header-file src="src/ios/AppDelegate+Tuyacordovaplugin.h" />
       <source-file src="src/ios/AppDelegate+Tuyacordovaplugin.m" />

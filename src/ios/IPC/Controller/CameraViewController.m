@@ -14,6 +14,7 @@
 #import <TuyaSmartCameraM/TuyaSmartCameraM.h>
 #import <AVFoundation/AVFoundation.h>
 #import "CameraVideoView.h"
+#import "CameraPTZControlView.h"
 #import "TyMiscUtils.h"
 #import <TYUIKit/TYUIKit.h>
 
@@ -59,6 +60,8 @@
 @property (nonatomic, strong) id<TuyaSmartCameraType> cameraType;
 
 @property (nonatomic, strong) CameraVideoView *videoView;
+
+@property (nonatomic, strong) CameraPTZControlView *ptzControlView;
 /// Record last mute status
 @property (nonatomic, assign) BOOL lastMuted;
 /// camera status
@@ -156,6 +159,7 @@
     [self.view addSubview:self.stateLabel];
     [self.view addSubview:self.retryButton];
     [self.view addSubview:self.controlView];
+    [self.view addSubview:self.ptzControlView];
     [self.view addSubview:self.soundButton];
     [self.view addSubview:self.hdButton];
     
@@ -657,6 +661,19 @@
         _controlView.delegate = self;
     }
     return _controlView;
+}
+
+
+- (CameraPTZControlView *)ptzControlView {
+    if (!_ptzControlView) {
+        CGFloat top = VideoViewHeight + TOP_MARGIN + APP_TOP_BAR_HEIGHT + 150;
+        CGFloat height = UIScreen.mainScreen.bounds.size.height - top;
+        _ptzControlView = [[CameraPTZControlView alloc] initWithFrame:CGRectMake(8, top, UIScreen.mainScreen.bounds.size.width, height)];
+        _ptzControlView.deviceId = _devId;
+        _ptzControlView.fatherVc = self;
+        [_ptzControlView mountUI];
+    }
+    return _ptzControlView;
 }
 
 - (UIButton *)soundButton {
