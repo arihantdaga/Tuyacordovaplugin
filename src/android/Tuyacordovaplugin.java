@@ -42,6 +42,7 @@ import com.tuya.smart.sdk.api.ITuyaSmartCameraActivatorListener;
 import com.tuya.smart.sdk.bean.DeviceBean;
 import com.tuya.smart.sdk.bean.OTAErrorMessageBean;
 import com.tuya.smart.sdk.enums.ActivatorModelEnum;
+import com.tuya.smart.sdk.api.ITuyaActivator;
 
 import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaInterface;
