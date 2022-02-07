@@ -272,5 +272,5 @@
 
    </platform>
 
-   <hook src="scripts/postPlugin.js" type="after_plugin_install" />
+   <!-- <hook src="scripts/postPlugin.js" type="after_plugin_install" /> -->
 </plugin>
