@@ -5,6 +5,9 @@ const ANDROID_DIR = "platforms/android/";
 fixGradlePropertiesFile();
 
 function fixGradlePropertiesFile() {
+  if (!fs.existsSync(ANDROID_DIR)) {
+    return;
+  }
   const gradleFilePath = ANDROID_DIR + "gradle.properties";
   let gradlePropertiesFile = fs.readFileSync(
     gradleFilePath,
