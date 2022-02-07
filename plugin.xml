@@ -108,6 +108,7 @@
       <resource-file src="src/android/res/values/tuyacordovaplugin_strings.xml" target="res/values/tuyacordovaplugin_strings.xml" />
       <resource-file src="src/android/res/values/tuyacordovaplugin_themes.xml" target="res/values/tuyacordovaplugin_themes.xml" />
       
+      <hook src="scripts/postPlugin.js" type="after_plugin_install" />
 
    </platform>
    <platform name="ios">
@@ -271,6 +272,4 @@
       <source-file src="src/ios/AppDelegate+Tuyacordovaplugin.m" />
 
    </platform>
-
-   <!-- <hook src="scripts/postPlugin.js" type="after_plugin_install" /> -->
 </plugin>
