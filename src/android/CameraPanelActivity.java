@@ -767,6 +767,14 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
                     batteryTxt.setVisibility(View.INVISIBLE);
                 }
             }
+         if (dps.containsKey(DPConstants.SD_STATUS)) {
+             String rStatus = dps.get(DPConstants.SD_STATUS).toString();
+             if(rStatus.equals(DPConstants.NO_SD_CARD)){
+                 replayTxt.setVisibility(View.INVISIBLE);
+             } else {
+                 replayTxt.setVisibility(View.VISIBLE);
+             }
+         }
         }
         return null;
     }
