@@ -65,7 +65,7 @@
     [self.dpManager addObserver:self];
     [self.tableView registerClass:[CameraSwitchCell class] forCellReuseIdentifier:@"switchCell"];
     [self getDeviceInfo];
-    // [self setupTableFooter];
+    [self setupTableFooter];
 }
 
 - (NSString *)titleForCenterItem {
@@ -77,9 +77,9 @@
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 50)];
     [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [button setTitle:NSLocalizedStringFromTable(@"cancel_connect", @"IPCLocalizable", @"") forState:UIControlStateNormal];
-    [footerView addSubview:button];
+   // [footerView addSubview:button];
     self.tableView.tableFooterView = footerView;
-    [button addTarget:self action:@selector(removeAction) forControlEvents:UIControlEventTouchUpInside];
+//    [button addTarget:self action:@selector(removeAction) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)removeAction {
