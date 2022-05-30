@@ -145,21 +145,31 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightBtn setImage:[UIImage imageNamed:@"tp_top_bar_more"] forState:UIControlStateNormal];
+    NSString *rightTitle = NSLocalizedStringFromTable(@"ipc_panel_button_settings", @"IPCLocalizable", @"");
+    [rightBtn setTitle:rightTitle forState:UIControlStateNormal];
+    [rightBtn setTitleColor:[TyMiscUtils stringToColor:_params[@"textColor1"]] forState:UIControlStateNormal];
+//    [rightBtn setImage:[UIImage imageNamed:@"tp_top_bar_more"] forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(settingAction) forControlEvents:UIControlEventTouchUpInside];
     rightBtn.frame = CGRectMake(0, 0, 44, 44);
     [rightBtn setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     self.navigationItem.rightBarButtonItems = @[rightItem];
     self.title = self.device.deviceModel.name;
+    self.view.tintColor = [TyMiscUtils stringToColor:_params[@"primaryColor"]];
+    //self.navigationItem.title = self.device.deviceModel.name;
     //_colorfunc.ty_colorWithHexString(_params[@"bgColor"]);
+    //self.view.tintColor =  [TyMiscUtils stringToColor:_params[@"bgColor"]];
+    if ([self.dpManager isSupportDP:TuyaSmartCameraSDCardStatusDPName]) {
+        NSInteger sdCardStatus = [[self.dpManager valueForDP:TuyaSmartCameraSDCardStatusDPName] tysdk_toInt];
+    }
+    
     self.view.backgroundColor = [TyMiscUtils stringToColor:_params[@"bgColor"]];// [UIColor whiteColor];
     [self.view addSubview:self.videoContainer];
     [self.view addSubview:self.indicatorView];
     [self.view addSubview:self.stateLabel];
     [self.view addSubview:self.retryButton];
-    [self.view addSubview:self.controlView];
     [self.view addSubview:self.ptzControlView];
+    [self.view addSubview:self.controlView];
     [self.view addSubview:self.soundButton];
     [self.view addSubview:self.hdButton];
     
@@ -467,6 +477,7 @@
 }
 
 - (void)cameraDidBeginPreview:(id<TuyaSmartCameraType>)camera {
+    [self.controlView selectedControl:kControlPlayback];
     [self.cameraType getHD];
     [self.controlView enableAllControl];
     [self stopLoading];
@@ -631,27 +642,27 @@
                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_screenshot", @"IPCLocalizable", @""),
                  @"identifier": kControlPhoto
                  },
-            //  @{
-            //      @"image": @"ty_camera_playback_icon",
-            //      @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
-            //      @"identifier": kControlPlayback
-            //      },
-            //  @{
-            //      @"image": @"ty_camera_cloud_icon",
-            //      @"title": NSLocalizedStringFromTable(@"ipc_panel_button_cstorage", @"IPCLocalizable", @""),
-            //      @"identifier": kControlCloud
-            //      },
-            //  @{
-            //      @"image": @"ty_camera_message",
-            //      @"title": NSLocalizedStringFromTable(@"ipc_panel_button_message", @"IPCLocalizable", @""),
-            //      @"identifier": kControlMessage
-            //      }
+              @{
+                  @"image": @"ty_camera_playback_icon",
+                  @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
+                  @"identifier": kControlPlayback
+                  },
+//              @{
+//                  @"image": @"ty_camera_cloud_icon",
+//                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_cstorage", @"IPCLocalizable", @""),
+//                  @"identifier": kControlCloud
+//                  },
+//              @{
+//                  @"image": @"ty_camera_message",
+//                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_message", @"IPCLocalizable", @""),
+//                  @"identifier": kControlMessage
+//                  }
              ];
 }
 
 - (CameraControlView *)controlView {
     if (!_controlView) {
-        CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT + (VideoViewHeight/2);
+        CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT + (VideoViewHeight/2) + 100;
         CGFloat height = self.view.frame.size.height / 8;
         //CGFloat top = [UIScreen mainScreen].bounds.size.height - APP_TOP_BAR_HEIGHT - height;
         CGFloat width = self.view.frame.size.width;
@@ -666,9 +677,9 @@
 
 - (CameraPTZControlView *)ptzControlView {
     if (!_ptzControlView) {
-        CGFloat top = VideoViewHeight + TOP_MARGIN + APP_TOP_BAR_HEIGHT + 150;
+        CGFloat top = VideoViewHeight + 25;
         CGFloat height = UIScreen.mainScreen.bounds.size.height - top;
-        _ptzControlView = [[CameraPTZControlView alloc] initWithFrame:CGRectMake(8, top, UIScreen.mainScreen.bounds.size.width, height)];
+        _ptzControlView = [[CameraPTZControlView alloc] initWithFrame:CGRectMake(40, top, UIScreen.mainScreen.bounds.size.width, height)];
         _ptzControlView.deviceId = _devId;
         _ptzControlView.fatherVc = self;
         [_ptzControlView mountUI];
