@@ -29,5 +29,6 @@ public class DPConstants {
 
     public static final String POWER_SOURCE_BATTERY = "1";
     public static final String POWER_SOURCE_PLUG_SUPPLY = "2";
+    public static final String NO_SD_CARD = "5";
 
 }
