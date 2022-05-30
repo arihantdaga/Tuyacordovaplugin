@@ -40,10 +40,10 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    CGFloat buttonWith = self.frame.size.width / 3;
+    CGFloat buttonWith = self.frame.size.width / 4;
     CGFloat buttonHeight = self.frame.size.height;
     [self.subviews enumerateObjectsUsingBlock:^(UIView *obj, NSUInteger idx, BOOL *stop) {
-        obj.frame = CGRectMake((idx % 3) * (buttonWith + 0.5), idx / 3 * (buttonHeight + 0.5), buttonWith - 1, buttonHeight - 1);
+        obj.frame = CGRectMake((idx % 4) * (buttonWith + 0.5), idx / 4 * (buttonHeight + 0.5), buttonWith - 1, buttonHeight - 1);
     }];
 }
 
