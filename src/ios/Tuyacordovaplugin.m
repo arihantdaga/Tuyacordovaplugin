@@ -30,6 +30,51 @@ static Tuyacordovaplugin* tuyacordovaplugin;
     }
 }
 
+static void initTuyaHomes(Tuyacordovaplugin *object, CDVInvokedUrlCommand *command) {
+    [object.homeManager getHomeListWithSuccess:^(NSArray<TuyaSmartHomeModel *> *homes) {
+        NSInteger sizeOfHomes = [homes count];
+        if (homes && sizeOfHomes > 0) {
+            NSDictionary *resultDict = @{
+                @"homeId": [NSString stringWithFormat:@"%lld", homes[0].homeId]
+            };
+            NSMutableArray *temp = [NSMutableArray array];
+            NSMutableArray *deviceList = [NSMutableArray array];
+            [homes enumerateObjectsUsingBlock:^(TuyaSmartHomeModel *homeMode, NSUInteger idx, BOOL *stop) {
+                TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeMode.homeId];
+                [temp addObject:home];
+                home.delegate = object;
+                [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+                    [deviceList addObjectsFromArray:home.deviceList];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"deviceDidUpdate" object:nil];
+                    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
+                    [object.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                } failure:^(NSError *error) {
+                    NSLog(@"get home detail error: %@", error);
+                }];
+            }];
+        } else {
+            [object.homeManager addHomeWithName:@"test"
+                                        geoName:@"hyderabad"
+                                          rooms:@[@"test"]
+                                       latitude:(double)17.3850
+                                      longitude:(double)78.4867
+                                        success:^(long long homeId) {
+                
+                // The value of `homeId` for the home.
+                NSLog(@"add home success");
+                initTuyaHomes(object, command);
+            } failure:^(NSError *error) {
+                NSLog(@"add home failure: %@", error);
+            }];
+        }
+    } failure:^(NSError *errorMsg) {
+        NSLog(@"loginOrRegisterWithCountryCode failure: %@", errorMsg);
+        NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
+        [object.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
+}
+
 - (void) user_loginOrRegitserWithUID: (CDVInvokedUrlCommand *) command {
 
     NSString *countryCode = (NSString *)[command argumentAtIndex:0];
@@ -45,36 +90,7 @@ static Tuyacordovaplugin* tuyacordovaplugin;
 	// 	NSLog(@"updateNickname failure: %@", error);
 	// }];
     //      }
-        [self.homeManager getHomeListWithSuccess:^(NSArray<TuyaSmartHomeModel *> *homes) {
-            if (homes && homes[0] && homes[0].homeId) {
-                NSDictionary *resultDict = @{
-                    @"homeId": [NSString stringWithFormat:@"%lld", homes[0].homeId]
-                };
-                NSMutableArray *temp = [NSMutableArray array];
-                NSMutableArray *deviceList = [NSMutableArray array];
-                [homes enumerateObjectsUsingBlock:^(TuyaSmartHomeModel *homeMode, NSUInteger idx, BOOL *stop) {
-                    TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeMode.homeId];
-                    [temp addObject:home];
-                    home.delegate = self;
-                    [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
-                        [deviceList addObjectsFromArray:home.deviceList];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"deviceDidUpdate" object:nil];
-                        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
-                        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-                    } failure:^(NSError *error) {
-                        NSLog(@"get home detail error: %@", error);
-                    }];
-                }];
-            } else {
-                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Internal Error TNH001"];
-                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-            }
-            } failure:^(NSError *errorMsg) {
-                NSLog(@"loginOrRegisterWithCountryCode failure: %@", errorMsg);
-                NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
-                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:resultDict];
-                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        }];
+        initTuyaHomes(self, command);
     } failure:^(NSError *errorMsg) {
         NSLog(@"loginOrRegisterWithCountryCode failure: %@", errorMsg);
         NSDictionary *resultDict = [Tuyacordovaplugin makeError:errorMsg];
