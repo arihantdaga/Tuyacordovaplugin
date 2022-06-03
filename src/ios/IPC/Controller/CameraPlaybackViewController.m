@@ -667,7 +667,7 @@ typedef NSArray<NSDictionary *> TYDictArray;
 
 - (UIView *)controlBar {
     if (!_controlBar) {
-        CGFloat top = [UIScreen mainScreen].bounds.size.height - 90;
+        CGFloat top = [UIScreen mainScreen].bounds.size.height - 150;
         _controlBar = [[UIView alloc] initWithFrame:CGRectMake(0, top, VideoViewWidth, 50)];
         [_controlBar addSubview:self.photoButton];
         [_controlBar addSubview:self.pauseButton];

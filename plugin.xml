@@ -130,7 +130,6 @@
             <pod name="TuyaSmartPanelBizBundle" />
             <pod name="TuyaSmartActivatorBizBundle" />
             <pod name="TuyaSmartCameraSettingBizBundle" />
-            <pod name="TuyaSmartDeviceDetailBizBundle" />
             <pod name="TuyaCameraUIKit" />
             <pod name="TuyaCloudStorageDebugger" />
          </pods>
