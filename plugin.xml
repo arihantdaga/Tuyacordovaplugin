@@ -127,7 +127,6 @@
             <pod name="TuyaSmartHomeKit" />       
             <pod name="TuyaSmartActivatorKit" />
             <pod name="TuyaSmartCameraKit" />
-            <pod name="TuyaSmartPanelBizBundle" />
             <pod name="TuyaSmartActivatorBizBundle" />
             <pod name="TuyaSmartCameraSettingBizBundle" />
             <pod name="TuyaCameraUIKit" />
