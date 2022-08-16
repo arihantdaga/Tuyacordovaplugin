@@ -26,6 +26,7 @@
             android:textSize="@dimen/ts_12" />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/camera_options_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -69,6 +70,20 @@
             android:text="@string/record"
             android:textColor="@color/camera_panel_control_color"
             android:textSize="@dimen/ts_13" />
+
+        <TextView
+            android:id="@+id/move_camera_Txt"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/right_button_icon"
+            android:drawablePadding="@dimen/mg_5"
+            android:gravity="center"
+            android:padding="@dimen/mg_20"
+            android:text="Control"
+            android:textColor="@color/camera_panel_control_color"
+            android:textSize="@dimen/ts_13" />
     </LinearLayout>
 
     <LinearLayout
@@ -109,10 +124,158 @@
             android:gravity="center"
             android:padding="@dimen/mg_20"
             android:text="@string/message"
-            android:textColor="@color/camera_panel_control_color"
-            android:textSize="@dimen/ts_13" />
+            android:textColor="@color/camera_panel_control_color" />
 
     </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/camera_move_options_layout"
+        android:visibility="gone">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="-30dp">
+            <LinearLayout>
+                <TextView
+                    android:id="@+id/back_to_camera_Txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/back_icon"
+                    android:drawablePadding="@dimen/mg_10"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Back"
+                    android:textColor="@color/camera_panel_control_color"
+                    android:textSize="@dimen/ts_13" />
+            </LinearLayout>
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="-10dp">
+            <LinearLayout>
+                <TextView
+                    android:id="@+id/motion_Up_Txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/up_button_icon"
+                    android:drawablePadding="@dimen/mg_5"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="UP"
+                    android:textColor="@color/camera_panel_control_color"
+                    android:textSize="@dimen/ts_13" />
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="0dp">
+            <LinearLayout>
+                <TextView
+                    android:id="@+id/motion_Left_Txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/left_button_icon"
+                    android:drawablePadding="@dimen/mg_10"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="LEFT"
+                    android:textColor="@color/camera_panel_control_color"
+                    android:textSize="@dimen/ts_13"
+                    android:layout_marginRight="30dp"/>
+
+                <TextView
+                    android:id="@+id/motion_Right_Txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/right_button_icon"
+                    android:drawablePadding="@dimen/mg_5"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="RIGHT"
+                    android:textColor="@color/camera_panel_control_color"
+                    android:textSize="@dimen/ts_13"
+                    android:layout_marginLeft="30dp" />
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="-15dp">
+            <LinearLayout>
+
+                <TextView
+                    android:id="@+id/motion_Down_Txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/down_button_icon"
+                    android:drawablePadding="@dimen/mg_5"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="DOWN"
+                    android:textColor="@color/camera_panel_control_color"
+                    android:textSize="@dimen/ts_13" />
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="0dp"
+            android:visibility="gone">
+            <LinearLayout>
+                <TextView
+                    android:id="@+id/zoom_in_Txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/left_button_icon"
+                    android:drawablePadding="@dimen/mg_10"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="Zoom IN"
+                    android:textColor="@color/camera_panel_control_color"
+                    android:textSize="@dimen/ts_13"
+                    android:layout_marginRight="30dp"/>
+
+                <TextView
+                    android:id="@+id/zoom_out_Txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/right_button_icon"
+                    android:drawablePadding="@dimen/mg_5"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="Zoom OUT"
+                    android:textColor="@color/camera_panel_control_color"
+                    android:textSize="@dimen/ts_13"
+                    android:layout_marginLeft="30dp" />
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

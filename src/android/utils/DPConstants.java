@@ -3,8 +3,10 @@ package com.arihant.tuyaplugin.utils;
 public class DPConstants {
     //Data type: enum
     public static final String PTZ_CONTROL = "119";
+    public static final String ZOOM_CONTROL = "";
     //Data type: boolean
     public static final String PTZ_STOP = "116";
+    public static final String ZOOM_STOP = "";
     //Data type: boolean
     public static final String WATERMARK = "104";
     public static final String BATTERY = "145";
@@ -26,6 +28,9 @@ public class DPConstants {
     public static final String PTZ_LEFT = "2";
     public static final String PTZ_DOWN = "4";
     public static final String PTZ_RIGHT = "6";
+
+    public static final String ZOOM_IN = "0";
+    public static final String ZOOM_OUT = "1";
 
     public static final String POWER_SOURCE_BATTERY = "1";
     public static final String POWER_SOURCE_PLUG_SUPPLY = "2";
