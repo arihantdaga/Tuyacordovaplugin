@@ -23,11 +23,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.FrameLayout;
@@ -40,6 +43,7 @@ import com.arihant.tuyaplugin.utils.ToastUtil;
 import com.tuya.smart.android.camera.sdk.TuyaIPCSdk;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCCore;
 import com.tuya.smart.android.camera.sdk.api.ITuyaIPCDoorbell;
+import com.tuya.smart.android.camera.sdk.api.ITuyaIPCPTZ;
 import com.tuya.smart.android.common.utils.L;
 import com.tuya.smart.camera.camerasdk.typlayer.callback.AbsP2pCameraListener;
 import com.tuya.smart.camera.camerasdk.typlayer.callback.OnRenderDirectionCallback;
@@ -97,7 +101,7 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
     private TextView qualityTv;
     private RelativeLayout mMainLayout;
     private FrameLayout  progressOverlay;
-    private TextView speakTxt, recordTxt, photoTxt, replayTxt, settingTxt, cloudStorageTxt, messageCenterTxt, deviceInfoTxt,batteryTxt;
+    private TextView speakTxt, recordTxt, photoTxt, replayTxt,zoomInTxt,zoomOutTxt,moveCameraTxt, backToCameraTxt, motionRightCameraTxt,motionLeftCameraTxt,motionUpCameraTxt, motionDownCameraTxt,settingTxt, cloudStorageTxt, messageCenterTxt, deviceInfoTxt,batteryTxt;
 
     private static final int ASPECT_RATIO_WIDTH = 9;
     private static final int ASPECT_RATIO_HEIGHT = 10;
@@ -137,6 +141,7 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         initListener();
         getBatteryLevel();
         if (querySupportByDPID(DPConstants.PTZ_CONTROL)) {
+            moveCameraTxt.setVisibility(View.VISIBLE);
             mVideoView.setOnRenderDirectionCallback(new OnRenderDirectionCallback() {
 
                 @Override
@@ -218,7 +223,6 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
     };
 
     private void initView() {
-
         String battery_val;
         DeviceBean deviceBean = TuyaHomeSdk.getDataInstance().getDeviceBean(devId);
         Map<String, Object> dps = deviceBean.getDps();
@@ -247,6 +251,22 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         photoTxt = findViewById(_getResource("photo_Txt", "id"));
         replayTxt = findViewById(_getResource("replay_Txt", "id"));
         replayTxt.setOnClickListener(this);
+        zoomInTxt = findViewById(_getResource("zoom_in_Txt", "id"));
+        zoomInTxt.setOnClickListener(this);
+        zoomOutTxt = findViewById(_getResource("zoom_out_Txt", "id"));
+        zoomOutTxt.setOnClickListener(this);
+        moveCameraTxt = findViewById(_getResource("move_camera_Txt", "id"));
+        moveCameraTxt.setOnClickListener(this);
+        backToCameraTxt = findViewById(_getResource("back_to_camera_Txt", "id"));
+        backToCameraTxt.setOnClickListener(this);
+        motionUpCameraTxt = findViewById(_getResource("motion_Up_Txt", "id"));
+        motionUpCameraTxt.setOnClickListener(this);
+        motionDownCameraTxt = findViewById(_getResource("motion_Down_Txt", "id"));
+        motionDownCameraTxt.setOnClickListener(this);
+        motionLeftCameraTxt =  findViewById(_getResource("motion_Left_Txt", "id"));
+        motionLeftCameraTxt.setOnClickListener(this);
+        motionRightCameraTxt =  findViewById(_getResource("motion_Right_Txt", "id"));
+        motionRightCameraTxt.setOnClickListener(this);
         // ((ViewGroup) replayTxt.getParent()).removeView(replayTxt);
         settingTxt = findViewById(_getResource("setting_Txt", "id"));
         settingTxt.setOnClickListener(this);
@@ -269,6 +289,7 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         batteryTxt.setTextColor(Color.parseColor(primaryColor));
         mMainLayout = findViewById(_getResource("main_layout", "id"));
         mMainLayout.setBackgroundColor(Color.parseColor(bgColor));
+
         muteImg.setSelected(true);
     }
 
@@ -329,6 +350,90 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         settingTxt.setOnClickListener(this);
         cloudStorageTxt.setOnClickListener(this);
         messageCenterTxt.setOnClickListener(this);
+        moveCameraTxt.setOnClickListener(this);
+        backToCameraTxt.setOnClickListener(this);
+        motionUpCameraTxt.setOnClickListener(this);
+        motionDownCameraTxt.setOnClickListener(this);
+        motionLeftCameraTxt.setOnClickListener(this);
+        motionRightCameraTxt.setOnClickListener(this);
+        muteImg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
+
+        motionUpCameraTxt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    publishDps(DPConstants.PTZ_CONTROL, DPConstants.PTZ_UP);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    publishDps(DPConstants.PTZ_STOP, true);
+                }
+                return true;
+            }
+        });
+
+        motionDownCameraTxt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    publishDps(DPConstants.PTZ_CONTROL, DPConstants.PTZ_DOWN);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    publishDps(DPConstants.PTZ_STOP, true);
+                }
+                return true;
+            }
+        });
+
+        motionLeftCameraTxt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    publishDps(DPConstants.PTZ_CONTROL, DPConstants.PTZ_RIGHT);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    publishDps(DPConstants.PTZ_STOP, true);
+                }
+                return true;
+            }
+        });
+
+        motionRightCameraTxt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    publishDps(DPConstants.PTZ_CONTROL, DPConstants.PTZ_LEFT);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    publishDps(DPConstants.PTZ_STOP, true);
+                }
+                return true;
+            }
+        });
+
+        zoomInTxt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    publishDps(DPConstants.ZOOM_CONTROL, DPConstants.ZOOM_IN);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    publishDps(DPConstants.ZOOM_STOP, true);
+                }
+                return true;
+            }
+        });
+
+        zoomOutTxt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    publishDps(DPConstants.ZOOM_CONTROL, DPConstants.ZOOM_OUT);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    publishDps(DPConstants.ZOOM_STOP, true);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -344,6 +449,14 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
             recordClick();
         } else if (id == _getResource("photo_Txt", "id")) {
             snapShotClick();
+        }  else if(id == _getResource("move_camera_Txt", "id")){
+            displayCameraMove();
+        } else if(id == _getResource("back_to_camera_Txt", "id")){
+            displayCameraOptions();
+        } else if(id == _getResource("motion_Up_Txt", "id")){
+
+        } else if(id == _getResource("motion_Down_Txt", "id")){
+
         } else if (id == _getResource("replay_Txt", "id")) {
             //Toast.makeText(this, "Yet to be Implemented", Toast.LENGTH_SHORT).show();
 
@@ -418,6 +531,22 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
             }
         }
     }
+
+    private void displayCameraMove(){
+        LinearLayout camera_options = (LinearLayout )findViewById(_getResource("camera_options_layout", "id"));
+        camera_options.setVisibility(View.GONE);
+        TableLayout camera_move_options = (TableLayout ) findViewById(_getResource("camera_move_options_layout", "id"));
+        camera_move_options.setVisibility(View.VISIBLE);
+
+    }
+
+    private void displayCameraOptions(){
+        TableLayout camera_move_options = (TableLayout) findViewById(_getResource("camera_move_options_layout", "id"));
+        camera_move_options.setVisibility(View.GONE);
+        LinearLayout camera_options = (LinearLayout )findViewById(_getResource("camera_options_layout", "id"));
+        camera_options.setVisibility(View.VISIBLE);
+    }
+
     private void recordClick() {
         if (!isRecording) {
             ToastUtil.shortToast(CameraPanelActivity.this, "Enter Recording");
@@ -660,6 +789,8 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
             }
             if (!mCameraP2P.isConnecting()) {
                 ITuyaIPCCore cameraInstance = TuyaIPCSdk.getCameraInstance();
+               // ITuyaIPCPTZ tuyaIPCPTZ = TuyaIPCSdk.getPTZInstance(devId);
+
                 if (cameraInstance != null && cameraInstance.isLowPowerDevice(devId)) {
                     ITuyaIPCDoorbell doorbell = TuyaIPCSdk.getDoorbell();
                     if (doorbell != null) {
@@ -754,13 +885,24 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
         if (deviceBean != null) {
             Map<String, Object> dps = deviceBean.getDps();
             if (dps.containsKey(DPConstants.POWER_SOURCE)) {
-                String bStatus = (String) dps.get(DPConstants.POWER_SOURCE);
-                if (bStatus.equals(DPConstants.POWER_SOURCE_BATTERY)) {
+                String bStatus_Of_PowerSource = (String) dps.get(DPConstants.POWER_SOURCE);
+                Integer bStatus_Of_Battery = (Integer) dps.get(DPConstants.BATTERY);
+                //If both battery and power Supply are plugged in
+                if (bStatus_Of_PowerSource.equals(DPConstants.POWER_SOURCE_BATTERY) && bStatus_Of_Battery > 0) {
                     batteryTxt.setVisibility(View.VISIBLE);
                     Object res = dps.get(DPConstants.BATTERY);
                     batteryLevel = JSON.toJSONString(res);
                     batteryTxt.setText("Battery : "+batteryLevel+" %");
-                } else if (bStatus.equals(DPConstants.POWER_SOURCE_PLUG_SUPPLY)){
+                }
+                //If only battery is plugged in
+                else if(bStatus_Of_Battery > 0) {
+                    batteryTxt.setVisibility(View.VISIBLE);
+                    Object res = dps.get(DPConstants.BATTERY);
+                    batteryLevel = JSON.toJSONString(res);
+                    batteryTxt.setText("Battery : "+batteryLevel+" %");
+                }
+                //If only power supply is plugged in
+                else if (bStatus_Of_PowerSource.equals(DPConstants.POWER_SOURCE_BATTERY) && bStatus_Of_Battery ==0){
                     batteryTxt.setVisibility(View.VISIBLE);
                     batteryTxt.setText("Plugged in Power");
                 } else {
