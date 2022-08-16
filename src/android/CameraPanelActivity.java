@@ -27,7 +27,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -888,18 +887,22 @@ public class CameraPanelActivity extends AppCompatActivity implements View.OnCli
             if (dps.containsKey(DPConstants.POWER_SOURCE)) {
                 String bStatus_Of_PowerSource = (String) dps.get(DPConstants.POWER_SOURCE);
                 Integer bStatus_Of_Battery = (Integer) dps.get(DPConstants.BATTERY);
-                if (bStatus_Of_PowerSource.equals(DPConstants.POWER_SOURCE_BATTERY)) {
-                    batteryTxt.setVisibility(View.VISIBLE);
-                    Object res = dps.get(DPConstants.BATTERY);
-                    batteryLevel = JSON.toJSONString(res);
-                    batteryTxt.setText("Battery : "+batteryLevel+" %");
-                } else if(bStatus_Of_Battery >= 0) {
+                //If both battery and power Supply are plugged in
+                if (bStatus_Of_PowerSource.equals(DPConstants.POWER_SOURCE_BATTERY) && bStatus_Of_Battery > 0) {
                     batteryTxt.setVisibility(View.VISIBLE);
                     Object res = dps.get(DPConstants.BATTERY);
                     batteryLevel = JSON.toJSONString(res);
                     batteryTxt.setText("Battery : "+batteryLevel+" %");
                 }
-                else if (bStatus_Of_PowerSource.equals(DPConstants.POWER_SOURCE_PLUG_SUPPLY)){
+                //If only battery is plugged in
+                else if(bStatus_Of_Battery > 0) {
+                    batteryTxt.setVisibility(View.VISIBLE);
+                    Object res = dps.get(DPConstants.BATTERY);
+                    batteryLevel = JSON.toJSONString(res);
+                    batteryTxt.setText("Battery : "+batteryLevel+" %");
+                }
+                //If only power supply is plugged in
+                else if (bStatus_Of_PowerSource.equals(DPConstants.POWER_SOURCE_BATTERY) && bStatus_Of_Battery ==0){
                     batteryTxt.setVisibility(View.VISIBLE);
                     batteryTxt.setText("Plugged in Power");
                 } else {
