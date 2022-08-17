@@ -101,6 +101,11 @@
       <resource-file src="src/android/res/drawable-xhdpi/pause.png" target="res/drawable-xhdpi/pause.png" />
       <resource-file src="src/android/res/drawable-xhdpi/resume.png" target="res/drawable-xhdpi/resume.png" />
       <resource-file src="src/android/res/drawable-xhdpi/stop.png" target="res/drawable-xhdpi/stop.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/back_icon.png" target="res/drawable-xhdpi/back_icon.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/up_button_icon.png" target="res/drawable-xhdpi/up_button_icon.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/left_button_icon.png" target="res/drawable-xhdpi/left_button_icon.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/right_button_icon.png" target="res/drawable-xhdpi/right_button_icon.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/down_button_icon.png" target="res/drawable-xhdpi/down_button_icon.png" />
 		
       <!-- Values -->
       <resource-file src="src/android/res/values/tuyacordovaplugin_colors.xml" target="res/values/tuyacordovaplugin_colors.xml" />
