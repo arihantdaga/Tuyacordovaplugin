@@ -38,17 +38,10 @@
 
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    CGFloat buttonWith = self.frame.size.width / 4;
-    CGFloat buttonHeight = self.frame.size.height;
-    [self.subviews enumerateObjectsUsingBlock:^(UIView *obj, NSUInteger idx, BOOL *stop) {
-        obj.frame = CGRectMake((idx % 4) * (buttonWith + 0.5), idx / 4 * (buttonHeight + 0.5), buttonWith - 1, buttonHeight - 1);
-    }];
-}
-
 - (void)setSourceData:(NSArray *)sourceData {
     [self removeAllSubviews];
+    CGFloat buttonWith = self.frame.size.width / 3;
+    CGFloat buttonHeight = self.frame.size.height /2;
     [sourceData enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
         NSString *imageName = [obj objectForKey:@"image"];
         NSString *title = [obj objectForKey:@"title"];
@@ -59,6 +52,7 @@
         controlButton.identifier = identifier;
         controlButton.themeParams =  [self themeParams];
         [controlButton addTarget:self action:@selector(controlAction:)];
+        controlButton.frame = CGRectMake(((idx) % 3) * (buttonWith + 0.5), (idx) / 3 * (buttonHeight + 0.5), buttonWith, buttonHeight);
         [self addSubview:controlButton];
     }];
 }

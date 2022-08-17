@@ -30,6 +30,9 @@
 #define kControlPlayback    @"playback"
 #define kControlCloud       @"Cloud"
 #define kControlMessage     @"message"
+#define kControlPtz         @"control"
+#define kControlBack        @"backcontrol"
+
 
 @interface CameraViewController ()<TuyaSmartCameraDelegate, CameraControlViewDelegate, TuyaSmartCameraDPObserver>
 
@@ -50,6 +53,8 @@
 @property (nonatomic, strong) UILabel *stateLabel;
 
 @property (nonatomic, strong) UIButton *retryButton;
+
+@property (nonatomic, strong) UIButton *ptzBackButton;
 
 @property (nonatomic, strong) UIColor *colorfunc;
 
@@ -168,13 +173,18 @@
     [self.view addSubview:self.indicatorView];
     [self.view addSubview:self.stateLabel];
     [self.view addSubview:self.retryButton];
+    [self.view addSubview:self.ptzBackButton];
     [self.view addSubview:self.ptzControlView];
     [self.view addSubview:self.controlView];
     [self.view addSubview:self.soundButton];
     [self.view addSubview:self.hdButton];
     
+    self.ptzControlView.hidden = YES;
+    self.ptzBackButton.hidden = YES;
+    
     // Tips: Speak、Record、Take Photo、Sound、HD, these buttons can be available after received video data.
     // Playback、Cloud Storage、Message, these buttons can be available after camera is connected.
+    [self.ptzBackButton addTarget:self action:@selector(controlBackAction) forControlEvents:UIControlEventTouchUpInside];
     [self.retryButton addTarget:self action:@selector(retryAction) forControlEvents:UIControlEventTouchUpInside];
     [self.soundButton addTarget:self action:@selector(soundAction) forControlEvents:UIControlEventTouchUpInside];
     [self.hdButton addTarget:self action:@selector(hdAction) forControlEvents:UIControlEventTouchUpInside];
@@ -246,6 +256,18 @@
 - (void)hdAction {
     TuyaSmartCameraDefinition definition = !self.isHD ? TuyaSmartCameraDefinitionHigh : TuyaSmartCameraDefinitionStandard;
     [self.cameraType setDefinition:definition];
+}
+
+- (void)controlAction {
+    self.controlView.hidden = YES;
+    self.ptzControlView.hidden = NO;
+    self.ptzBackButton.hidden = NO;
+}
+
+- (void)controlBackAction {
+    self.ptzControlView.hidden = YES;
+    self.ptzBackButton.hidden = YES;
+    self.controlView.hidden = NO;
 }
 
 - (void)talkAction {
@@ -414,6 +436,14 @@
 - (void)controlView:(CameraControlView *)controlView didSelectedControl:(NSString *)identifier {
     if ([identifier isEqualToString:kControlTalk]) {
         [self talkAction];
+        return;
+    }
+    if ([identifier isEqualToString:kControlPtz]) {
+        [self controlAction];
+        return;
+    }
+    if ([identifier isEqualToString:kControlBack]) {
+        [self controlBackAction];
         return;
     }
     if ([identifier isEqualToString:kControlPlayback]) {
@@ -647,6 +677,11 @@
                   @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
                   @"identifier": kControlPlayback
                   },
+             @{
+                 @"image": @"ty_mainbt_devicelist",
+                 @"title": NSLocalizedStringFromTable(@"ty_mainbt_devicelist", @"IPCLocalizable", @""),
+                 @"identifier": kControlPtz
+             }
 //              @{
 //                  @"image": @"ty_camera_cloud_icon",
 //                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_cstorage", @"IPCLocalizable", @""),
@@ -662,8 +697,8 @@
 
 - (CameraControlView *)controlView {
     if (!_controlView) {
-        CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT + (VideoViewHeight/2) + 100;
-        CGFloat height = self.view.frame.size.height / 8;
+        CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT + (VideoViewHeight/2);
+        CGFloat height = self.view.frame.size.height / 4;
         //CGFloat top = [UIScreen mainScreen].bounds.size.height - APP_TOP_BAR_HEIGHT - height;
         CGFloat width = self.view.frame.size.width;
         _controlView = [[CameraControlView alloc] initWithFrame:CGRectMake(0, top, width, height)];
@@ -677,9 +712,10 @@
 
 - (CameraPTZControlView *)ptzControlView {
     if (!_ptzControlView) {
-        CGFloat top = VideoViewHeight + 25;
-        CGFloat height = UIScreen.mainScreen.bounds.size.height - top;
-        _ptzControlView = [[CameraPTZControlView alloc] initWithFrame:CGRectMake(40, top, UIScreen.mainScreen.bounds.size.width, height)];
+        CGFloat top = VideoViewHeight + APP_TOP_BAR_HEIGHT + (VideoViewHeight/2);
+        CGFloat height =  self.view.frame.size.height / 4;
+        CGFloat width = self.view.frame.size.width;
+        _ptzControlView = [[CameraPTZControlView alloc] initWithFrame:CGRectMake(0, top, width, height)];
         _ptzControlView.deviceId = _devId;
         _ptzControlView.fatherVc = self;
         [_ptzControlView mountUI];
@@ -693,6 +729,14 @@
         [_soundButton setImage:[UIImage imageNamed:@"ty_camera_soundOff_icon"] forState:UIControlStateNormal];
     }
     return _soundButton;
+}
+
+- (UIButton *)ptzBackButton {
+    if (!_ptzBackButton) {
+        _ptzBackButton = [[UIButton alloc] initWithFrame:CGRectMake(8, APP_TOP_BAR_HEIGHT + VideoViewHeight + TOP_MARGIN, 44, 44)];
+        [_ptzBackButton setImage:[UIImage imageNamed:@"tp_top_bar_back"] forState:UIControlStateNormal];
+    }
+    return _ptzBackButton;
 }
 
 - (UIButton *)hdButton {
