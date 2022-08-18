@@ -23,12 +23,12 @@
 }
 
 - (void)setupUI {
-    CGFloat btnWidth = 60;
-    CGFloat btnHeight = 30;
-    CGFloat horizonMargin = 30;
-    CGFloat verticalMargin = 30;
-    CGFloat centerX = self.bounds.size.width*0.5-30;
-    CGFloat centerY = self.bounds.size.height*0.5-50;
+    CGFloat btnWidth = 80;
+    CGFloat btnHeight = 50;
+    CGFloat horizonMargin = 50;
+    CGFloat verticalMargin = 50;
+    CGFloat centerX = self.bounds.size.width*0.5;
+    CGFloat centerY = self.bounds.size.height*0.5;
     
     UIButton *upBtn = [self creatButtonWithTitle:NSLocalizedStringFromTable(@"UP", @"IPCLocalizable", @"") tag:TuyaSmartCameraPTZDirectionUp];
     upBtn.frame = CGRectMake(centerX-0.5*btnWidth, centerY-btnHeight-verticalMargin, btnWidth, btnHeight);
