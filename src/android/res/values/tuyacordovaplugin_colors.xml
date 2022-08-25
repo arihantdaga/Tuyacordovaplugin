@@ -22,6 +22,7 @@
     <color name="colorHighlight">#FF5800</color>
 
     <color name="color_primary_dark">#e54000</color>
+    <color name="colorPrimaryDark">#e54000</color>
     <color name="color_accent">#ffffa748</color>
     <color name="color_navigationBar">#ff4800</color>
     <color name="text_hint_color">#9b9b9b</color>
