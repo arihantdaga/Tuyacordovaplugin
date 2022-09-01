@@ -1,0 +1,1 @@
+#import <TuyaSmartHomeKit/TuyaSmartKit.h>

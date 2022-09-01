@@ -125,11 +125,12 @@
       <podspec>
          <config>
             <source url="https://github.com/TuyaInc/TuyaPublicSpecs.git"/>
+            <source url='https://github.com/tuya/tuya-pod-specs.git'/>
          </config>
          <pods use-frameworks="true">
             <pod name="SDWebImage" />   
             <pod name="SVProgressHUD" />
-            <pod name="TuyaSmartHomeKit" />       
+            <pod name="TuyaSmartHomeKit" spec='>= 4.0.0' />       
             <pod name="TuyaSmartActivatorKit" />
             <pod name="TuyaSmartCameraKit" />
             <pod name="TuyaSmartActivatorBizBundle" />
@@ -147,6 +148,8 @@
       <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
          <string>To speak for smart IPCamera</string>
       </config-file>
+
+       <header-file src="src/ios/Tuyacordovaplugin_Bridging-Header.h"/>
         
       <header-file src="src/ios/Tuyacordovaplugin.h" />
       <source-file src="src/ios/Tuyacordovaplugin.m" />
