@@ -657,42 +657,66 @@
 }
 
 - (NSArray *)controlDatas {
-    return @[@{
-                 @"image": @"ty_camera_mic_icon",
-                 @"title": NSLocalizedStringFromTable(@"ipc_panel_button_speak", @"IPCLocalizable", @""),
-                 @"identifier": kControlTalk
-                 },
-             @{
-                 @"image": @"ty_camera_rec_icon",
-                 @"title": NSLocalizedStringFromTable(@"ipc_panel_button_record", @"IPCLocalizable", @""),
-                 @"identifier": kControlRecord
-                 },
-             @{
-                 @"image": @"ty_camera_photo_icon",
-                 @"title": NSLocalizedStringFromTable(@"ipc_panel_button_screenshot", @"IPCLocalizable", @""),
-                 @"identifier": kControlPhoto
-                 },
-              @{
-                  @"image": @"ty_camera_playback_icon",
-                  @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
-                  @"identifier": kControlPlayback
-                  },
-             @{
-                 @"image": @"ty_mainbt_devicelist",
-                 @"title": NSLocalizedStringFromTable(@"ty_mainbt_devicelist", @"IPCLocalizable", @""),
-                 @"identifier": kControlPtz
-             }
-//              @{
-//                  @"image": @"ty_camera_cloud_icon",
-//                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_cstorage", @"IPCLocalizable", @""),
-//                  @"identifier": kControlCloud
-//                  },
-//              @{
-//                  @"image": @"ty_camera_message",
-//                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_message", @"IPCLocalizable", @""),
-//                  @"identifier": kControlMessage
-//                  }
-             ];
+    if (![self.dpManager isSupportDP:TuyaSmartCameraPTZControlDPName]) {
+        return @[@{
+                     @"image": @"ty_camera_mic_icon",
+                     @"title": NSLocalizedStringFromTable(@"ipc_panel_button_speak", @"IPCLocalizable", @""),
+                     @"identifier": kControlTalk
+                     },
+                 @{
+                     @"image": @"ty_camera_rec_icon",
+                     @"title": NSLocalizedStringFromTable(@"ipc_panel_button_record", @"IPCLocalizable", @""),
+                     @"identifier": kControlRecord
+                     },
+                 @{
+                     @"image": @"ty_camera_photo_icon",
+                     @"title": NSLocalizedStringFromTable(@"ipc_panel_button_screenshot", @"IPCLocalizable", @""),
+                     @"identifier": kControlPhoto
+                     },
+                  @{
+                      @"image": @"ty_camera_playback_icon",
+                      @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
+                      @"identifier": kControlPlayback
+                      }
+                 ];
+    } else {
+        return @[@{
+                     @"image": @"ty_camera_mic_icon",
+                     @"title": NSLocalizedStringFromTable(@"ipc_panel_button_speak", @"IPCLocalizable", @""),
+                     @"identifier": kControlTalk
+                     },
+                 @{
+                     @"image": @"ty_camera_rec_icon",
+                     @"title": NSLocalizedStringFromTable(@"ipc_panel_button_record", @"IPCLocalizable", @""),
+                     @"identifier": kControlRecord
+                     },
+                 @{
+                     @"image": @"ty_camera_photo_icon",
+                     @"title": NSLocalizedStringFromTable(@"ipc_panel_button_screenshot", @"IPCLocalizable", @""),
+                     @"identifier": kControlPhoto
+                     },
+                  @{
+                      @"image": @"ty_camera_playback_icon",
+                      @"title": NSLocalizedStringFromTable(@"pps_flashback", @"IPCLocalizable", @""),
+                      @"identifier": kControlPlayback
+                      },
+                 @{
+                     @"image": @"ty_mainbt_devicelist",
+                     @"title": NSLocalizedStringFromTable(@"ty_mainbt_devicelist", @"IPCLocalizable", @""),
+                     @"identifier": kControlPtz
+                 }
+    //              @{
+    //                  @"image": @"ty_camera_cloud_icon",
+    //                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_cstorage", @"IPCLocalizable", @""),
+    //                  @"identifier": kControlCloud
+    //                  },
+    //              @{
+    //                  @"image": @"ty_camera_message",
+    //                  @"title": NSLocalizedStringFromTable(@"ipc_panel_button_message", @"IPCLocalizable", @""),
+    //                  @"identifier": kControlMessage
+    //                  }
+                 ];
+    }
 }
 
 - (CameraControlView *)controlView {
