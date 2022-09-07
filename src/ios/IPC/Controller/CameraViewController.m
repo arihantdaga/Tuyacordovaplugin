@@ -8,8 +8,6 @@
 #import "CameraControlView.h"
 #import "CameraPlaybackViewController.h"
 #import "CameraSettingViewController.h"
-#import "CameraCloudViewController.h"
-#import "CameraMessageViewController.h"
 #import "CameraPermissionUtil.h"
 #import <TuyaSmartCameraM/TuyaSmartCameraM.h>
 #import <AVFoundation/AVFoundation.h>
@@ -452,14 +450,14 @@
         return;
     }
     if ([identifier isEqualToString:kControlCloud]) {
-        CameraCloudViewController *vc = [CameraCloudViewController new];
-        vc.devId = self.devId;
-        [self.navigationController pushViewController:vc animated:YES];
+        // CameraCloudViewController *vc = [CameraCloudViewController new];
+        // vc.devId = self.devId;
+        // [self.navigationController pushViewController:vc animated:YES];
     }
     if ([identifier isEqualToString:kControlMessage]) {
-        CameraMessageViewController *vc = [CameraMessageViewController new];
-        vc.devId = self.devId;
-        [self.navigationController pushViewController:vc animated:YES];
+        // CameraMessageViewController *vc = [CameraMessageViewController new];
+        // vc.devId = self.devId;
+        // [self.navigationController pushViewController:vc animated:YES];
     }
     BOOL needPhotoPermission = [identifier isEqualToString:kControlPhoto] || [identifier isEqualToString:kControlRecord];
     if (needPhotoPermission) {

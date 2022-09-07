@@ -220,14 +220,10 @@
       <resource-file src="src/ios/IPC/Config/IPCViewsLocalizable.strings" />
 
       <!-- IPC/Controller -->
-      <header-file src="src/ios/IPC/Controller/CameraCloudViewController.h" />
-      <source-file src="src/ios/IPC/Controller/CameraCloudViewController.m" />
       <header-file src="src/ios/IPC/Controller/CameraDoorbellManager.h" />
       <source-file src="src/ios/IPC/Controller/CameraDoorbellManager.m" />
       <header-file src="src/ios/IPC/Controller/CameraDoorbellViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraDoorbellViewController.m" />
-      <header-file src="src/ios/IPC/Controller/CameraMessageViewController.h" />
-      <source-file src="src/ios/IPC/Controller/CameraMessageViewController.m" />
       <header-file src="src/ios/IPC/Controller/CameraPlaybackViewController.h" />
       <source-file src="src/ios/IPC/Controller/CameraPlaybackViewController.m" />
       <header-file src="src/ios/IPC/Controller/CameraSDCardViewController.h" />

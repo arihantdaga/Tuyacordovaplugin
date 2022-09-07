@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-tuya-unofficial",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Tuya SDK Unofficial Plugin",
   "scripts": {
     "build": ""

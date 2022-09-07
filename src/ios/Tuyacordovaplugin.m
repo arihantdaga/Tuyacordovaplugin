@@ -43,7 +43,7 @@ static void initTuyaHomes(Tuyacordovaplugin *object, CDVInvokedUrlCommand *comma
                 TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeMode.homeId];
                 [temp addObject:home];
                 home.delegate = object;
-                [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+                [home getHomeDataWithSuccess:^(TuyaSmartHomeModel *homeModel) {
                     [deviceList addObjectsFromArray:home.deviceList];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"deviceDidUpdate" object:nil];
                     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDict];
@@ -198,7 +198,7 @@ static void initTuyaHomes(Tuyacordovaplugin *object, CDVInvokedUrlCommand *comma
 
     TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeId];
     home.delegate = self;
-    [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+    [home getHomeDataWithSuccess:^(TuyaSmartHomeModel *homeModel) {
         NSArray<TuyaSmartDeviceModel*> *devices = [home.deviceList mutableCopy];
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -215,7 +215,7 @@ static void initTuyaHomes(Tuyacordovaplugin *object, CDVInvokedUrlCommand *comma
     long long homeId = [homeIdString longLongValue];
     TuyaSmartHome *home = [TuyaSmartHome homeWithHomeId:homeId];
     home.delegate = self;
-    [home getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+    [home getHomeDataWithSuccess:^(TuyaSmartHomeModel *homeModel) {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } failure:^(NSError *errorMsg) {
